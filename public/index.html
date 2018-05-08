@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div class="_mob-wrapper" id="app">
+
+      <popup id="mErrorExistingUser" class="existing-user-notice"
+        v-bind:is-open="hasModal && typeModal == 'mErrorExistingUser' ">
+        <div class="header">Профиль уже существует</div>
+        <account-info
+          v-bind:name="testUsers[email] && testUsers[email].name"
+          v-bind:email="email"
+          v-bind:pic="testUsers[email] && testUsers[email].pic"
+        ></account-info>
+
+        <label for="main-screen-password"
+          class="btn btn-primary"
+
+          v-on:click="routeHome(); $nextTick(function() {console.log('!'); this.hasModal = false})">
+          Войти с паролем
+        </label>
+        <div class="btn btn-text btn-next btn-sm" v-on:click="cantLogin">Я не помню пароль</div>
+        <label
+          for="registration-1-screen-email"
+          class="btn btn-text btn-sm"
+
+          v-on:click="routeRegStepOne"
+        >
+          Ввести другую почту
+        </label>
+      </popup>
+
+      <popup id="mErrorNewUser" class="new-user-notice"
+        v-bind:is-open="hasModal && typeModal == 'mErrorNewUser' ">
+        <div class="message">
+          <p class="main-p _has-overflow-block">
+            Профиль
+            <span class="text-overflow">{{email}}</span><br />
+            не является зарегистрированным участником
+          </p>
+        </div>
+        <label for="main-screen-password"
+          class="btn btn-primary"
+          v-on:click="main.hasModal = false">
+          Я новый участник
+        </label>
+        <div class="btn btn-text btn-next" v-on:click="cantLogin">Я не могу войти</div>
+        <label
+          for="registration-1-screen-email"
+          class="btn btn-text"
+
+          v-on:click="routeRegStepOne"
+        >
+          Войти с другой почтой
+        </label>
+      </popup>
+
+      <div class="screen" id="main-screen" v-show="current == 'main'">
+        <div class="header">
+          <img class="header-logo" src="/img/logo_full.png" srcset="/img/logo_full@2x.png 2x" alt="">
+        </div>
+        <div class="sign-up-block content">
+          <h1 class="sign-up-header">
+            Коллективный разум<br>527 415 врачей
+          </h1>
+          <div class="btn btn-secondary" v-on:click="routeRegStepOne()">
+            Регистрация
+          </div>
+          <div class="btn-subscript">требует подтверждения квалификации, 18+</div>
+        </div>
+        <!-- <div class="separator"></div> -->
+        <div class="sign-in-block content" ref="signInBlock">
+          <field id="main-screen-email" v-model="email" place="top" type="email" label="Почта или телефон" v-on:input="validateLogin" v-on:click="scrollLogin"></field>
+          <field id="main-screen-password" v-model="password" place="bottom" type="password" label="Пароль" v-bind:error="main.isErrorPass" v-on:input="validateLogin"></field>
+          <div class="btn btn-primary" v-bind:class="{'disabled': !main.validLogin}" v-on:click="checkLogin">Войти</div>
+          <div class="social-block">
+            <div class="social-btn social-btn_vk" v-on:click="routeSocial('vk')"></div>
+            <div class="social-btn social-btn_ok"></div>
+            <div class="social-btn social-btn_fb" v-on:click="routeSocial('fb')"></div>
+            <div class="social-btn social-btn_mailru"></div>
+            <div class="social-btn social-btn_ya"></div>
+          </div>
+
+        </div>
+        <div class="emergency-btn btn btn-sm btn-text" v-bind:class="{'highlighted':main.suggestRestoreAccess}" v-on:click="cantLogin">Я не могу войти в свой аккаунт</div>
+
+
+        <div class="content get-app-block">
+          <h2 class="secondary-header">
+            Приложение удобнее
+          </h2>
+          <div class="store-link-wrapper">
+            <a href="#" class="store-link play-market">
+              <img src="/img/play_market.png" srcset="/img/play_market@2x.png 2x" alt="">
+            </a>
+            <a href="#" class="store-link app-store">
+              <img src="/img/app_store.png" srcset="/img/app_store@2x.png 2x" alt="">
+            </a>
+          </div>
+          <div class="app-mockup"></div>
+        </div>
+        <div class="content footer">
+
+        </div>
+      </div>
+
+      <div class="screen" id="social-screen" v-show="current == 'social'">
+        <div class="content" v-bind:class="[ social.app + '-mockup']">
+          <div class="header">
+            <div class="icon"></div>
+            <div class="caption">{{appNames[social.app]}}</div>
+          </div>
+          <div class="body">
+            <p>Приложение <span class="app-name">Доктор на работе</span> просит предоставить доступ к вашим данным:</p>
+            <p><strong>Email: {{email}}</strong></p>
+          </div>
+          <div class="footer">
+            <div class="btn deny-access" v-on:click="onSocialNext()">Отмена</div>
+            <div class="btn grant-access" v-on:click="onSocialNext()">Ок</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen reg-screen" id="registration-1-screen" v-show="current == 'registration1'">
+        <div class="header">
+          <img v-on:click="routeHome" class="header-logo" src="/img/d_logo.png" srcset="/img/d_logo@2x.png 2x" alt="">
+          <span class="title">Регистрация</span>
+        </div>
+        <div class="content">
+          <div class="user-input" v-show="registration.socialReg == false">
+            <div class="subscript">Зарегистрируйтесь<br />через социальные сети</div>
+            <div class="social-block">
+              <div class="social-btn social-btn_vk" v-on:click="routeSocial('vk')"></div>
+              <div class="social-btn social-btn_ok"></div>
+              <div class="social-btn social-btn_fb" v-on:click="routeSocial('fb')"></div>
+              <div class="social-btn social-btn_mailru"></div>
+              <div class="social-btn social-btn_ya"></div>
+            </div>
+            <field id="registration-1-screen-email" class="reg-email" v-on:input="validateEmail" v-model="email" type="email" label="Или введите почту"></field>
+          </div>
+          <div class="social-input" v-show="registration.socialReg == true">
+            <div class="warning" v-show="registration.suggestReg == true"></div>
+            <div class="app-field focus has-icon">
+              <div class="social-icon" v-bind:class="['social-icon_' + this.social.app]"></div>
+              <span class="app-field__caption">Регистрация через {{appNames[social.app]}}</span>
+              <div class="app-field__input">{{email}}</div>
+            </div>
+          </div>
+          <div class="btn btn-secondary" v-on:click="routeRegStepTwo" v-bind:class="{ 'disabled': !isValidEmail }">Далее</div>
+          <!-- <label class="confirm-personal-data">
+            <input type="checkbox" />
+            <p class="confirmation-agreement"></p>
+          </label> -->
+        </div>
+      </div>
+
+      <div class="screen" id="logged-feed-screen" v-show="this.current == 'feed'">
+        <div class="feed-mockup"></div>
+      </div>
+
+      <div class="screen" id="restore-access-screen" v-show="this.current == 'restore'">
+        <div class="header">
+          <img v-on:click="routeHome" class="header-logo" src="/img/d_logo.png" srcset="/img/d_logo@2x.png 2x" alt="">
+          <span class="title">Восстановить доступ</span>
+        </div>
+        <div class="content">
+
+          <div class="step-0" v-show="restore.state == 0">
+            <field id="restore-screen-email" v-model="email" type="text" label="Почта или телефон" v-on:input="validateEmail"></field>
+            <div for="main-screen-password"
+              class="btn btn-secondary"
+              v-bind:class="[ isValidEmail ? '' : 'disabled']"
+              v-on:click="initRestore"
+            >
+              Далее
+            </div>
+          </div>
+
+          <div class="step-1" v-show="restore.state != 0">
+
+            <account-info
+              v-bind:name="restore.accData.name"
+              v-bind:email="email"
+              v-bind:pic="restore.accData.pic"
+            ></account-info>
+
+            <div class="restore-new-email" v-show="restore.state == 1">
+              <div class="level social"  v-if="restore.accData.app && restore.accData.app.length != 0">
+                <div class="social-block">
+                  <div class="social-btn social-btn_vk" v-if="restore.accData.app && restore.accData.app.indexOf('vk') != -1" v-on:click="routeSocial('vk')"></div>
+                  <div class="social-btn social-btn_ok" v-if="restore.accData.app && restore.accData.app.indexOf('ok') != -1"></div>
+                  <div class="social-btn social-btn_fb" v-if="restore.accData.app && restore.accData.app.indexOf('fb') != -1" v-on:click="routeSocial('fb')"></div>
+                  <div class="social-btn social-btn_mailru" v-if="restore.accData.app && restore.accData.app.indexOf('ma') != -1"></div>
+                  <div class="social-btn social-btn_ya" v-if="restore.accData.app && restore.accData.app.indexOf('ya') != -1"></div>
+                </div>
+                <div class="message" v-if="restore.accData.app && restore.accData.app.length != 0">Войти через социальную&nbsp;сеть</div>
+              </div>
+              <div class="level">
+                <div class="btn btn-secondary">Получить пароль на почту</div>
+                <div class="btn btn-text btn-sm" v-on:click="restoreForm()">У меня нет доступа к почте</div>
+              </div>
+            </div>
+
+            <div class="restore-sms" v-show="restore.state == 2">
+              <div class="message">Код входа отправлен на ваш номер</div>
+              <div class="phone-number">{{restore.accData.phone}}</div>
+              <div class="code-input-wrapper">
+                <field id="restore-screen-sms" class="phone code" v-on:input="checkSmsCode" v-model="smsCode" type="text" label="Код из СМС"></field>
+                <div class="btn btn-secondary" v-bind:class="{ 'disabled': !isValidCode }" v-on:click="loginCode">Войти</div>
+              </div>
+              <div class="btn">Повторить (через 45 сек)</div>
+            </div>
+
+            <div class="restore-diploma" v-show="restore.state == 3">
+              <div class="text message">Введите данные диплома</div>
+              <field id="restore-screen-diploma-code" v-model="diplomaCode" type="text" place="top" label="Серия и номер диплома"></field>
+              <field id="restore-screen-diploma-date" v-model="diplomaDate" type="text" place="bottom" label="Дата выдачи"></field>
+
+              <div class="text">Новый пароль будет отправлен на ваш номер</div>
+              <field id="restore-screen-add-phone" v-model="phone" type="text" label="Телефон"></field>
+              <div class="btn btn-secondary" v-on:click="checkDiploma">Отправить</div>
+              <div class="btn btn-text">Альтернативный способ</div>
+            </div>
+
+            <div class="restore-contact" v-show="restore.state == 4">
+              <div class="message">
+                Свяжитесь с нами для подтверждения личности
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="screen reg-screen" id="registration-2-screen" v-show="current == 'registration2'">
+        <div class="header">
+          <img v-on:click="routeHome" class="header-logo" src="/img/d_logo.png" srcset="/img/d_logo@2x.png 2x" alt="">
+          <span class="title" v-if="registration.restoreForm != true">Регистрация</span>
+          <span class="title" v-if="registration.restoreForm">Восстановить доступ</span>
+        </div>
+        <div class="content">
+          <div class="restore-message"></div>
+          <account-info
+            v-bind:name="registration.existingInfo.name"
+            v-bind:email="registration.existingInfo.email"
+            v-bind:pic="registration.existingInfo.pic"
+            v-bind:pic="registration.existingInfo.phone"
+          ></account-info>
+
+          <div class="default-message confirm-link">
+            <div class="message-icon">
+              <svg width="33" height="49" viewBox="0 0 33 49" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+              <g id="Canvas" fill="none">
+              <g id="new email">
+              <path id="Union" fill-rule="evenodd" clip-rule="evenodd" d="M 30 0L 3 0C 1.34314 0 0 1.34314 0 3L 0 19C 0 20.6569 1.34314 22 3 22L 30 22C 31.6569 22 33 20.6569 33 19L 33 3C 33 1.34314 31.6569 0 30 0ZM 2 3.14343L 2 18.7646L 11.8229 10.6743L 2 3.14343ZM 29.2598 20L 3.67291 20L 13.4519 11.9232L 14.6747 12.8607C 15.7515 13.6862 17.2485 13.6862 18.3253 12.8607L 19.5475 11.9237L 29.2598 20ZM 31 18.7988L 31 3.14343L 21.1759 10.6752L 31 18.7988ZM 29.2042 2L 3.79578 2L 15.8915 11.2735C 16.2505 11.5486 16.7495 11.5486 17.1085 11.2735L 29.2042 2Z" transform="translate(0 27)" fill="#217AAF"/>
+              <line id="Line" x1="1" y1="-1" x2="9" y2="-1" transform="matrix(0 1 -1 0 7 9)" stroke="#217AAF" stroke-width="2" stroke-linecap="round"/>
+              <line id="Line 2" x1="1" y1="-1" x2="13" y2="-1" transform="matrix(0 1 -1 0 15 3)" stroke="#217AAF" stroke-width="2" stroke-linecap="round"/>
+              <line id="Line 3" x1="1" y1="-1" x2="13" y2="-1" transform="matrix(0 1 -1 0 23 0)" stroke="#217AAF" stroke-width="2" stroke-linecap="round"/>
+              </g>
+              </g>
+              </svg>
+            </div>
+            <div class="message-text">На ваш адрес придет  письмо со&nbsp;ссылкой  для&nbsp;подтверждения</div>
+          </div>
+
+          <div class="default-message new-password">
+            <div class="message-icon">
+              <svg width="32" height="22" viewBox="0 0 32 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+              <g id="Canvas" fill="none">
+              <g id="pass">
+              <circle id="Ellipse" cx="3" cy="3" r="3" transform="translate(6.12451 8)" fill="#217AAF"/>
+              <circle id="Ellipse_2" cx="3" cy="3" r="3" transform="translate(13.0625 8)" fill="#217AAF"/>
+              <circle id="Ellipse_3" cx="3" cy="3" r="3" transform="translate(20 8)" fill="#217AAF"/>
+              <rect id="Rectangle 2" x="-1" y="-1" width="30" height="20" rx="3" transform="translate(2 2)" stroke="#217AAF" stroke-width="2"/>
+              </g>
+              </g>
+              </svg>
+            </div>
+            <div class="message-text">Запишите пароль для входа:<br><strong>123456</strong></div>
+          </div>
+
+          <div class="disclaimer">
+            <div class="disclaimer-highlight">Доступ к сайту только для&nbsp;врачей</div>
+            Пожалуйста, заполните анкету максимально подробно. Это ускорит подтверждение статуса врача.
+          </div>
+
+          <div class="form-block personal1-block">
+            <h3 class="step">
+              <div class="subscript">Шаг 1 из 4</div>
+              <div class="caption">Личная информация</div>
+            </h3>
+            <div class="fieldset">
+              <field id="fsurname" v-model="registration.fsurname" place="top" type="text" label="Фамилия"></field>
+              <field id="fname" v-model="registration.fname" place="middle" type="text" label="Имя"></field>
+              <field id="fmiddlename" v-model="registration.fmiddlename" place="bottom" type="text" label="Отчество"></field>
+            </div>
+            <div class="fieldset row">
+              <field id="fbirthyear" v-model="registration.fbirthyear" type="number" label="Год рождения" class="not-fw"></field>
+              <div class="switcher">
+                <span class="switch-item" v-on:click.prevent="registration.fsex = 'm'" v-bind:class="{active: (registration.fsex == 'm')}">М</span>
+                <span class="switch-item" v-on:click.prevent="registration.fsex = 'f'" v-bind:class="{active: (registration.fsex == 'f')}">Ж</span>
+              </div>
+            </div>
+            <div class="fieldset">
+              <div class="uploader upload-pic"></div>
+            </div>
+
+
+          </div>
+
+          <div class="form-block education-block">
+            <h3 class="step">
+              <div class="subscript">Шаг 2 из 4</div>
+              <div class="caption">Образование</div>
+            </h3>
+            <div class="fieldset">
+              <field id="fhigheredu" v-model="registration.fhigheredu" place="top" type="text" label="Учебное заведение"></field>
+              <field id="fmajor" v-model="registration.fmajor" place="bottom" type="text" label="Основная специальность"></field>
+            </div>
+            <div class="fieldset">
+              <field id="fbirthyear" v-model="registration.fgraduatoinyear" type="number" label="Год получения диплома"></field>
+              <div class="uploader" label="Загрузить диплом"></div>
+            </div>
+          </div>
+
+          <div class="form-block occupation-block">
+            <h3 class="step">
+              <div class="subscript">Шаг 3 из 4</div>
+              <div class="caption">Место работы</div>
+            </h3>
+
+            <div class="fieldset">
+              <field id="foccupation" v-model="registration.foccupation" place="top" type="text" label="Организация"></field>
+              <field id="fjobtitle" v-model="registration.fjobtitle" place="bottom" type="text" label="Должность"></field>
+            </div>
+          </div>
+
+          <div class="form-block contact-block">
+            <h3 class="step">
+              <div class="subscript">Шаг 4 из 4</div>
+              <div class="caption">Контактная информация</div>
+            </h3>
+
+            <div class="fieldset">
+              <field id="fphone" v-model="registration.fphone" type="text" label="Телефон"></field>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    <script type="text/javascript" src="/js/libs.js"></script>
+    <script type="text/javascript" src="/js/app.js"></script>
+    <script>
+      document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
+      ':35729/livereload.js?snipver=1"></' + 'script>')
+    </script>
+  </body>
+</html>

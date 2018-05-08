@@ -1,0 +1,10 @@
+<svg width="33" height="49" viewBox="0 0 33 49" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Canvas" fill="none">
+<g id="new email">
+<path id="Union" fill-rule="evenodd" clip-rule="evenodd" d="M 30 0L 3 0C 1.34314 0 0 1.34314 0 3L 0 19C 0 20.6569 1.34314 22 3 22L 30 22C 31.6569 22 33 20.6569 33 19L 33 3C 33 1.34314 31.6569 0 30 0ZM 2 3.14343L 2 18.7646L 11.8229 10.6743L 2 3.14343ZM 29.2598 20L 3.67291 20L 13.4519 11.9232L 14.6747 12.8607C 15.7515 13.6862 17.2485 13.6862 18.3253 12.8607L 19.5475 11.9237L 29.2598 20ZM 31 18.7988L 31 3.14343L 21.1759 10.6752L 31 18.7988ZM 29.2042 2L 3.79578 2L 15.8915 11.2735C 16.2505 11.5486 16.7495 11.5486 17.1085 11.2735L 29.2042 2Z" transform="translate(0 27)" fill="#217AAF"/>
+<line id="Line" x1="1" y1="-1" x2="9" y2="-1" transform="matrix(0 1 -1 0 7 9)" stroke="#217AAF" stroke-width="2" stroke-linecap="round"/>
+<line id="Line 2" x1="1" y1="-1" x2="13" y2="-1" transform="matrix(0 1 -1 0 15 3)" stroke="#217AAF" stroke-width="2" stroke-linecap="round"/>
+<line id="Line 3" x1="1" y1="-1" x2="13" y2="-1" transform="matrix(0 1 -1 0 23 0)" stroke="#217AAF" stroke-width="2" stroke-linecap="round"/>
+</g>
+</g>
+</svg>

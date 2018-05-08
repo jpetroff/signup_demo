@@ -1,0 +1,90 @@
+#social-screen {
+  height: 100vh;
+  color: #424242;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+  }
+
+  .header {
+    height: 40px;
+    display: flex;
+    flex-flow: row;
+    padding: 4px 47px 4px 15px;
+    box-sizing: border-box;
+
+    .icon {
+      width: 32px;
+      height: 32px;
+      flex-grow: 0;
+    }
+    .caption {
+      text-align: center;
+      flex-grow: 1;
+      color: white;
+      height: 32px;
+      line-height: 32px;
+      font-weight: 500;
+    }
+  }
+
+  .body {
+    flex-grow: 1;
+    padding: 16px;
+
+    .app-name {
+      font-weight: 500;
+      color: #0B7AB5;
+    }
+  }
+
+  .footer {
+    flex-grow: 0;
+    height: 44px;
+    display: flex;
+    flex-direction: row;
+    padding: 0 4px;
+
+    .btn {
+      margin: 0 4px;
+      width: 50%;
+      height: 36px;
+      line-height: 35px;
+      font-size: 16px;
+
+      &.deny-access {
+        background: white;
+        border: 1px solid #acacac;
+        color: #888;
+
+      }
+
+
+    }
+  }
+
+
+  .vk-mockup {
+    .header {
+      background-color: #4a76a8;
+    }
+    .icon {
+      background: url('/img/ic_head_logo.svg') center left no-repeat transparent;
+
+    }
+    .btn.grant-access { background: #4a76a8 !important; }
+  }
+  .fb-mockup {
+    .header {
+      background-color: #4267b2;
+    }
+    .icon {
+      background: url('/img/fb_head_logo.png') center left no-repeat transparent;
+
+    }
+    .btn.grant-access { background: #4267b2 !important; }
+  }
+}

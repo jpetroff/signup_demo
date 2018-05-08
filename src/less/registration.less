@@ -1,0 +1,145 @@
+.reg-screen {
+  .header {
+    .mixin-header;
+    font-size: 10px;
+    margin-bottom: 28px;
+    text-align: left;
+    vertical-align: top;
+    display: flex;
+    flex-flow: row;
+
+    &-logo {
+      position: relative;
+      top: 3px;
+      margin-right: 20px;
+    }
+
+    .title {
+      font-size: 18px;
+      line-height: 20px;
+      color: white;
+    }
+  }
+
+  .content {
+    padding: 0px 20px;
+
+    // .btn-disabled {
+    //   line-height: 48px;
+    // }
+  }
+}
+
+#registration-1-screen {
+  .subscript {
+    font-size: 18px;
+    opacity: 0.5;
+    text-align: center;
+  }
+
+  .reg-email {
+    margin-top: 16px;
+  }
+}
+
+#registration-2-screen {
+  .account-description {
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e2e2e2;
+  }
+
+  .default-message {
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 16px;
+
+    .message-icon {
+      float: left;
+    }
+    .message-text {
+      margin-left: 48px;
+    }
+  }
+
+  .default-message.confirm-link .message-text { padding-top: 13px; }
+
+  .disclaimer {
+    margin-top: 36px;
+    font-size: 16px;
+    line-height: 24px;
+
+    &-highlight {
+      font-size: 21px;
+      line-height: 28px;
+      color: @secondary-dark;
+      margin-bottom: 4px;
+    }
+  }
+
+  .form-block {
+    margin-bottom: 44px;
+    h3.step {
+      font-weight: normal;
+      margin-left: -20px;
+      margin-right: -20px;
+      text-align: center;
+      background: #D8ECF7;
+      padding: 20px;
+      margin: 24px -20px 44px -20px;
+
+      .subscript {
+        font-size: 12px;
+        line-height: 16px;
+        color: #828282;
+      }
+    }
+  }
+
+  .fieldset {
+    margin: 20px 0;
+
+    .app-field.not-fw {
+      width: 60%;
+    }
+
+    &.row {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .switcher {
+      display: flex;
+      flex-flow: column;
+      flex-grow: 1;
+      margin-left: 20px;
+
+      .switch-item {
+        display: block;
+        height: 32px;
+        line-height: 31px;
+        padding-left: 28px;
+        font-size: 18px;
+        position: relative;
+
+
+        &:before {
+          content: '';
+          position: absolute;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: #f2f2f2;
+          left: 0;
+          top: 6px;
+          box-sizing: border-box;
+        }
+
+        &.active:before {
+          border: 6px solid #54A0C9;
+
+        }
+      }
+    }
+  }
+}
