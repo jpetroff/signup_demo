@@ -606,8 +606,8 @@ th {
 .avatar-layout {
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-direction: row;
-      flex-direction: row;
+  -ms-flex-direction: row-reverse;
+      flex-direction: row-reverse;
   border: none;
   padding: 0;
 }
@@ -617,7 +617,7 @@ th {
   position: static;
   width: auto;
   height: auto;
-  padding-right: 20px;
+  padding-left: 20px;
 }
 .avatar-layout .app-field__caption .subscript {
   display: inline-block;
@@ -627,7 +627,7 @@ th {
 }
 .avatar-layout .upload-field__icon {
   top: 25px;
-  right: 25px;
+  left: 25px;
 }
 .avatar-layout .app-field__input {
   -ms-flex-negative: 0;

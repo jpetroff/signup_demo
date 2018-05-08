@@ -112,7 +112,7 @@ Vue.component('uploader', w.Components['uploader']);
 
 .avatar-layout {
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
   border: none;
   padding: 0;
 
@@ -123,7 +123,7 @@ Vue.component('uploader', w.Components['uploader']);
     position: static;
     width: auto;
     height: auto;
-    padding-right: 20px;
+    padding-left: 20px;
 
     .subscript {
       display: inline-block;
@@ -135,7 +135,7 @@ Vue.component('uploader', w.Components['uploader']);
 
   .upload-field__icon {
     top: 25px;
-    right: 25px;
+    left: 25px;
 
   }
 

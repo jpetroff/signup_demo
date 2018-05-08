@@ -299,13 +299,13 @@
               <field id="fname" v-model="registration.fname" place="middle" type="text" label="Имя"></field>
               <field id="fmiddlename" v-model="registration.fmiddlename" place="bottom" type="text" label="Отчество"></field>
             </div>
-            <!-- <div class="fieldset row">
+            <div class="fieldset row">
               <field id="fbirthyear" v-model="registration.fbirthyear" type="number" label="Год рождения" class="not-fw"></field>
               <div class="switcher">
                 <span class="switch-item" v-on:click.prevent="registration.fsex = 'm'" v-bind:class="{active: (registration.fsex == 'm')}">М</span>
                 <span class="switch-item" v-on:click.prevent="registration.fsex = 'f'" v-bind:class="{active: (registration.fsex == 'f')}">Ж</span>
               </div>
-            </div> -->
+            </div>
             <div class="fieldset">
               <uploader id="avatar-uploader" type="avatar" label="Загрузить фотографию" accept="image/*" subscript="Макс. размер 6 Мб, 250×250 пикселей"></uploader>
             </div>
