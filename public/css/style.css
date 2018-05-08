@@ -1087,12 +1087,12 @@ body {
   margin-right: -20px;
   text-align: center;
   background: #D8ECF7;
-  padding: 20px;
+  padding: 12px 20px;
   margin: 24px -20px 44px -20px;
 }
 #registration-2-screen .form-block h3.step .subscript {
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 14px;
+  line-height: 20px;
   color: #828282;
 }
 #registration-2-screen .fieldset {
