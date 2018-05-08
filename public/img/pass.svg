@@ -1,0 +1,10 @@
+<svg width="32" height="22" viewBox="0 0 32 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Canvas" fill="none">
+<g id="pass">
+<circle id="Ellipse" cx="3" cy="3" r="3" transform="translate(6.12451 8)" fill="#217AAF"/>
+<circle id="Ellipse_2" cx="3" cy="3" r="3" transform="translate(13.0625 8)" fill="#217AAF"/>
+<circle id="Ellipse_3" cx="3" cy="3" r="3" transform="translate(20 8)" fill="#217AAF"/>
+<rect id="Rectangle 2" x="-1" y="-1" width="30" height="20" rx="3" transform="translate(2 2)" stroke="#217AAF" stroke-width="2"/>
+</g>
+</g>
+</svg>

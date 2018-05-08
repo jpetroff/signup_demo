@@ -299,15 +299,15 @@
               <field id="fname" v-model="registration.fname" place="middle" type="text" label="Имя"></field>
               <field id="fmiddlename" v-model="registration.fmiddlename" place="bottom" type="text" label="Отчество"></field>
             </div>
-            <div class="fieldset row">
+            <!-- <div class="fieldset row">
               <field id="fbirthyear" v-model="registration.fbirthyear" type="number" label="Год рождения" class="not-fw"></field>
               <div class="switcher">
                 <span class="switch-item" v-on:click.prevent="registration.fsex = 'm'" v-bind:class="{active: (registration.fsex == 'm')}">М</span>
                 <span class="switch-item" v-on:click.prevent="registration.fsex = 'f'" v-bind:class="{active: (registration.fsex == 'f')}">Ж</span>
               </div>
-            </div>
+            </div> -->
             <div class="fieldset">
-              <div class="uploader upload-pic"></div>
+              <uploader id="avatar-uploader" type="avatar" label="Загрузить фотографию" accept="image/*" subscript="Макс. размер 6 Мб, 250×250 пикселей"></uploader>
             </div>
 
 
@@ -324,31 +324,58 @@
             </div>
             <div class="fieldset">
               <field id="fbirthyear" v-model="registration.fgraduatoinyear" type="number" label="Год получения диплома"></field>
-              <div class="uploader" label="Загрузить диплом"></div>
+            </div>
+            <div class="fieldset">
+              <uploader id="diploma-uploader" type="file" label="Загрузить диплом" accept="image/*,.pdf"></uploader>
             </div>
           </div>
 
           <div class="form-block occupation-block">
             <h3 class="step">
               <div class="subscript">Шаг 3 из 4</div>
-              <div class="caption">Место работы</div>
+              <div class="caption">Работа</div>
             </h3>
 
             <div class="fieldset">
               <field id="foccupation" v-model="registration.foccupation" place="top" type="text" label="Организация"></field>
               <field id="fjobtitle" v-model="registration.fjobtitle" place="bottom" type="text" label="Должность"></field>
             </div>
+
+            <div class="fieldset">
+              <field id="fspecialty" v-model="registration.fjobtitle" type="text" label="Специализация"></field>
+            </div>
           </div>
 
           <div class="form-block contact-block">
             <h3 class="step">
               <div class="subscript">Шаг 4 из 4</div>
-              <div class="caption">Контактная информация</div>
+              <div class="caption">Авторизация</div>
             </h3>
 
             <div class="fieldset">
+              <div class="field-caption">
+                C помощью телефона можно быстро авторизоваться без пароля. Мы никому не раскрываем эту информацию
+              </div>
               <field id="fphone" v-model="registration.fphone" type="text" label="Телефон"></field>
             </div>
+
+            <div class="fieldset">
+              <div class="field-caption">
+                Добавьте авторизацию через социальные&nbsp;сети
+              </div>
+              <div class="social-block">
+                <div class="social-btn social-btn_vk" v-on:click="routeSocial('vk')"></div>
+                <div class="social-btn social-btn_ok"></div>
+                <div class="social-btn social-btn_fb" v-on:click="routeSocial('fb')"></div>
+                <div class="social-btn social-btn_mailru"></div>
+                <div class="social-btn social-btn_ya"></div>
+              </div>
+            </div>
+
+            <div class="fieldset">
+              <field id="fnewpass" v-model="registration.fnewpass" type="text" label="Новый пароль"></field>
+            </div>
+
           </div>
 
         </div>

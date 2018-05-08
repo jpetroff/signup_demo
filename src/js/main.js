@@ -1,5 +1,5 @@
 w.Data = {
-  current: 'registration1', // current screen
+  current: 'registration2', // current screen
 
   // creds
   // email: 'e.rozhdestvenskaya@doktornarabote.cc',
@@ -47,12 +47,12 @@ w.Data = {
     // work
     foccupation: '',
     fjobtitle: '',
-    fcurrentlyemployed: true,
+    fspecialty: true,
 
     // personal 2
     fphone: '',
     fsocialapps: [],
-    fselfdescription: '',
+    fnewpass: '',
 
   },
   restore: {

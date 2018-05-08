@@ -159,10 +159,63 @@ Vue.component('popup', w.Components['popup']);
 })(window);
 (function(w){
 "use strict";
+// File /Users/jpetrov/Work/signup_demo/src/components/uploader.js
+
+w.Components['uploader'] = {
+  props: ['type', 'label', 'id', 'accept', 'subscript'],
+  template: "<label class=\"app-field upload-field\" v-bind:class=\"{loaded: (name &amp;&amp; name != \'\'), focus: (name &amp;&amp; name != \'\' &amp;&amp; type == \'file\'), \'avatar-layout\': (type == \'avatar\')}\" v-on:click=\"$emit(\'click\')\"><span class=app-field__caption>{{ dynamicLabel }} <span class=subscript v-if=subscript>{{ subscript }}</span> </span><span class=app-field__input v-html=content v-bind:style=styleObject></span><div class=upload-field__icon><svg width=32 height=32 viewBox=\"0 0 32 32\" version=1.1 xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink><g id=Canvas fill=none><g id=plus><circle id=Ellipse cx=16 cy=16 r=16 fill=#E3E3E3></circle><rect id=\"Rectangle 2\" width=2 height=16 transform=\"translate(15 8)\" fill=white></rect><rect id=Rectangle width=16 height=2 transform=\"translate(8 15)\" fill=white></rect></g></g></svg></div><input class=upload-field__hidden-input v-bind:id=[id] type=file v-on:change=onUpload($event.target)></label>",
+  data: function() {
+    return {
+      content: '',
+      type: 'file', // < file | avatar >
+      errorClass: '',
+      errorType: this.error,
+      dynamicLabel: this.label,
+      styleObject: {},
+      name: null
+    }
+  },
+  methods: {
+    onUpload: function(elem) {
+      console.dir(elem);
+
+      if(!elem.files[0]) return;
+
+      this.name = elem.files[0].name;
+
+      if(this.type == "file") {
+        this.content = '' + elem.files[0].name;
+      } else if (this.type == "avatar") {
+        var reader = new FileReader();
+
+        reader.addEventListener('load', _.bind(function() {
+          this.content = '&nbsp;';
+
+          this.styleObject = {
+            backgroundImage: 'url("' + reader.result + '")'
+          }
+        }, this));
+
+        reader.readAsDataURL(elem.files[0]);
+      }
+
+
+      this.$emit('upload', elem.files[0].name);
+    }
+  }
+
+}
+
+Vue.component('uploader', w.Components['uploader']);
+
+// End of /Users/jpetrov/Work/signup_demo/src/components/uploader.js
+})(window);
+(function(w){
+"use strict";
 // File /Users/jpetrov/Work/signup_demo/src/js/main.js
 
 w.Data = {
-  current: 'registration1', // current screen
+  current: 'registration2', // current screen
 
   // creds
   // email: 'e.rozhdestvenskaya@doktornarabote.cc',
@@ -210,12 +263,12 @@ w.Data = {
     // work
     foccupation: '',
     fjobtitle: '',
-    fcurrentlyemployed: true,
+    fspecialty: true,
 
     // personal 2
     fphone: '',
     fsocialapps: [],
-    fselfdescription: '',
+    fnewpass: '',
 
   },
   restore: {
