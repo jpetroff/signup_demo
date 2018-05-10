@@ -1,6 +1,21 @@
 #main-screen {
   background: white;
 
+  &.show {
+    position: static;
+    visibility: visible;
+    height: auto;
+    overflow: auto;
+  }
+
+  &.hide {
+    position: absolute;
+    left: -300%;
+    visibility: hidden;
+    height: 1px;
+    overflow: hidden;
+  }
+
   .header {
     .mixin-header;
     font-size: 10px;

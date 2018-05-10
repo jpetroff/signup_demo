@@ -10,6 +10,7 @@ w.Data = {
   smsCode: '',
   password: '',
   phone: '',
+  isValidPhone: false,
   diplomaCode: '',
   diplomaDate: '',
   isValidCode: false,
@@ -17,6 +18,7 @@ w.Data = {
   typeModal: '', // < reg | existing >
 
   main: {
+    loginField: '',
     isErrorPass: false,
     validLogin: false,
     suggestRestoreAccess: false
@@ -88,7 +90,8 @@ w.Data = {
       app: ['vk'],
       pic: '/img/userpic.jpeg',
       diploma: ['АБ 99999', '10.07.2017']
-    }
+    },
+    '9647025299': 'exist_phone@dnr.cc'
   },
 
   appNames: {
@@ -108,6 +111,7 @@ w.App = new Vue({
     cleanSlate: function() {
       this.email = '';
       this.isValidEmail = false;
+      this.isValidPhone = false;
       this.isExistingAccount = false;
       this.isSocialAuth = false;
       this.phone = '';
@@ -147,7 +151,7 @@ w.App = new Vue({
         this.main.isErrorPass = 'wrongpass';
         this.main.validLogin = false;
         setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 750)
-      } else if ( !(user && user.password) ) {
+      } else if ( this.email && !(user && user.password) ) {
         this.typeModal = 'mErrorNewUser';
         this.hasModal = true;
       }
@@ -179,10 +183,24 @@ w.App = new Vue({
       }
     },
     validateEmail: function(val) {
-      this.isValidEmail = (val.indexOf('@') != -1);
+      return this.isValidEmail = (val.indexOf('@') != -1);
+    },
+    validatePhone: function(val) {
+      var _val = val.trim();
+      _val = _val.replace(/[- ]/, '');
+      return this.isValidPhone = /^(\+7|8)?[0-9]{10}$/i.test(_val);
     },
     checkUser: function() {
-      var result = this.testUsers[this.email];
+      var _email = '';
+
+      if (this.email && this.isValidEmail) {
+        _email = this.email;
+      } else if (this.phone && this.isValidPhone) {
+        _email = this.testUsers[this.phone];
+      } else {
+        return undefined;
+      }
+      var result = this.testUsers[_email];
 
       if(!result) {
         this.testUsers[this.email] = {
@@ -211,6 +229,7 @@ w.App = new Vue({
         this.hasModal = !!(this.email && this.isValidEmail && this.testUsers[this.email] && this.testUsers[this.email].password);
         this.typeModal = 'mErrorExistingUser'
         // this.routeHome();
+        return true;
       }
 
       this.registration.existingInfo = user || {};
@@ -279,15 +298,28 @@ w.App = new Vue({
       }
     },
     validateLogin: function() {
-      this.validateEmail(this.email);
-      if(this.email != '' && this.isValidEmail && this.password != '') {
+      if( this.validateEmail(this.main.loginField) ) {
+        this.phone = '';
+        this.isValidPhone = false;
+        this.email = this.main.loginField;
+        this.isValidEmail = true;
+      } else if( this.validatePhone(this.main.loginField) ) {
+        this.email = '';
+        this.isValidEmail = false;
+        this.phone = this.main.loginField;
+        this.isValidPhone = true;
+      }
+
+      if(
+        (this.email != '' && this.isValidEmail && this.password != '') ||
+        (this.phone != '' && this.isValidPhone && this.password != '')
+      ) {
         this.main.validLogin = true;
       } else {
         this.main.validLogin = false;
       }
+
       console.log(this.main.validLogin);
-      // var top = this.$refs.signInBlock.offsetTop;
-      // w.utils.scrollTop(top + 16, true, 250);
     },
     scrollLogin: function() {
       // var top = this.$refs.signInBlock.offsetTop;

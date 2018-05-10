@@ -4,6 +4,7 @@
 
     <input v-if="!textarea" class="app-field__input"
       v-bind:id="[id]"
+      v-bind:name="[id]"
       v-bind:type="type"
       v-bind:value="value"
       v-on:focus="focus = true; $emit('input', $event.target.value);"
@@ -12,6 +13,7 @@
 
     <textarea v-if="!!textarea" rows="3" class="app-field__input_multiline"
       v-bind:id="[id]"
+      v-bind:name="[id]"
       v-on:focus="focus = true; $emit('input', $event.target.value);"
       v-on:blur="focus = false"
       v-on:input="$emit('input', $event.target.value)"

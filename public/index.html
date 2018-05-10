@@ -20,7 +20,7 @@
 
         <label for="main-screen-password"
           class="btn btn-primary"
-          v-on:click="routeHome(); $nextTick(function() {console.log('!'); this.hasModal = false})">
+          v-on:click="routeHome(); hasModal = false;">
           Войти с паролем
         </label>
         <div class="btn btn-text btn-next btn-sm" v-on:click="cantLogin">Я не помню пароль</div>
@@ -44,21 +44,6 @@
           v-bind:pic="null"
         ></account-info>
 
-        <!-- <label for="main-screen-password"
-          class="btn btn-primary"
-          v-on:click="main.hasModal = false">
-          Я новый участник
-        </label>
-        <div class="btn btn-text btn-next" v-on:click="cantLogin">Я не могу войти</div>
-        <label
-          for="registration-1-screen-email"
-          class="btn btn-text"
-
-          v-on:click="routeRegStepOne"
-        >
-          Войти с другой почтой
-        </label> -->
-
         <label for="registration-1-screen-email"
           class="btn btn-secondary"
           v-on:click="routeRegStepOne(); $nextTick(function() {console.log('!'); this.hasModal = false})">
@@ -74,7 +59,8 @@
         </label>
       </popup>
 
-      <div class="screen" id="main-screen" v-show="current == 'main'">
+      <div class="screen" id="main-screen" v-bind:class="{show: (current == 'main'), hide: (current != 'main')}">
+      <!-- <div class="screen" id="main-screen" v-show="current == 'main'"> -->
         <div class="header">
           <img class="header-logo" src="/img/logo_full.png" srcset="/img/logo_full@2x.png 2x" alt="">
         </div>
@@ -89,7 +75,7 @@
         </div>
         <!-- <div class="separator"></div> -->
         <div class="sign-in-block content" ref="signInBlock">
-          <field id="main-screen-email" v-model="email" place="top" type="email" label="Почта или телефон" v-on:input="validateLogin" v-on:click="scrollLogin"></field>
+          <field id="main-screen-email" v-model="main.loginField" place="top" type="email" label="Почта или телефон" v-on:input="validateLogin" v-on:click="scrollLogin"></field>
           <field id="main-screen-password" v-model="password" place="bottom" type="password" label="Пароль" v-bind:error="main.isErrorPass" v-on:input="validateLogin"></field>
           <div class="btn btn-primary" v-bind:class="{'disabled': !main.validLogin}" v-on:click="checkLogin">Войти</div>
           <div class="social-block">
