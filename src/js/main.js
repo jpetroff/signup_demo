@@ -1,9 +1,9 @@
 w.Data = {
-  current: 'registration2', // current screen
+  current: 'main', // current screen
 
   // creds
   // email: 'e.rozhdestvenskaya@doktornarabote.cc',
-  email: 'new@dnr.cc',
+  email: '',
   isValidEmail: false,
   isExistingAccount: false,
   isSocialAuth: false, // false or id:['vk', 'fb']
@@ -47,7 +47,7 @@ w.Data = {
     // work
     foccupation: '',
     fjobtitle: '',
-    fspecialty: true,
+    fspecialty: '',
 
     // personal 2
     fphone: '',
@@ -147,6 +147,9 @@ w.App = new Vue({
         this.main.isErrorPass = 'wrongpass';
         this.main.validLogin = false;
         setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 750)
+      } else if ( !(user && user.password) ) {
+        this.typeModal = 'mErrorNewUser';
+        this.hasModal = true;
       }
     },
     onSocialNext: function() {

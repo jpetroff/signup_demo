@@ -3,8 +3,6 @@ global.__dst = __dirname + '/public/';
 
 global.__prod = (process.env.PROD == '1');
 
-console.log(__dirname);
-
 var gulp = require('gulp');
 
 require('./gulp/build');

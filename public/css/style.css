@@ -404,8 +404,11 @@ th {
   height: 18px;
 }
 
+textarea::-webkit-input-placeholder {
+  text-indent: 0px;
+}
 .app-field {
-  padding: 30px 12px 10px 12px;
+  padding: 29px 12px 9px 12px;
   box-sizing: border-box;
   display: block;
   border: 1px solid #DBDBDB;
@@ -436,6 +439,24 @@ th {
   padding: 0 !important;
   vertical-align: top;
   background: transparent;
+}
+.app-field__input_multiline {
+  font-size: 18px;
+  line-height: 24px;
+  border: none;
+  display: block;
+  width: 100%;
+  outline: none;
+  box-shadow: none;
+  padding: 0 !important;
+  vertical-align: top;
+  background: transparent;
+  margin: 0;
+  border-radius: 0 !important;
+  -webkit-appearance: none;
+  -webkit-border-radius: 0px;
+  -ms-flex-direction: row;
+      flex-direction: row;
 }
 .app-field.focus .app-field__caption {
   font-size: 14px;
@@ -621,7 +642,7 @@ th {
 }
 .avatar-layout .app-field__caption .subscript {
   display: inline-block;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 16px;
   margin-top: 8px;
 }
@@ -673,6 +694,13 @@ body {
   padding: 12px 24px;
   box-sizing: border-box;
   font-weight: 500;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+}
+.screen {
+  padding-top: 64px;
 }
 .mixin-section-header {
   font-size: 25px;
@@ -830,6 +858,10 @@ body {
   padding: 12px 24px;
   box-sizing: border-box;
   font-weight: 500;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
   font-size: 10px;
   margin-bottom: 20px;
   text-align: center;
@@ -930,6 +962,7 @@ body {
 #social-screen {
   height: 100vh;
   color: #424242;
+  padding-top: 0 !important;
 }
 #social-screen .content {
   display: -ms-flexbox;
@@ -980,6 +1013,11 @@ body {
   -ms-flex-direction: row;
       flex-direction: row;
   padding: 0 4px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 #social-screen .footer .btn {
   margin: 0 4px;
@@ -1018,6 +1056,10 @@ body {
   padding: 12px 24px;
   box-sizing: border-box;
   font-weight: 500;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
   font-size: 10px;
   margin-bottom: 28px;
   text-align: left;
@@ -1102,8 +1144,8 @@ body {
   font-size: 16px;
   line-height: 20px;
   margin-bottom: 12px;
-  opacity: 0.5;
   margin-top: 36px;
+  padding-right: 20px;
 }
 #registration-2-screen .fieldset .social-block {
   text-align: left;
@@ -1122,11 +1164,10 @@ body {
 #registration-2-screen .fieldset .switcher {
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-flow: column;
-      flex-flow: column;
+  -ms-flex-flow: row;
+      flex-flow: row;
   -ms-flex-positive: 1;
       flex-grow: 1;
-  margin-left: 20px;
 }
 #registration-2-screen .fieldset .switcher .switch-item {
   display: block;
@@ -1135,6 +1176,8 @@ body {
   padding-left: 28px;
   font-size: 18px;
   position: relative;
+  -ms-flex-positive: 1;
+      flex-grow: 1;
 }
 #registration-2-screen .fieldset .switcher .switch-item:before {
   content: '';
@@ -1150,6 +1193,12 @@ body {
 #registration-2-screen .fieldset .switcher .switch-item.active:before {
   border: 6px solid #54A0C9;
 }
+#registration-2-screen .registration-footer {
+  background: #D8ECF7;
+  margin: 0 -20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
 #restore-access-screen .header {
   width: 100%;
   height: 44px;
@@ -1157,6 +1206,10 @@ body {
   padding: 12px 24px;
   box-sizing: border-box;
   font-weight: 500;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
   font-size: 10px;
   margin-bottom: 28px;
   text-align: left;

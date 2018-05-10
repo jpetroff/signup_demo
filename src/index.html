@@ -20,7 +20,6 @@
 
         <label for="main-screen-password"
           class="btn btn-primary"
-
           v-on:click="routeHome(); $nextTick(function() {console.log('!'); this.hasModal = false})">
           Войти с паролем
         </label>
@@ -37,14 +36,15 @@
 
       <popup id="mErrorNewUser" class="new-user-notice"
         v-bind:is-open="hasModal && typeModal == 'mErrorNewUser' ">
-        <div class="message">
-          <p class="main-p _has-overflow-block">
-            Профиль
-            <span class="text-overflow">{{email}}</span><br />
-            не является зарегистрированным участником
-          </p>
-        </div>
-        <label for="main-screen-password"
+
+        <div class="header">Адрес не зарегистрирован</div>
+        <account-info
+          v-bind:name="null"
+          v-bind:email="email"
+          v-bind:pic="null"
+        ></account-info>
+
+        <!-- <label for="main-screen-password"
           class="btn btn-primary"
           v-on:click="main.hasModal = false">
           Я новый участник
@@ -57,6 +57,20 @@
           v-on:click="routeRegStepOne"
         >
           Войти с другой почтой
+        </label> -->
+
+        <label for="registration-1-screen-email"
+          class="btn btn-secondary"
+          v-on:click="routeRegStepOne(); $nextTick(function() {console.log('!'); this.hasModal = false})">
+          Я новый участник
+        </label>
+        <div class="btn btn-text btn-next btn-sm" v-on:click="cantLogin">Я не могу войти</div>
+        <label
+          for="registration-1-screen-email"
+          class="btn btn-text btn-sm"
+          v-on:click="this.hasModal = false"
+        >
+          Ввести другую почту
         </label>
       </popup>
 
@@ -247,7 +261,7 @@
           <div class="restore-message"></div>
           <account-info
             v-bind:name="registration.existingInfo.name"
-            v-bind:email="registration.existingInfo.email"
+            v-bind:email="registration.existingInfo.email || email"
             v-bind:pic="registration.existingInfo.pic"
             v-bind:pic="registration.existingInfo.phone"
           ></account-info>
@@ -299,15 +313,17 @@
               <field id="fname" v-model="registration.fname" place="middle" type="text" label="Имя"></field>
               <field id="fmiddlename" v-model="registration.fmiddlename" place="bottom" type="text" label="Отчество"></field>
             </div>
-            <div class="fieldset row">
-              <field id="fbirthyear" v-model="registration.fbirthyear" type="number" label="Год рождения" class="not-fw"></field>
-              <div class="switcher">
-                <span class="switch-item" v-on:click.prevent="registration.fsex = 'm'" v-bind:class="{active: (registration.fsex == 'm')}">М</span>
-                <span class="switch-item" v-on:click.prevent="registration.fsex = 'f'" v-bind:class="{active: (registration.fsex == 'f')}">Ж</span>
-              </div>
+            <!-- <div class="fieldset">
+              <field id="fbirthyear" v-model="registration.fbirthyear" type="number" label="Дата рождения" ></field>
             </div>
             <div class="fieldset">
-              <uploader id="avatar-uploader" type="avatar" label="Загрузить фотографию" accept="image/*" subscript="Макс. размер 6 Мб, 250×250 пикселей"></uploader>
+              <div class="switcher">
+                <span class="switch-item" v-on:click.prevent="registration.fsex = 'm'" v-bind:class="{active: (registration.fsex == 'm')}">Мужчина</span>
+                <span class="switch-item" v-on:click.prevent="registration.fsex = 'f'" v-bind:class="{active: (registration.fsex == 'f')}">Женщина</span>
+              </div>
+            </div> -->
+            <div class="fieldset">
+              <uploader id="avatar-uploader" type="avatar" label="Загрузить фотографию" accept="image/*" subscript="На фото должно быть различимо видно ваше лицо"></uploader>
             </div>
 
 
@@ -326,7 +342,7 @@
               <field id="fbirthyear" v-model="registration.fgraduatoinyear" type="number" label="Год получения диплома"></field>
             </div>
             <div class="fieldset">
-              <uploader id="diploma-uploader" type="file" label="Загрузить диплом" accept="image/*,.pdf"></uploader>
+              <uploader id="diploma-uploader" type="file" label="Прикрепить диплом" accept="image/*,.pdf"></uploader>
             </div>
           </div>
 
@@ -337,12 +353,15 @@
             </h3>
 
             <div class="fieldset">
+              <div class="field-caption">
+                Эта информация нужна для проверки. Она останется конфеденциальной
+              </div>
               <field id="foccupation" v-model="registration.foccupation" place="top" type="text" label="Организация"></field>
               <field id="fjobtitle" v-model="registration.fjobtitle" place="bottom" type="text" label="Должность"></field>
             </div>
 
             <div class="fieldset">
-              <field id="fspecialty" v-model="registration.fjobtitle" type="text" label="Специализация"></field>
+              <field id="fspecialty" v-model="registration.fspecialty" type="text" textarea="true" label="Специализация"></field>
             </div>
           </div>
 
@@ -376,6 +395,10 @@
               <field id="fnewpass" v-model="registration.fnewpass" type="text" label="Новый пароль"></field>
             </div>
 
+          </div>
+
+          <div class="registration-footer">
+            <div class="btn btn-primary">Сохранить</div>
           </div>
 
         </div>

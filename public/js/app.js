@@ -80,8 +80,8 @@ Vue.component('account-info', w.Components['account-info']);
 // File /Users/jpetrov/Work/signup_demo/src/components/field.js
 
 w.Components['field'] = {
-  template: "<label class=app-field v-bind:class=\"[ activeClass, placeClass, errorClass ]\" v-on:click=\"$emit(\'click\')\"><span class=app-field__caption>{{ dynamicLabel }}</span> <input class=app-field__input v-bind:id=[id] v-bind:type=type v-bind:value=value v-on:focus=\"focus = true; $emit(\'input\', $event.target.value);\" v-on:blur=\"focus = false\" v-on:input=\"$emit(\'input\', $event.target.value); unflagError()\"></label>",
-  props: ['value', 'label', 'place', 'type', 'id',  'error'],
+  template: "<label class=app-field v-bind:class=\"[ activeClass, placeClass, errorClass ]\" v-on:click=\"$emit(\'click\')\"><span class=app-field__caption>{{ dynamicLabel }}</span> <input v-if=!textarea class=app-field__input v-bind:id=[id] v-bind:type=type v-bind:value=value v-on:focus=\"focus = true; $emit(\'input\', $event.target.value);\" v-on:blur=\"focus = false\" v-on:input=\"$emit(\'input\', $event.target.value); unflagError()\"> <textarea v-if=!!textarea rows=3 class=app-field__input_multiline v-bind:id=[id] v-on:focus=\"focus = true; $emit(\'input\', $event.target.value);\" v-on:blur=\"focus = false\" v-on:input=\"$emit(\'input\', $event.target.value)\" v-bind:style=fixIphone>{{ value }}</textarea></label>",
+  props: ['value', 'label', 'place', 'type', 'id',  'error', 'textarea'],
   model: {
     prop: 'value',
     event: 'input'
@@ -92,7 +92,8 @@ w.Components['field'] = {
       type: 'text',
       errorClass: '',
       errorType: this.error,
-      dynamicLabel: this.label
+      dynamicLabel: this.label,
+      styleObjTextarea: {}
     }
   },
   watch: {
@@ -112,6 +113,13 @@ w.Components['field'] = {
     placeClass: function() {
       return ['top', 'bottom', 'middle', 'single'].indexOf(this.place) != -1 ? this.place : 'single';
 
+    },
+    fixIphone: function() {
+      if(navigator.userAgent.indexOf('iPhone') != -1) {
+        return { marginLeft: '-3px'};
+      }
+
+      return {};
     }
   },
   methods: {
@@ -215,11 +223,11 @@ Vue.component('uploader', w.Components['uploader']);
 // File /Users/jpetrov/Work/signup_demo/src/js/main.js
 
 w.Data = {
-  current: 'registration2', // current screen
+  current: 'main', // current screen
 
   // creds
   // email: 'e.rozhdestvenskaya@doktornarabote.cc',
-  email: 'new@dnr.cc',
+  email: '',
   isValidEmail: false,
   isExistingAccount: false,
   isSocialAuth: false, // false or id:['vk', 'fb']
@@ -263,7 +271,7 @@ w.Data = {
     // work
     foccupation: '',
     fjobtitle: '',
-    fspecialty: true,
+    fspecialty: '',
 
     // personal 2
     fphone: '',
@@ -363,6 +371,9 @@ w.App = new Vue({
         this.main.isErrorPass = 'wrongpass';
         this.main.validLogin = false;
         setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 750)
+      } else if ( !(user && user.password) ) {
+        this.typeModal = 'mErrorNewUser';
+        this.hasModal = true;
       }
     },
     onSocialNext: function() {

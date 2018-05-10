@@ -1,20 +1,29 @@
 <template lang="html">
   <label class="app-field" v-bind:class="[ activeClass, placeClass, errorClass ]" v-on:click="$emit('click')">
     <span class="app-field__caption">{{ dynamicLabel }}</span>
-    <input class="app-field__input"
+
+    <input v-if="!textarea" class="app-field__input"
       v-bind:id="[id]"
       v-bind:type="type"
       v-bind:value="value"
       v-on:focus="focus = true; $emit('input', $event.target.value);"
       v-on:blur="focus = false"
       v-on:input="$emit('input', $event.target.value); unflagError()">
+
+    <textarea v-if="!!textarea" rows="3" class="app-field__input_multiline"
+      v-bind:id="[id]"
+      v-on:focus="focus = true; $emit('input', $event.target.value);"
+      v-on:blur="focus = false"
+      v-on:input="$emit('input', $event.target.value)"
+      v-bind:style="fixIphone"
+    >{{ value }}</textarea>
   </label>
 </template>
 
 <script>
 w.Components['field'] = {
   template: "<%= template %>",
-  props: ['value', 'label', 'place', 'type', 'id',  'error'],
+  props: ['value', 'label', 'place', 'type', 'id',  'error', 'textarea'],
   model: {
     prop: 'value',
     event: 'input'
@@ -25,7 +34,8 @@ w.Components['field'] = {
       type: 'text',
       errorClass: '',
       errorType: this.error,
-      dynamicLabel: this.label
+      dynamicLabel: this.label,
+      styleObjTextarea: {}
     }
   },
   watch: {
@@ -45,6 +55,13 @@ w.Components['field'] = {
     placeClass: function() {
       return ['top', 'bottom', 'middle', 'single'].indexOf(this.place) != -1 ? this.place : 'single';
 
+    },
+    fixIphone: function() {
+      if(navigator.userAgent.indexOf('iPhone') != -1) {
+        return { marginLeft: '-3px'};
+      }
+
+      return {};
     }
   },
   methods: {
@@ -71,9 +88,10 @@ Vue.component('field', w.Components['field']);
 </script>
 
 <style lang="less">
+textarea::-webkit-input-placeholder { text-indent: 0px; }
 .app-field {
   // height: 56px;
-  padding: 30px 12px 10px 12px;
+  padding: 29px 12px 9px 12px;
   box-sizing: border-box;
   display: block;
   border: 1px solid #DBDBDB;
@@ -106,6 +124,25 @@ Vue.component('field', w.Components['field']);
     padding: 0 !important;
     vertical-align: top;
     background: transparent;
+
+    &_multiline {
+      font-size: 18px;
+      line-height: 24px;
+      border: none;
+      display: block;
+      width: 100%;
+      outline: none;
+      box-shadow: none;
+      padding: 0 !important;
+      vertical-align: top;
+      background: transparent;
+      margin: 0;
+      border-radius: 0 !important;
+      -webkit-appearance:none;
+      -webkit-border-radius:0px;
+      flex-direction: row;
+
+    }
   }
 
   &.focus &__caption {

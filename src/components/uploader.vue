@@ -127,7 +127,7 @@ Vue.component('uploader', w.Components['uploader']);
 
     .subscript {
       display: inline-block;
-      font-size: 12px;
+      font-size: 14px;
       line-height: 16px;
       margin-top: 8px;
     }
