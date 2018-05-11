@@ -21,7 +21,9 @@ w.Data = {
     loginField: '',
     isErrorPass: false,
     validLogin: false,
-    suggestRestoreAccess: false
+    isErrorLogin: false,
+    suggestRestoreAccess: false,
+
   },
   social: {
     prev: '', // 0 - registration, 1 - login
@@ -58,14 +60,18 @@ w.Data = {
 
   },
   restore: {
-    accData: {
-      name: '',
-      code: '1234',
-      name: 'Володина Ольга Александровна',
-      pic: '/img/userpic.jpeg',
-      app: ['vk']
-    },
-    state: 1, // 0 - запрос идентификатора, 1 - пароль на почту или соц. сеть, 2 - телефон, 3 - диплом
+    // accData: {
+    //   name: '',
+    //   code: '1234',
+    //   name: 'Володина Ольга Александровна',
+    //   pic: '/img/userpic.jpeg',
+    //   app: ['vk']
+    // },
+    accData: {},
+    accountId: '',
+    validAccount: false,
+    error: false,
+    state: 0, // 0 - запрос идентификатора, 1 - пароль на почту или соц. сеть, 2 - телефон, 3 - диплом
   },
 
   testUsers: {
@@ -100,7 +106,9 @@ w.Data = {
   },
 
   formErrors: {
-    'wrongpass': 'Неверный пароль'
+    'wrongpass': 'Неверный пароль',
+    'unknownnumber': 'Номер не зарегистрирован',
+    'unknownrestore': 'Профиль не найден'
   }
 }
 
@@ -143,17 +151,21 @@ w.App = new Vue({
     checkLogin: function() {
       var user = this.checkUser();
 
-      console.log(user && user.password && this.password != user.password);
+      console.log(user);
 
       if( user && user.password && this.password == user.password ) {
         this.routeFeed();
       } else if (user && user.password && this.password != user.password ) {
         this.main.isErrorPass = 'wrongpass';
         this.main.validLogin = false;
-        setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 750)
+        setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 750);
       } else if ( this.email && !(user && user.password) ) {
         this.typeModal = 'mErrorNewUser';
         this.hasModal = true;
+      } else if ( this.phone && !user) {
+        this.main.isErrorLogin = 'unknownnumber';
+        this.main.validLogin = false;
+        setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 750);
       }
     },
     onSocialNext: function() {
@@ -187,7 +199,8 @@ w.App = new Vue({
     },
     validatePhone: function(val) {
       var _val = val.trim();
-      _val = _val.replace(/[- ]/, '');
+      _val = _val.replace(/[- ]/g, '');
+
       return this.isValidPhone = /^(\+7|8)?[0-9]{10}$/i.test(_val);
     },
     checkUser: function() {
@@ -196,6 +209,7 @@ w.App = new Vue({
       if (this.email && this.isValidEmail) {
         _email = this.email;
       } else if (this.phone && this.isValidPhone) {
+        this.phone = this.phone.replace(/^(\+7|8)/, '');
         _email = this.testUsers[this.phone];
       } else {
         return undefined;
@@ -240,17 +254,25 @@ w.App = new Vue({
       this.current = 'registration2'
 
     },
-    cantLogin: function() {
+    cantLogin: function(ev) {
+      ev.preventDefault();
+
       this.hasModal = false;
       this.initRestore();
       this.current = 'restore';
     },
     initRestore: function() {
+      if(this.restore.accountId == '') return;
       var user = this.checkUser();
 
       if( user && user.password ) {
         this.restore.accData = user;
         this.restore.accData.pic = user.pic || '/img/no_photo.jpeg';
+
+        if( this.phone && this.isValidPhone && this.testUsers[this.phone]) {
+          this.email = this.testUsers[this.phone];
+          this.isValidEmail = true;
+        }
 
         if( user.phone ) {
 
@@ -268,12 +290,43 @@ w.App = new Vue({
 
       } else {
         // нет такого пользователя
-
+        this.restore.validAccount = false;
+        this.restore.error = 'unknownrestore';
       }
     },
-    checkSmsCode: function (val) {
-      val = parseInt(val);
-      this.smsCode = val;
+    validateRestoreField: function() {
+      this.restore.error = '';
+      if( this.validateEmail(this.restore.accountId) ) {
+        this.phone = '';
+        this.isValidPhone = false;
+        this.email = this.restore.accountId;
+        this.isValidEmail = true;
+      } else if( this.validatePhone(this.restore.accountId) ) {
+        this.email = '';
+        this.isValidEmail = false;
+        this.phone = this.restore.accountId;
+        this.isValidPhone = true;
+      }
+
+      if(
+        (this.email != '' && this.isValidEmail) ||
+        (this.phone != '' && this.isValidPhone)
+      ) {
+        this.restore.validAccount = true;
+      } else {
+        this.restore.validAccount = false;
+      }
+
+      console.log(this.restore.validAccount);
+    },
+    checkSmsCode: function () {
+      if(this.smsCode == '') return;
+      this.smsCode = parseInt(this.smsCode);
+
+      if(this.smsCode == NaN) this.smsCode = '';
+
+      console.log(this.smsCode);
+
       if(this.smsCode == this.restore.accData.code) {
         this.isValidCode = true;
       } else {
@@ -330,7 +383,16 @@ w.App = new Vue({
       this.routeRegStepTwo();
     }
   },
-
+  watch: {
+    'email': function() {
+      this.main.loginField = this.email;
+      this.restore.accountId = this.email;
+    },
+    'phone': function() {
+      this.main.loginField = this.phone;
+      this.restore.accountId = this.phone;
+    }
+  }
 
 });
 

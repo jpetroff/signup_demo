@@ -18,11 +18,11 @@
           v-bind:pic="testUsers[email] && testUsers[email].pic"
         ></account-info>
 
-        <label for="main-screen-password"
+        <v-touch tag="label" for="main-screen-password"
           class="btn btn-primary"
-          v-on:click="routeHome(); hasModal = false;">
+          v-on:tap.prevent="routeHome(); hasModal = false;">
           Войти с паролем
-        </label>
+        </v-touch>
         <div class="btn btn-text btn-next btn-sm" v-on:click="cantLogin">Я не помню пароль</div>
         <label
           for="registration-1-screen-email"
@@ -59,8 +59,8 @@
         </label>
       </popup>
 
-      <div class="screen" id="main-screen" v-bind:class="{show: (current == 'main'), hide: (current != 'main')}">
-      <!-- <div class="screen" id="main-screen" v-show="current == 'main'"> -->
+      <!-- <div class="screen" id="main-screen" v-bind:class="{show: (current == 'main'), hide: (current != 'main')}"> -->
+      <div class="screen" id="main-screen" v-show="current == 'main'">
         <div class="header">
           <img class="header-logo" src="/img/logo_full.png" srcset="/img/logo_full@2x.png 2x" alt="">
         </div>
@@ -68,15 +68,15 @@
           <h1 class="sign-up-header">
             Коллективный разум<br>527 415 врачей
           </h1>
-          <div class="btn btn-secondary" v-on:click="routeRegStepOne()">
+          <div for="registration-1-screen-email" class="btn btn-secondary"  v-on:click="routeRegStepOne($event)">
             Регистрация
           </div>
           <div class="btn-subscript">требует подтверждения квалификации, 18+</div>
         </div>
         <!-- <div class="separator"></div> -->
         <div class="sign-in-block content" ref="signInBlock">
-          <field id="main-screen-email" v-model="main.loginField" place="top" type="email" label="Почта или телефон" v-on:input="validateLogin" v-on:click="scrollLogin"></field>
-          <field id="main-screen-password" v-model="password" place="bottom" type="password" label="Пароль" v-bind:error="main.isErrorPass" v-on:input="validateLogin"></field>
+          <field id="main-screen-email" v-model="main.loginField" place="top" type="email" label="Почта или телефон" v-bind:error="main.isErrorLogin" v-on:input="validateLogin" v-on:click="scrollLogin"></field>
+          <field id="main-screen-password" v-model="password" place="bottom" type="password" label="Пароль" v-bind:error="main.isErrorPass" v-on:input="validateLogin(); main.isErrorPass = '';"></field>
           <div class="btn btn-primary" v-bind:class="{'disabled': !main.validLogin}" v-on:click="checkLogin">Войти</div>
           <div class="social-block">
             <div class="social-btn social-btn_vk" v-on:click="routeSocial('vk')"></div>
@@ -87,8 +87,9 @@
           </div>
 
         </div>
-        <div class="emergency-btn btn btn-sm btn-text" v-bind:class="{'highlighted':main.suggestRestoreAccess}" v-on:click="cantLogin">Я не могу войти в свой аккаунт</div>
-
+        <!-- <v-touch tag="label" for="restore-screen-email" v-on:tap="cantLogin($event)" v-on:click="function(){}"> -->
+          <div class="emergency-btn btn btn-sm btn-text" v-bind:class="{'highlighted':main.suggestRestoreAccess}" v-on:click="cantLogin">Я не могу войти в свой профиль</div>
+        <!-- </v-touch> -->
 
         <div class="content get-app-block">
           <h2 class="secondary-header">
@@ -171,10 +172,10 @@
         <div class="content">
 
           <div class="step-0" v-show="restore.state == 0">
-            <field id="restore-screen-email" v-model="email" type="text" label="Почта или телефон" v-on:input="validateEmail"></field>
+            <field id="restore-screen-email" v-model="restore.accountId" type="text" label="Почта или телефон" v-bind:error="restore.error" v-on:input="validateRestoreField"></field>
             <div for="main-screen-password"
               class="btn btn-secondary"
-              v-bind:class="[ isValidEmail ? '' : 'disabled']"
+              v-bind:class="{disabled: !restore.validAccount}"
               v-on:click="initRestore"
             >
               Далее
@@ -210,10 +211,10 @@
               <div class="message">Код входа отправлен на ваш номер</div>
               <div class="phone-number">{{restore.accData.phone}}</div>
               <div class="code-input-wrapper">
-                <field id="restore-screen-sms" class="phone code" v-on:input="checkSmsCode" v-model="smsCode" type="text" label="Код из СМС"></field>
+                <field id="restore-screen-sms" class="phone code" v-on:input="checkSmsCode" v-model="smsCode" type="number" label="Код из СМС"></field>
                 <div class="btn btn-secondary" v-bind:class="{ 'disabled': !isValidCode }" v-on:click="loginCode">Войти</div>
               </div>
-              <div class="btn">Повторить (через 45 сек)</div>
+              <div class="btn btn-text btn-sm">Повторить (через 45 сек)</div>
             </div>
 
             <div class="restore-diploma" v-show="restore.state == 3">

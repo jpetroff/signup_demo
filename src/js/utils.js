@@ -1,5 +1,7 @@
 w.Components = {};
 
+Vue.use(VueTouch);
+
 w.utils = {
   updateDOM: function( fn, ctx ) {
 		var methodFn = _.defer;
