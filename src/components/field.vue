@@ -7,15 +7,18 @@
       v-bind:name="[id]"
       v-bind:type="type"
       v-bind:value="value"
-      v-on:focus="focus = true; $emit('input', $event.target.value)"
-      v-on:blur="focus = false"
-      v-on:input="$emit('input', $event.target.value); unflagError()">
+      v-on:focus="setfocus($event.target.value)"
+      v-on:blur="unfocus"
+      v-on:input="$emit('input', $event.target.value)"
+      v-bind:readonly="readonly"
+      v-bind:tabindex="tabindex"
+    >
 
     <textarea v-if="!!textarea" rows="3" class="app-field__input_multiline"
       v-bind:id="[id]"
       v-bind:name="[id]"
-      v-on:focus="focus = true"
-      v-on:blur="focus = false"
+      v-on:focus="setfocus($event.target.value)"
+      v-on:blur="unfocus"
       v-on:input="$emit('input', $event.target.value)"
       v-bind:style="fixIphone"
     >{{ value }}</textarea>
@@ -25,7 +28,7 @@
 <script>
 w.Components['field'] = {
   template: "<%= template %>",
-  props: ['value', 'label', 'place', 'type', 'id',  'error', 'textarea'],
+  props: ['value', 'label', 'place', 'type', 'id',  'error', 'textarea', 'readonly', 'focusId', 'tabindex'],
   model: {
     prop: 'value',
     event: 'input'
@@ -82,6 +85,18 @@ w.Components['field'] = {
         this.errorClass = '';
         this.dynamicLabel = this.label;
       }
+    },
+    unfocus: function( val ) {
+      this.focus = false;
+    },
+    setfocus: function( val ) {
+      this.focus = true;
+      window.requestAnimationFrame(function() {
+          console.log(window.innerHeight);
+          window.Data.p.focusViewportHeight = window.innerHeight;
+      });
+      console.log(val);
+      this.$emit('input', val);
     }
   }
 };

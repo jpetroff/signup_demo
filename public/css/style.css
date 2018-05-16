@@ -690,7 +690,7 @@ body {
 }
 .mixin-header {
   width: 100%;
-  height: 44px;
+  height: 48px;
   background: #54A0C9;
   padding: 12px 24px;
   box-sizing: border-box;
@@ -702,6 +702,18 @@ body {
 }
 .screen {
   padding-top: 64px;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translate3d(0, 0, 0);
+}
+.screen.modal-locker {
+  position: fixed;
+  overflow-y: hidden;
 }
 .mixin-section-header {
   font-size: 25px;
@@ -785,12 +797,27 @@ body {
 }
 .btn-text {
   background: transparent;
+  color: #999;
+}
+.btn-text.btn-primary {
   color: #065E8D;
+}
+.btn-text.btn-secondary {
+  color: #DE7900;
 }
 .btn-text.btn-sm {
   font-size: 15px;
   height: 36px;
   line-height: 35px;
+}
+.btn-next {
+  margin-top: 16px;
+}
+.fieldset .field-caption {
+  font-size: 16px;
+  line-height: 20px;
+  margin-bottom: 12px;
+  padding: 0 12px;
 }
 .social-block {
   text-align: center;
@@ -867,7 +894,7 @@ body {
 }
 #main-screen .header {
   width: 100%;
-  height: 44px;
+  height: 48px;
   background: #54A0C9;
   padding: 12px 24px;
   box-sizing: border-box;
@@ -1065,7 +1092,7 @@ body {
 }
 .reg-screen .header {
   width: 100%;
-  height: 44px;
+  height: 48px;
   background: #54A0C9;
   padding: 12px 24px;
   box-sizing: border-box;
@@ -1099,10 +1126,24 @@ body {
 #registration-1-screen .subscript {
   font-size: 18px;
   opacity: 0.5;
-  text-align: center;
+  text-align: left;
+  padding-left: 12px;
 }
 #registration-1-screen .reg-email {
   margin-top: 16px;
+}
+#registration-1-screen .fieldset .field-caption {
+  margin-top: 12px;
+}
+#registration-1-screen .confirm-personal-data {
+  margin-top: 20px;
+  padding: 0 12px;
+}
+#registration-1-screen .confirm-personal-data .confirmation-text {
+  font-size: 11px;
+  line-height: 12px;
+  opacity: 0.5;
+  margin: 12px 0;
 }
 #registration-2-screen .account-description {
   margin-bottom: 20px;
@@ -1155,15 +1196,14 @@ body {
   margin: 36px 0;
 }
 #registration-2-screen .fieldset .field-caption {
-  font-size: 16px;
-  line-height: 20px;
-  margin-bottom: 12px;
   margin-top: 36px;
-  padding-right: 20px;
+}
+#registration-2-screen .fieldset .field-caption .faded {
+  opacity: 0.4;
 }
 #registration-2-screen .fieldset .social-block {
   text-align: left;
-  margin-left: -6px;
+  margin-left: 6px;
   margin-top: 0;
 }
 #registration-2-screen .fieldset .app-field.not-fw {
@@ -1207,15 +1247,106 @@ body {
 #registration-2-screen .fieldset .switcher .switch-item.active:before {
   border: 6px solid #54A0C9;
 }
+#registration-2-screen .fake-input {
+  height: auto;
+  min-height: 24px;
+}
 #registration-2-screen .registration-footer {
   background: #D8ECF7;
   margin: 0 -20px;
   padding-left: 20px;
   padding-right: 20px;
 }
+.fs-modal-selector {
+  position: fixed;
+  z-index: 99999;
+}
+.fs-modal-selector .popup-content {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+.fs-modal-selector .app-field {
+  border-bottom-color: #065E8D;
+  pointer-events: auto;
+}
+.fs-modal-selector .select-list {
+  height: 207px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid #dbdbdb;
+  border-top-color: #065E8D;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  -webkit-overflow-scrolling: touch;
+  pointer-events: auto;
+  padding: 8px 0;
+}
+.fs-modal-selector .select-list .select-item {
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 16px;
+}
+.fs-modal-selector .select-list .select-item:active,
+.fs-modal-selector .select-list .select-item:focus,
+.fs-modal-selector .select-list .select-item.selected,
+.fs-modal-selector .select-list .select-item[data-selected="true"] {
+  background: #D8ECF7;
+}
+.simple-field {
+  border: 1px solid #dbdbdb;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-color: #065E8D;
+  padding: 12px;
+  padding-right: 52px;
+  position: relative;
+}
+.simple-field__input {
+  border: none;
+  font-size: 18px;
+  line-height: 24px;
+  height: 24px;
+  display: block;
+  width: 100%;
+  outline: none;
+  box-shadow: none;
+  padding: 0 !important;
+  vertical-align: top;
+  background: transparent;
+  font-size: 16px;
+  position: relative;
+  z-index: 99;
+}
+.simple-field__placeholder {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 16px;
+  line-height: 24px;
+  z-index: 0;
+  opacity: 0.3;
+}
+.simple-field__clear {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  line-height: 44px;
+  text-align: center;
+  top: 0;
+  right: 0;
+  font-size: 28px;
+  opacity: 0.3;
+  z-index: 999;
+}
 #restore-access-screen .header {
   width: 100%;
-  height: 44px;
+  height: 48px;
   background: #54A0C9;
   padding: 12px 24px;
   box-sizing: border-box;

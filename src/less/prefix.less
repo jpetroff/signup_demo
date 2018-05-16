@@ -33,7 +33,7 @@ body {
 
 .mixin-header {
   width: 100%;
-  height: 44px;
+  height: 48px;
   background: #54A0C9;
   padding: 12px 24px;
   box-sizing: border-box;
@@ -46,6 +46,19 @@ body {
 
 .screen {
   padding-top: 64px;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translate3d(0,0,0);
+
+  &.modal-locker {
+    position: fixed;
+    overflow-y: hidden;
+  }
 }
 
 .mixin-section-header {
@@ -129,12 +142,36 @@ body {
 
 .btn-text {
   background: transparent;
-  color: @primary-dark;
+  color: #999;
+
+  &.btn-primary {
+    color: @primary-dark;
+  }
+
+  &.btn-secondary {
+    color: @secondary-dark;
+  }
 
   &.btn-sm {
     font-size: 15px;
     height: 36px;
     line-height: 35px;
+  }
+}
+
+.btn-next {
+  margin-top: 16px;
+}
+
+.fieldset {
+  .field-caption {
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 12px;
+    // opacity: 0.5;
+    // margin-top: 12px;
+
+    padding: 0 12px;
   }
 }
 

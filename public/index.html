@@ -18,15 +18,15 @@
           v-bind:pic="testUsers[email] && testUsers[email].pic"
         ></account-info>
 
-        <v-touch tag="label" for="main-screen-password"
+        <btn focus-id="main-screen-password"
           class="btn btn-primary"
-          v-on:tap.prevent="routeHome(); hasModal = false;">
+          v-on:click="retryPass">
           Войти с паролем
-        </v-touch>
-        <div class="btn btn-text btn-next btn-sm" v-on:click="cantLogin">Я не помню пароль</div>
+        </btn>
+        <div class="btn btn-text btn-next btn-sm btn-primary" v-on:click="cantLogin">Я не помню пароль</div>
         <label
           for="registration-1-screen-email"
-          class="btn btn-text btn-sm"
+          class="btn btn-text btn-sm btn-primary"
 
           v-on:click="routeRegStepOne"
         >
@@ -59,6 +59,18 @@
         </label>
       </popup>
 
+      <popup id="mChooseEdu" class="fs-modal-selector" v-bind:is-open="hasModal && typeModal == 'mChooseEdu' ">
+        <!-- <field id="fhigheredu" v-model="registration.fhigheredu" place="top" type="text" label="Начните вводить название" v-on:input="sortEduList" tabindex="-1"></field> -->
+        <div class="simple-field">
+          <span class="simple-field__placeholder" v-show="registration.fhigheredu == ''">Начните вводить название</span>
+          <input type="text" v-model="registration.fhigheredu" id="fhigheredu" class="simple-field__input" v-on:input="sortEduList" tabindex="-1"/>
+          <label class="simple-field__clear" v-on:click="registration.fhigheredu = ''; sortEduList()" for="fhigheredu">×</label>
+        </div>
+        <ul class="select-list">
+          <li class="select-item" v-for="item in registration.suggestedEduItems" v-on:click="applySelectedEdu($event.target, item)" v-bind:class="{selected: (item.trim().toLowerCase() == registration.fhigheredu.trim().toLowerCase())}">{{ item }}</li>
+        </ul>
+      </popup>
+
       <!-- <div class="screen" id="main-screen" v-bind:class="{show: (current == 'main'), hide: (current != 'main')}"> -->
       <div class="screen" id="main-screen" v-show="current == 'main'">
         <div class="header">
@@ -68,15 +80,15 @@
           <h1 class="sign-up-header">
             Коллективный разум<br>527 415 врачей
           </h1>
-          <div for="registration-1-screen-email" class="btn btn-secondary"  v-on:click="routeRegStepOne($event)">
+          <btn class="btn btn-secondary"  v-on:click="routeRegStepOne">
             Регистрация
-          </div>
+          </btn>
           <div class="btn-subscript">требует подтверждения квалификации, 18+</div>
         </div>
         <!-- <div class="separator"></div> -->
         <div class="sign-in-block content" ref="signInBlock">
           <field id="main-screen-email" v-model="main.loginField" place="top" type="email" label="Почта или телефон" v-bind:error="main.isErrorLogin" v-on:input="validateLogin" v-on:click="scrollLogin"></field>
-          <field id="main-screen-password" v-model="password" place="bottom" type="password" label="Пароль" v-bind:error="main.isErrorPass" v-on:input="validateLogin(); main.isErrorPass = '';"></field>
+          <field id="main-screen-password" v-model="password" place="bottom" type="password" label="Пароль" v-bind:error="main.isErrorPass" v-on:input="validateLogin"></field>
           <div class="btn btn-primary" v-bind:class="{'disabled': !main.validLogin}" v-on:click="checkLogin">Войти</div>
           <div class="social-block">
             <div class="social-btn social-btn_vk" v-on:click="routeSocial('vk')"></div>
@@ -88,7 +100,9 @@
 
         </div>
         <!-- <v-touch tag="label" for="restore-screen-email" v-on:tap="cantLogin($event)" v-on:click="function(){}"> -->
-          <div class="emergency-btn btn btn-sm btn-text" v-bind:class="{'highlighted':main.suggestRestoreAccess}" v-on:click="cantLogin">Я не могу войти в свой профиль</div>
+          <btn class="emergency-btn btn-sm btn-text" v-bind:class="{'highlighted':main.suggestRestoreAccess}" v-on:click="cantLogin" focus-id="restore-screen-email">
+            Я не могу войти в свой профиль
+          </btn>
         <!-- </v-touch> -->
 
         <div class="content get-app-block">
@@ -144,19 +158,24 @@
             </div>
             <field id="registration-1-screen-email" class="reg-email" v-on:input="validateEmail" v-model="email" type="email" label="Или введите почту"></field>
           </div>
-          <div class="social-input" v-show="registration.socialReg == true">
-            <div class="warning" v-show="registration.suggestReg == true"></div>
+          <div class="social-input fieldset" v-show="registration.socialReg == true">
             <div class="app-field focus has-icon">
               <div class="social-icon" v-bind:class="['social-icon_' + this.social.app]"></div>
               <span class="app-field__caption">Регистрация через {{appNames[social.app]}}</span>
               <div class="app-field__input">{{email}}</div>
             </div>
+            <div class="field-caption" v-show="registration.suggestReg == true">Профиль с такой почтой не зарегистрирован. Хотите создать новый профиль?</div>
           </div>
           <div class="btn btn-secondary" v-on:click="routeRegStepTwo" v-bind:class="{ 'disabled': !isValidEmail }">Далее</div>
-          <!-- <label class="confirm-personal-data">
-            <input type="checkbox" />
-            <p class="confirmation-agreement"></p>
-          </label> -->
+          <div class="btn btn-text btn-next btn-sm btn-secondary" v-show="registration.suggestReg == true">На главную</div>
+          <div class="confirm-personal-data">
+            <!-- <input type="checkbox" /> -->
+            <p class="confirmation-text">
+              Администрация сайта не использует и не разглашает Ваши персональные данные без Вашего согласия в соответствии с Федеральным законом от 27.07.2006 г. №152-ФЗ «О персональных данных».
+            </p><p class="confirmation-text">
+              Продолжая, Вы подтверждаете, что ознакомились с Лицензионным договором и принимаете его условия.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -172,13 +191,22 @@
         <div class="content">
 
           <div class="step-0" v-show="restore.state == 0">
-            <field id="restore-screen-email" v-model="restore.accountId" type="text" label="Почта или телефон" v-bind:error="restore.error" v-on:input="validateRestoreField"></field>
-            <div for="main-screen-password"
-              class="btn btn-secondary"
-              v-bind:class="{disabled: !restore.validAccount}"
-              v-on:click="initRestore"
-            >
-              Далее
+            <div class="fieldset">
+              <div class="field-caption">
+                Введите почту или телефон, указанный при регистрации
+              </div>
+              <field id="restore-screen-email" v-model="restore.accountId" type="text" label="Почта или телефон" v-bind:error="restore.error" v-on:input="validateRestoreField"></field>
+            </div>
+
+            <div class="btnset">
+              <div for="main-screen-password"
+                class="btn btn-primary"
+                v-bind:class="{disabled: !restore.validAccount}"
+                v-on:click="initRestore"
+              >
+                Далее
+              </div>
+              <div class="btn btn-sm btn-text btn-next btn-primary">Я не помню почту или телефон</div>
             </div>
           </div>
 
@@ -238,7 +266,7 @@
         </div>
       </div>
 
-      <div class="screen reg-screen" id="registration-2-screen" v-show="current == 'registration2'">
+      <div class="screen reg-screen" v-bind:class="{ 'modal-locker' : hasModal}" id="registration-2-screen" v-show="current == 'registration2'">
         <div class="header">
           <img v-on:click="routeHome" class="header-logo" src="/img/d_logo.png" srcset="/img/d_logo@2x.png 2x" alt="">
           <span class="title" v-if="registration.restoreForm != true">Регистрация</span>
@@ -322,7 +350,11 @@
               <div class="caption">Образование</div>
             </h3>
             <div class="fieldset">
-              <field id="fhigheredu" v-model="registration.fhigheredu" place="top" type="text" label="Учебное заведение"></field>
+              <!-- <field id="fhigheredu-readonly" focus-id="fhigheredu" v-model="registration.fhigheredu" place="top" type="text" label="Учебное заведение" v-on:click="openEduSelect" v-bind:readonly="true"></field> -->
+              <label for="fhigheredu" class="app-field top" v-bind:class="{focus: (registration.fhigheredu != '')}" v-on:click="openEduSelect">
+                <span class="app-field__caption">Учебное заведение</span>
+                <div class="app-field__input fake-input">{{ registration.fhigheredu }}</div>
+              </label>
               <field id="fmajor" v-model="registration.fmajor" place="bottom" type="text" label="Основная специальность"></field>
             </div>
             <div class="fieldset">
@@ -355,12 +387,13 @@
           <div class="form-block contact-block">
             <h3 class="step">
               <div class="subscript">Шаг 4 из 4</div>
-              <div class="caption">Авторизация</div>
+              <div class="caption">Вход на сайт</div>
             </h3>
 
             <div class="fieldset">
               <div class="field-caption">
-                C помощью телефона можно быстро авторизоваться без пароля. Мы никому не раскрываем эту информацию
+                C телефоном можно быстро зайти на сайт без пароля.
+                <span class="faded">Мы никому не передаем ваш номер и не используем его для рассылок</span>
               </div>
               <field id="fphone" v-model="registration.fphone" type="text" label="Телефон"></field>
             </div>

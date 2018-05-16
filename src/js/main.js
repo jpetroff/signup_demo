@@ -15,7 +15,11 @@ w.Data = {
   diplomaDate: '',
   isValidCode: false,
   hasModal: false,
-  typeModal: '', // < reg | existing >
+  typeModal: 'mChooseEdu', // < reg | existing | eduselect >
+
+  p: {
+    focusViewportHeight: window.innerHeight
+  },
 
   main: {
     loginField: '',
@@ -30,6 +34,8 @@ w.Data = {
     app: 'vk' // ['vk', 'fb']
   },
   registration: {
+    suggestedEduItems: window._he,
+    _transitionSelectEdu: false,
     suggestReg: false,
     socialReg: false,
     restoreForm: false,
@@ -233,6 +239,7 @@ w.App = new Vue({
       if(erase) this.cleanSlate();
 
       this.clearModals();
+      return true;
     },
     routeRegStepTwo: function() {
       if(!this.isValidEmail) return;
@@ -255,9 +262,8 @@ w.App = new Vue({
 
     },
     cantLogin: function(ev) {
-      ev.preventDefault();
 
-      this.hasModal = false;
+      this.clearModals();
       this.initRestore();
       this.current = 'restore';
     },
@@ -350,7 +356,8 @@ w.App = new Vue({
 
       }
     },
-    validateLogin: function() {
+    validateLogin: function( clearPassErr ) {
+      console.log(window.innerHeight);
       if( this.validateEmail(this.main.loginField) ) {
         this.phone = '';
         this.isValidPhone = false;
@@ -372,7 +379,11 @@ w.App = new Vue({
         this.main.validLogin = false;
       }
 
-      console.log(this.main.validLogin);
+      if(clearPassErr) {
+        this.main.isErrorPass = '';
+      }
+
+      return true;
     },
     scrollLogin: function() {
       // var top = this.$refs.signInBlock.offsetTop;
@@ -381,6 +392,33 @@ w.App = new Vue({
     restoreForm: function() {
       this.registration.restoreForm = true;
       this.routeRegStepTwo();
+    },
+    openEduSelect: function() {
+      this.hasModal = true;
+      this.typeModal = 'mChooseEdu';
+      return true;
+    },
+    retryPass: function() {
+      this.clearModals();
+      this.routeHome();
+      return true;
+    },
+    focusSelectEdu: function() {
+      console.log(window.innerHeight);
+    },
+    sortEduList: function() {
+      if(this.registration.fhigheredu != '') {
+        this.registration.suggestedEduItems = w.utils.filterSubstr(this.registration.fhigheredu, w._he);
+      } else {
+        this.registration.suggestedEduItems = w._he;
+      }
+    },
+    applySelectedEdu: function( elem, item ) {
+      // this.registration._transitionSelectEdu = true;
+      console.log('apply');
+      // elem.dataset.selected = true;
+      this.registration.fhigheredu = item;
+      setTimeout(_.bind(function() { this.registration._transitionSelectEdu = false; this.hasModal = false;}, this), 300);
     }
   },
   watch: {
