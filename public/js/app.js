@@ -314,6 +314,7 @@ w.Data = {
     socialReg: false,
     restoreForm: false,
     existingInfo: {},
+    state: 0, // < 0 | 1>
 
     // personal
     fsurname: '',
@@ -352,6 +353,7 @@ w.Data = {
     validAccount: false,
     error: false,
     state: 0, // 0 - запрос идентификатора, 1 - пароль на почту или соц. сеть, 2 - телефон, 3 - диплом
+    form: 'https://docs.google.com/forms/d/e/1FAIpQLSdQppOFU75_mrrfzUtfR-sFexdB1J7M0ic9LQ1KdAWrWssGcA/viewform'
   },
 
   testUsers: {
@@ -396,6 +398,17 @@ w.App = new Vue({
   data: w.Data,
   computed: {},
   methods: {
+    _route: function( cb, scroll = true ) {
+      if(scroll) {
+        window.scrollTo(0, 0);
+      }
+
+      if(typeof cb == 'function') {
+        cb();
+      } else if( typeof cb == 'string') {
+        this.current = cb;
+      }
+    },
     cleanSlate: function() {
       this.email = '';
       this.isValidEmail = false;
@@ -408,12 +421,15 @@ w.App = new Vue({
     clearModals: function() {
       this.hasModal = false;
     },
+    headerBack: function() {
+      this._route('main');
+    },
     unflagError(key) {
       console.log(key);
       this.$set(this, key, null);
     },
     routeHome: function() {
-      this.current = 'main';
+      this._route('main');
     },
     routeSocial: function(app) {
       this.social.app = app;
@@ -423,10 +439,10 @@ w.App = new Vue({
       if(this.social.app == 'fb') this.email = 'new@dnr.cc';
       this.isValidEmail = true;
 
-      this.current = 'social';
+      this._route('social');
     },
     routeFeed: function() {
-      this.current = 'feed';
+      this._route('feed');
     },
     checkLogin: function() {
       var user = this.checkUser();
@@ -475,11 +491,12 @@ w.App = new Vue({
       }
     },
     validateEmail: function(val) {
-      return this.isValidEmail = (val.indexOf('@') != -1);
+      // return this.isValidEmail = (val.indexOf('@') != -1);
+      return this.isValidEmail = /[^\.@]+@[^\.@]+\.[^\.@]+/i.test(val);
     },
     validatePhone: function(val) {
       var _val = val.trim();
-      _val = _val.replace(/[- ]/g, '');
+      _val = _val.replace(/[- \(\)]/g, '');
 
       return this.isValidPhone = /^(\+7|8)?[0-9]{10}$/i.test(_val);
     },
@@ -507,13 +524,13 @@ w.App = new Vue({
     routeRegStepOne: function( erase ) {
       this.registration.socialReg = false;
       this.registration.suggestReg = false;
-      this.current = 'registration1';
-      var erase = !!(erase);
 
+      var erase = !!(erase);
       if(erase) this.cleanSlate();
 
       this.clearModals();
-      return true;
+
+      this._route('registration1');
     },
     routeRegStepTwo: function() {
       if(!this.isValidEmail) return;
@@ -539,7 +556,11 @@ w.App = new Vue({
 
       this.clearModals();
       this.initRestore();
-      this.current = 'restore';
+      this._route('restore');
+    },
+    restorePassFocus: function() {
+      if(this.current == 'main') return 'main-screen-email';
+      if(this.current == 'restore') return 'registration-1-screen-email'
     },
     initRestore: function() {
       if(this.restore.accountId == '') return;
@@ -681,6 +702,8 @@ w.App = new Vue({
       console.log(window.innerHeight);
     },
     sortEduList: function() {
+      this.$refs['mErrorNewUserList'] && this.$refs['mErrorNewUserList'].scrollTo(0,0);
+
       if(this.registration.fhigheredu != '') {
         this.registration.suggestedEduItems = w.utils.filterSubstr(this.registration.fhigheredu, w._he);
       } else {

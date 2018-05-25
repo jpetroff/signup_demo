@@ -38,6 +38,11 @@
     padding-left: 12px;
   }
 
+  .social-block {
+    text-align: left;
+    margin-left: 4px;
+  }
+
   .reg-email {
     margin-top: 16px;
   }
@@ -68,17 +73,51 @@
   .default-message {
     font-size: 16px;
     line-height: 20px;
-    margin-bottom: 16px;
+    margin: 28px 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 
     .message-icon {
-      float: left;
+      // float: left;
+      width: 48px;
+      flex-grow: 0;
+      flex-shrink: 0;
+      font-size: 0;
+      display: flex;
+      // justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+
     }
     .message-text {
-      margin-left: 48px;
+      // margin-left: 48px;
+      flex-grow: 1;
     }
   }
 
-  .default-message.confirm-link .message-text { padding-top: 13px; }
+  // .default-message.confirm-link .message-text { padding-top: 13px; }
+  .default-message.status {
+    .message-icon { padding-left: 5px; }
+
+    .message-text { color: @secondary-dark; font-weight: 600;}
+  }
+
+  .default-message .message-text .pass {
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    // font-family: monospace;
+  }
+
+  .default-message.confirm-link {
+    align-items: flex-end;
+
+    .message-icon {
+      margin-bottom: 4px;
+    }
+  }
 
   .disclaimer {
     margin-top: 36px;
@@ -91,6 +130,10 @@
       color: @secondary-dark;
       margin-bottom: 4px;
     }
+  }
+
+  .reg-form .form-block:first-child {
+    margin-top: 44px;
   }
 
   .form-block {
@@ -118,7 +161,7 @@
     .field-caption {
       margin-top: 36px;
 
-      .faded { opacity: 0.4 }
+      .faded { opacity: 0.4; display: block; }
     }
 
     .social-block {
@@ -176,11 +219,63 @@
     min-height: 24px;
   }
 
+  .reg-intro {
+    height: 100vh;
+    padding-top: 48px;
+    margin-top: -48px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    &__header {
+      font-size: 21px;
+      line-height: 24px;
+      color: @secondary-dark;
+      padding: 18px 0 0px 0;
+      flex-grow: 0;
+      flex-shrink: 0;
+      // font-weight: bold;
+      text-align: center;
+    }
+
+    &__message {
+      font-size: 16px;
+      line-height: 20px;
+      flex-grow: 0;
+      flex-shrink: 0;
+      margin-bottom: 12px;
+    }
+
+    &__mascot {
+      // height: 200px;
+      flex-grow: 1;
+      // padding-top: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .mascot-svg-wrapper {
+        display: inline-block;
+        width: 87px;
+        height: 87px;
+      }
+    }
+
+    .btn {
+      flex-grow: 0;
+      flex-shrink: 0;
+      margin-bottom: 20px;
+      margin-top: 8px;
+    }
+  }
+
+
   .registration-footer {
     background: #D8ECF7;
     margin: 0 -20px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 20px;
+    // padding-left: 20px;
+    // padding-right: 20px;
   }
 }
 

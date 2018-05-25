@@ -45,7 +45,7 @@ Vue.component('popup', w.Components['popup']);
     top: 0;
     left: 0;
     opacity: 1;
-    z-index: 999;
+    z-index: 99999;
     // transition: opacity 0.2s ease-in-out;
   }
 

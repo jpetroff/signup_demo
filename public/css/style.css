@@ -536,7 +536,7 @@ textarea::-webkit-input-placeholder {
   top: 0;
   left: 0;
   opacity: 1;
-  z-index: 999;
+  z-index: 99999;
 }
 .popup-content {
   position: absolute;
@@ -666,7 +666,7 @@ textarea::-webkit-input-placeholder {
 }
 
 body {
-  font-family: ---apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -686,6 +686,7 @@ body {
     min-height: none;
     border: none;
     margin: 0;
+    position: static;
   }
 }
 .mixin-header {
@@ -700,9 +701,60 @@ body {
   left: 0;
   z-index: 99;
 }
+.global-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: #54A0C9;
+  z-index: 99999;
+  padding: 12px 48px;
+  box-sizing: border-box;
+}
+.global-header .back,
+.global-header .menu {
+  position: absolute;
+  top: 0;
+  width: 48px;
+  height: 48px;
+  box-sizing: border-box;
+}
+.global-header .caption {
+  font-weight: 500;
+  color: white;
+  font-size: 18px;
+  line-height: 24px;
+  height: 24px;
+}
+.global-header .logo {
+  display: block;
+  text-align: center;
+  padding-top: 4px;
+}
+.global-header .back {
+  left: 0;
+  padding-top: 16px;
+  padding-left: 20px;
+}
+.global-header .menu {
+  right: 0;
+  padding-top: 18px;
+  padding-left: 12px;
+}
+.global-header .back-svg {
+  width: 9px;
+  height: 16px;
+  font-size: 0;
+}
+.global-header .menu-svg {
+  width: 16px;
+  height: 14px;
+  font-size: 0;
+}
 .screen {
   padding-top: 64px;
-  position: relative;
+  position: static;
   overflow-x: hidden;
   overflow-y: auto;
   top: 0;
@@ -710,10 +762,12 @@ body {
   right: 0;
   bottom: 0;
   transform: translate3d(0, 0, 0);
+  -webkit-overflow-scrolling: touch;
 }
 .screen.modal-locker {
-  position: fixed;
-  overflow-y: hidden;
+  -ms-touch-action: none;
+      touch-action: none;
+  -webkit-overflow-scrolling: none;
 }
 .mixin-section-header {
   font-size: 25px;
@@ -761,6 +815,7 @@ body {
   margin-top: 20px;
   font-weight: 600;
   font-size: 18px;
+  text-decoration: none;
 }
 .btn-primary {
   background: #065E8D;
@@ -1129,6 +1184,10 @@ body {
   text-align: left;
   padding-left: 12px;
 }
+#registration-1-screen .social-block {
+  text-align: left;
+  margin-left: 4px;
+}
 #registration-1-screen .reg-email {
   margin-top: 16px;
 }
@@ -1153,16 +1212,50 @@ body {
 #registration-2-screen .default-message {
   font-size: 16px;
   line-height: 20px;
-  margin-bottom: 16px;
+  margin: 28px 0;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -ms-flex-align: center;
+      align-items: center;
 }
 #registration-2-screen .default-message .message-icon {
-  float: left;
+  width: 48px;
+  -ms-flex-positive: 0;
+      flex-grow: 0;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  font-size: 0;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+      align-items: center;
+  box-sizing: border-box;
 }
 #registration-2-screen .default-message .message-text {
-  margin-left: 48px;
+  -ms-flex-positive: 1;
+      flex-grow: 1;
 }
-#registration-2-screen .default-message.confirm-link .message-text {
-  padding-top: 13px;
+#registration-2-screen .default-message.status .message-icon {
+  padding-left: 5px;
+}
+#registration-2-screen .default-message.status .message-text {
+  color: #DE7900;
+  font-weight: 600;
+}
+#registration-2-screen .default-message .message-text .pass {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+#registration-2-screen .default-message.confirm-link {
+  -ms-flex-align: end;
+      align-items: flex-end;
+}
+#registration-2-screen .default-message.confirm-link .message-icon {
+  margin-bottom: 4px;
 }
 #registration-2-screen .disclaimer {
   margin-top: 36px;
@@ -1174,6 +1267,9 @@ body {
   line-height: 28px;
   color: #DE7900;
   margin-bottom: 4px;
+}
+#registration-2-screen .reg-form .form-block:first-child {
+  margin-top: 44px;
 }
 #registration-2-screen .form-block {
   margin-bottom: 44px;
@@ -1200,6 +1296,7 @@ body {
 }
 #registration-2-screen .fieldset .field-caption .faded {
   opacity: 0.4;
+  display: block;
 }
 #registration-2-screen .fieldset .social-block {
   text-align: left;
@@ -1251,11 +1348,63 @@ body {
   height: auto;
   min-height: 24px;
 }
+#registration-2-screen .reg-intro {
+  height: 100vh;
+  padding-top: 48px;
+  margin-top: -48px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  box-sizing: border-box;
+}
+#registration-2-screen .reg-intro__header {
+  font-size: 21px;
+  line-height: 24px;
+  color: #DE7900;
+  padding: 18px 0 0px 0;
+  -ms-flex-positive: 0;
+      flex-grow: 0;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  text-align: center;
+}
+#registration-2-screen .reg-intro__message {
+  font-size: 16px;
+  line-height: 20px;
+  -ms-flex-positive: 0;
+      flex-grow: 0;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  margin-bottom: 12px;
+}
+#registration-2-screen .reg-intro__mascot {
+  -ms-flex-positive: 1;
+      flex-grow: 1;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
+}
+#registration-2-screen .reg-intro__mascot .mascot-svg-wrapper {
+  display: inline-block;
+  width: 87px;
+  height: 87px;
+}
+#registration-2-screen .reg-intro .btn {
+  -ms-flex-positive: 0;
+      flex-grow: 0;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  margin-bottom: 20px;
+  margin-top: 8px;
+}
 #registration-2-screen .registration-footer {
   background: #D8ECF7;
   margin: 0 -20px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 20px;
 }
 .fs-modal-selector {
   position: fixed;
@@ -1377,12 +1526,8 @@ body {
 #restore-access-screen .content {
   padding: 0px 20px;
 }
-#restore-access-screen .restore-new-email .btn-secondary {
-  margin: 0;
-}
-#restore-access-screen .restore-new-email .btn-text {
-  margin-top: 16px;
-  color: #999;
+#restore-access-screen .account-description {
+  margin-bottom: 0;
 }
 #restore-access-screen .restore-new-email .message {
   text-align: left;
@@ -1420,6 +1565,9 @@ body {
   margin-right: 12px;
   font-weight: normal;
   opacity: 0.5;
+}
+#restore-access-screen .restore-sms {
+  margin-top: 20px;
 }
 #restore-access-screen .restore-sms .message {
   font-size: 16px;
