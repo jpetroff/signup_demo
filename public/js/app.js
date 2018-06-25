@@ -85,7 +85,7 @@ w.utils = {
 		}
 
 		setTimeout(function(){
-			elem.classList.remove('loading');
+			w.requestAnimationFrame(function() { elem.classList.remove('loading')} );
 			fn.apply(ctx);
 		}, loadingT);
 	}
@@ -551,25 +551,26 @@ w.App = new Vue({
 
 			this._route('registration1');
 		},
-		routeRegStepTwo: function() {
+		routeRegStepTwo: function(btn) {
 			if(!this.isValidEmail) return;
 
-			var user = this.checkUser();
+			w.utils._fakeLoad(btn, this, function() {
+				var user = this.checkUser();
 
-			if (user && user.password && !this.registration.restoreForm) {
-				this.hasModal = !!(this.email && this.isValidEmail && this.testUsers[this.email] && this.testUsers[this.email].password);
-				this.typeModal = 'mErrorExistingUser'
-				// this.routeHome();
-				return true;
-			}
+				if (user && user.password && !this.registration.restoreForm) {
+					this.hasModal = !!(this.email && this.isValidEmail && this.testUsers[this.email] && this.testUsers[this.email].password);
+					this.typeModal = 'mErrorExistingUser'
+					// this.routeHome();
+					return true;
+				}
 
-			this.registration.existingInfo = user || {};
-			this.registration.existingInfo.email = this.email;
+				this.registration.existingInfo = user || {};
+				this.registration.existingInfo.email = this.email;
 
-			console.log(this.registration.existingInfo.name);
+				console.log(this.registration.existingInfo.name);
 
-			this.current = 'registration2'
-
+				this.current = 'registration2';
+			})
 		},
 		cantLogin: function(ev) {
 
@@ -581,38 +582,41 @@ w.App = new Vue({
 			if(this.current == 'main') return 'main-screen-email';
 			if(this.current == 'restore') return 'registration-1-screen-email'
 		},
-		initRestore: function() {
+		initRestore: function(btn) {
 			if(this.restore.accountId == '') return;
-			var user = this.checkUser();
 
-			if( user && user.password ) {
-				this.restore.accData = user;
-				this.restore.accData.pic = user.pic || '/img/no_photo.jpeg';
+			w.utils._fakeLoad(btn, this, function() {
+				var user = this.checkUser();
 
-				if( this.phone && this.isValidPhone && this.testUsers[this.phone]) {
-					this.email = this.testUsers[this.phone];
-					this.isValidEmail = true;
-				}
+				if( user && user.password ) {
+					this.restore.accData = user;
+					this.restore.accData.pic = user.pic || '/img/no_photo.jpeg';
 
-				if( user.phone ) {
+					if( this.phone && this.isValidPhone && this.testUsers[this.phone]) {
+						this.email = this.testUsers[this.phone];
+						this.isValidEmail = true;
+					}
 
-					this.restore.state = 2;
+					if( user.phone ) {
 
-				} else if ( user.socialApp ) {
+						this.restore.state = 2;
 
-					this.restore.state = 3;
+					} else if ( user.socialApp ) {
+
+						this.restore.state = 3;
+
+					} else {
+
+						this.restore.state = 1;
+					}
+
 
 				} else {
-
-					this.restore.state = 1;
+					// нет такого пользователя
+					this.restore.validAccount = false;
+					this.restore.error = 'unknownrestore';
 				}
-
-
-			} else {
-				// нет такого пользователя
-				this.restore.validAccount = false;
-				this.restore.error = 'unknownrestore';
-			}
+			});
 		},
 		validateRestoreField: function() {
 			this.restore.error = '';

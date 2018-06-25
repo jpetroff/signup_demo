@@ -119,9 +119,9 @@
 					<div class="btn btn-primary" v-bind:class="{'disabled': !main.validLogin}" v-on:click="checkLogin($event.currentTarget)">
 						<span class="caption">Войти</span>
 						<div class="spinner">
-								<div class="double-bounce1"></div>
-								<div class="double-bounce2"></div>
-							</div>
+							<div class="double-bounce1"></div>
+							<div class="double-bounce2"></div>
+						</div>
 					</div>
 					<div class="social-block">
 						<div class="social-btn social-btn_vk" v-on:click="routeSocial('vk')"></div>
@@ -212,7 +212,15 @@
 						</div>
 						<div class="field-caption" v-show="registration.suggestReg == true">Профиль с такой почтой не зарегистрирован. Хотите создать новый профиль?</div>
 					</div>
-					<div class="btn btn-secondary" v-on:click="routeRegStepTwo" v-bind:class="{ 'disabled': !isValidEmail }">Продолжить регистрацию</div>
+
+					<div class="btn btn-secondary" v-on:click="routeRegStepTwo($event.currentTarget)" v-bind:class="{ 'disabled': !isValidEmail }">
+						<span class="caption">Продолжить регистрацию</span>
+						<div class="spinner">
+							<div class="double-bounce1"></div>
+							<div class="double-bounce2"></div>
+						</div>
+					</div>
+
 					<div class="btn btn-text btn-next btn-sm btn-secondary" v-show="registration.suggestReg == true" v-on:click="routeHome">Вернуться на главную</div>
 					<div class="confirm-personal-data">
 						<!-- <input type="checkbox" /> -->
@@ -248,9 +256,13 @@
 							<div for="main-screen-password"
 								class="btn btn-primary"
 								v-bind:class="{disabled: !restore.validAccount}"
-								v-on:click="initRestore"
+								v-on:click="initRestore($event.currentTarget)"
 							>
-								Далее
+								<span class="caption">Далее</span>
+								<div class="spinner">
+									<div class="double-bounce1"></div>
+									<div class="double-bounce2"></div>
+								</div>
 							</div>
 							<a v-bind:href="this.restore.form" class="btn btn-sm btn-text btn-next btn-primary" target="_blank">Я не помню почту или телефон</a>
 						</div>

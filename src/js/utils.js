@@ -81,7 +81,7 @@ w.utils = {
 		}
 
 		setTimeout(function(){
-			elem.classList.remove('loading');
+			w.requestAnimationFrame(function() { elem.classList.remove('loading')} );
 			fn.apply(ctx);
 		}, loadingT);
 	}
