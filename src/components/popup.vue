@@ -122,7 +122,7 @@ Vue.component('popup', w.Components['popup']);
 		}
 
 		.btn-text {
-			margin-top: 0;
+			// margin-top: 0;
 			color: #969696;
 		}
 

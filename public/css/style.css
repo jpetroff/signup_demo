@@ -594,7 +594,6 @@ textarea::-webkit-input-placeholder {
   line-height: 24px;
 }
 .popup-content .btn-text {
-  margin-top: 0;
   color: #969696;
 }
 .popup-content .btn-next {
@@ -716,6 +715,7 @@ body {
   z-index: 99999;
   padding: 12px 48px;
   box-sizing: border-box;
+  border-bottom: 1px solid #5098BF;
 }
 .global-header .back,
 .global-header .menu {
@@ -803,6 +803,50 @@ body {
   position: relative;
   overflow: hidden;
 }
+.spinner {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -12px;
+  margin-top: -12px;
+}
+.double-bounce1,
+.double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 2px solid white;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  opacity: 1;
+  animation: sk-bounce 2s infinite ease-in-out;
+}
+.double-bounce2 {
+  animation-delay: -1s;
+}
+@keyframes sk-bounce {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  75% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
 .btn {
   height: 44px;
   border-radius: 4px;
@@ -821,6 +865,26 @@ body {
   font-weight: 600;
   font-size: 18px;
   text-decoration: none;
+}
+.btn .caption,
+.btn .spinner {
+  transition: all 0.2 ease;
+}
+.btn .caption {
+  opacity: 1;
+  visibility: visible;
+}
+.btn .spinner {
+  opacity: 0;
+  visibility: hidden;
+}
+.btn.loading .caption {
+  opacity: 0;
+  visibility: hidden;
+}
+.btn.loading .spinner {
+  opacity: 1;
+  visibility: visible;
 }
 .btn-primary {
   background: #065E8D;
@@ -858,6 +922,7 @@ body {
 .btn-text {
   background: transparent;
   color: #999;
+  margin-top: 8px;
 }
 .btn-text.btn-primary {
   color: #065E8D;
@@ -1060,7 +1125,11 @@ body {
 }
 #main-screen .footer {
   background: #252525;
-  min-height: 280px;
+  padding-bottom: 26px;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 -1px 3px 0px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 99;
 }
 #main-screen .footer nav.footer-section {
   padding-top: 18px;
@@ -1585,6 +1654,8 @@ body {
 #restore-access-screen .restore-new-email .level.social {
   -ms-flex-direction: row-reverse;
       flex-direction: row-reverse;
+  margin-top: 24px;
+  margin-bottom: 0;
 }
 #restore-access-screen .restore-new-email .level.social .social-block {
   -ms-flex-positive: 1;

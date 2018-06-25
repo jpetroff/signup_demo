@@ -10,7 +10,7 @@
 		<div class="_mob-wrapper" id="app">
 
 			<div class="global-header" v-show="current != 'social' && current != 'feed'">
-				<div class="back" v-if="current != 'main'" v-on:click="headerBack">
+				<div class="back" v-show="current != 'main'" v-on:click="headerBack">
 					<div class="back-svg">
 						<svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path d="M2.40682 7.78552L8.48537 13.864C8.87587 14.2545 8.87587 14.8877 8.48537 15.2782C8.09481 15.6688 7.46169 15.6688 7.07113 15.2782L0.292989 8.50006C0.0971267 8.30423 -0.000529551 8.0477 8.08006e-05 7.79102C-0.0032151 7.53082 0.0943191 7.26959 0.292866 7.07108L7.07106 0.292877C7.46157 -0.0976257 8.09475 -0.0976257 8.48525 0.292877C8.87581 0.683411 8.87581 1.31659 8.48525 1.70709L2.40682 7.78552Z" transform="translate(0.0146484 0.221771)" fill="white"/>
@@ -19,7 +19,7 @@
 				</div>
 
 				<div class="caption">
-					<span class="logo" v-if="current=='main'">
+					<span class="logo" v-show="current=='main'">
 						<img class="header-logo" src="/img/logo_full.png" srcset="/img/logo_full@2x.png 2x" alt="">
 					</span>
 					<span v-if="current=='registration1' || current == 'registration2'">Регистрация</span>
@@ -76,10 +76,10 @@
 					v-on:click="routeRegStepOne(); $nextTick(function() {console.log('!'); this.hasModal = false})">
 					Я новый участник
 				</label>
-				<label for="restore-screen-email" class="btn btn-text btn-next btn-sm" v-on:click="cantLogin">Я не могу войти</label>
+				<label for="restore-screen-email" class="btn btn-text btn-next btn-sm btn-secondary" v-on:click="cantLogin">Я не могу войти</label>
 				<label
 					v-bind:for="restorePassFocus()"
-					class="btn btn-text btn-sm"
+					class="btn btn-text btn-sm btn-secondary"
 					v-on:click="clearModals"
 				>
 					Ввести другую почту
@@ -116,7 +116,13 @@
 				<div class="sign-in-block content" ref="signInBlock">
 					<field id="main-screen-email" v-model="main.loginField" place="top" type="email" label="Почта или телефон" v-bind:error="main.isErrorLogin" v-on:input="validateLogin" v-on:click="scrollLogin"></field>
 					<field id="main-screen-password" v-model="password" place="bottom" type="password" label="Пароль" v-bind:error="main.isErrorPass" v-on:input="validateLogin"></field>
-					<div class="btn btn-primary" v-bind:class="{'disabled': !main.validLogin}" v-on:click="checkLogin">Войти</div>
+					<div class="btn btn-primary" v-bind:class="{'disabled': !main.validLogin}" v-on:click="checkLogin($event.currentTarget)">
+						<span class="caption">Войти</span>
+						<div class="spinner">
+								<div class="double-bounce1"></div>
+								<div class="double-bounce2"></div>
+							</div>
+					</div>
 					<div class="social-block">
 						<div class="social-btn social-btn_vk" v-on:click="routeSocial('vk')"></div>
 						<div class="social-btn social-btn_ok"></div>

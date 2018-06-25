@@ -75,7 +75,20 @@ w.utils = {
     });
 
     return result;
-  }
+	},
+	_fakeLoad: function(elem, ctx, fn) {
+		var loadingT = 0;
+		if(elem && elem.classList) {
+			loadingT = Math.round( Math.random() * 1500 ) + 500;
+			elem.classList.add('loading');
+			console.log('!!', loadingT);
+		}
+
+		setTimeout(function(){
+			elem.classList.remove('loading');
+			fn.apply(ctx);
+		}, loadingT);
+	}
 }
 
 w._he = ["Vasile Goldis Western University, Арад, Румыния","Азербайджанский медицинский университет (АМУ), Баку","Азербайджанский международный университет, медицинский факультет, Баку","Алтайский государственный медицинский университет (АГМУ, АГМИ), Барнаул","Амурская государственная медицинская академия (АГМА, БГМИ), Благовещенск","Андижанский государственный медицинский институт (АГМИ), Андижан","Армянский медицинский институт (АМИ), Ереван","Армянско-Российский международный университет \"Мхитар Гош\", Ванадзор","Астраханская государственная медицинская академия (АГМА, АГМИ), Астрахань","Афинский Национальный Каподистрийский Университет, Афины, Греция","Балтийский федеральный университет им. Иммануила Канта, медицинский факультет (БФУ, РГУ), Калининград","Башкирский государственный медицинский университет (БГМУ, БГМИ), Уфа","Белгородский государственный университет, медицинский факультет (БелГУ), Белгород","Белорусский государственный медицинский университет (БГМУ, БМИ, ММИ), Минск","Буковинский государственный медицинский университет (БГМУ, БГМА), Черновцы","Бурятский государственный университет, медицинский факультет (БГУ), Улан-Удэ","Бухарский медицинский институт, Бухара","Вильнюсский университет, медицинский факультет (ВУ, ВГУ), Вильнюс","Винницкий национальный медицинский университет им. Н.И. Пирогова (ВНМУ), Винница","Витебский государственный медицинский университет (ВГМУ, ВГМИ), Витебск","Владивостокский государственный медицинский университет (ВГМУ, ВГМИ), Владивосток","Военно-медицинская академия Бундесвера, Росток","Военно-медицинская академия им. С.М. Кирова (ВМедА, ВМОЛКА, ВМА), Санкт-Петербург","Волгоградский государственный медицинский университет (ВолГМУ), Волгоград","Воронежская государственная медицинская академия им. Н.Н. Бурденко (ВГМА, ВГМИ), Воронеж","Гомельский государственный медицинский университет (ГГМУ, ГГМИ), Гомель","Государственная классическая академия им. Маймонида, факультет социальной медицины (ГКА, ГЕА), Москва","Государственный медицинский университет города Семей (ГМУ города Семей, СГМА, СГМИ), Семипалатинск","Государственный медицинский университет туркменистана (ТГМУ, ТГМИ), Ашхабад","Государственный университет медицины и фармакологии им. Николая Тестемицяну, Кишинёв","Гродненский государственный медицинский университет (ГрГМУ, ГрМАГрМИ), Гродно","Гюмрийский университет \"Прогресс\", Гюмри","Дагестанская государственная медицинская академия (ДГМА, ДГМИ), Махачкала","Дальневосточный государственный медицинский университет (ДВГМУ, ХГМИ), Хабаровск","Днепропетровская государственная медицинская академия  (ДГМА), Днепропетровск","Днепропетровский медицинский институт народной медицины, Днепропетровск","Днепропетровский национальный университет, факультет биологии, экологии и медицины (ДНУ), Днепропетровск","Донецкий государственный медицинский университет им. М. Горького (ДонНМУ), Донецк","Ереванский государственный медицинский университет им. М. Гераци (ЕГМУ), Ереван","Ереванский медицинский институт им. Меграбяна, Ереван","Ереванский медицинский университет им. Святой Терезы, Ереван","Ереванский университет \"Айбусак\", медицинский факультет, Ереван","Западно-Казахстанская государственная медицинская академия им. М. Оспанова (ЗКГМА, АГМА), Актобе","Запорожский государственный медицинский университет (ЗГМУ), Запорожье","Ивановская государственная медицинская академия (ИвГМА, ИГМА), Иваново","Ивано-Франковский государственный медицинский университет (ИФГМУ, ИФГМА, СГМИ), Ивано-Франковск","Ижевская государственная медицинская академия (ИГМА, ИГМИ), Ижевск","Ингушский государственный университет, медицинский факультет (ИнгГУ), Назрань","Институт экологии и медицины, медицинский факультет, Киев","Иркутский государственный медицинский университет (ИГМУ, ИГМИ), Иркутск","Кабардино-Балкарский государственный университет им. Х.М. Бербекова, медицинский факультет (КБГУ), Нальчик","Казанская государственная медицинская академия (КГМА, КГИДУВ), Казань","Казанский государственный медицинский университет (КГМУ, КГМИ), Казань","Казахский национальный медицинский университет им. С.Д. Асфендиярова (КазНМУ), Алма-Ата","Казахстанско-Российский медицинский университет (КРМУ, КМУ, КМИ), Алма-Ата","Карагандинский государственный медицинский университет (КГМУ, КГМА, КГМИ), Караганда","Кемеровская государственная медицинская академия (КемГМА, КемГМИ), Кемерово","Киевский медицинский университет Украинской ассоциации народной медицины (КМУ УАНМ), Киев","Кировская государственная медицинская академия (КГМА, КГМИ), Киров","Кишиневский государственный медицинский университет им. Н.Тестемицану","Красноярский государственный медицинский университет им. проф. В.Ф. Войно-Ясенецкого (КрасГМУ, КрасГМИ, КрасГМА), Красноярск","Крымский государственный медицинский университет им. С.И. Георгиевского (КГМУ, КГМИ), Симферополь","Кубанский государственный медицинский университет (КубГМУ, КубГМА, КубГМИ), Краснодар","Курский государственный медицинский университет (КГМУ, КГМИ), Курск","Кыргызская государственная медицинская академия (КГМА, КГМИ), Бишкек","Кыргызско-Российский славянский университет, медицинский факультет, Бишкек","Латвийский университет, медицинский факультет, Рига","Литовский университет наук о здоровье, медицинская академия, Каунас","Луганский государственный медицинский университет (ЛГМУ, ЛГМИ), Луганск","Львовский национальный медицинский университет им. Данила Галицкого (ЛМИ, ЛНМУ, ЛГМУ, ЛГМИ), Львов","Майкопский государственный технологический университет, медицинский институт (МИ МГТУ), Майкоп","Медицинский институт \"Амирдовлат Амасиаци\", Ванадзор","Медицинский университет Астана (AMU, МУА, КГМА, КМА, КазГМА), Астана","Международный казахско-турецкий университет им. Х.А. Яссави, школа медицины (МКТУ), Туркестан","Мордовский государственный университет им. Н.П. Огарева, медицинский институт (НИ МГУ), Саранск","Московский государственный медико-стоматологический университет (МГМСУ, МГМСИ), Москва","Московский государственный университет им. М.В. Ломоносова, факультет фундаментальной медицины (МГУ), Москва","Мюнхенский университет Людвига-Максимилиана","Нахичеванский государственный университет, медицинский факультет (НГУ), Нахичевань","Национальный медицинский университет им. А.А. Богомольца (НМУ), Киев","Нижегородская государственная медицинская академия (НижГМА, ГМИ), Нижний Новгород","Нижегородский военно-медицинский институт ФПС РФ  при НГМА (НижВМИ), Нижний Новгород","Новгородский государственный университет им. Ярослава Мудрого, институт медицинского образования (ИМО НовГУ), Новгород","Новосибирский государственный медицинский университет (НГМУ, НГМА, НМИ), Новосибирск","Новосибирский государственный университет, медицинский факультет (НГУ), Новосибирск","Обнинский институт атомной энергетики, медицинский факультет (ИАТЭ НИЯУ МИФИ), Обнинск","Одесский национальный медицинский университет (ОНМедУ, ОГМУ), Одесса","Омская государственная медицинская академия (ОмГМА, ОмГМИ), Омск","Оренбургская государственная медицинская академия (ОрГМА, ОрГМИ), Оренбург","Орловский государственный университет, медицинский институт (ОГУ), Орёл","Ошский государственный университет, медицинский институт (ОшГУ), Ош","Пензенский государственный унтверситет, медицинский институт (ПГУ), Пенза","Первый московский государственный медицинский университет им. И.М. Сеченова (1-й МГМУ, ММА), Москва","Первый Санкт-Петербургский государственный медицинский университет им. акад. И.П. Павлова (ПСПбГМУ, СПбГМУ, 1-й ЛМИ), Санкт-Петербург","Пермская государственная медицинская академия им. акад. Е.А. Вагнера (ПГМА, ПМИ), Пермь","Петрозаводский государственный университет, медицинский факультет (ПетрГУ), Петрозаводск","Приднестровский государственный университет им. Т.Г. Шевченко, медицинский факультет (ПГУ), Тирасполь","Рижский университет им. П. Страдиньша, медицинские факультеты, Рига","Российский национальный исследовательский медицинский университет им. Н.И. Пирогова (РНИМУ, РГМУ,  2-й МОЛГМИ), Москва","Российский университет дружбы народов, медицинский факультет (РУДН), Москва","Российско-Армянский государственный университет, медико-биологический факультет, Ереван","Ростовский государственный медицинский университет (РостГМУ, РостМИ), Ростов-на-Дону","Рязанский государственный медицинский университет им. акад. И.П. Павлова (РГМУ, РМИ), Рязань","Самаркандский государственный медицинский институт  (СамГосМИ), Самарканд","Самарский военно-медицинский институт (СВМИ), Самара","Самарский государственный медицинский университет (СамГМУ, КМИ), Самара","Самарский медицинский институт РЕАВИЗ (СМИ Реавиз), Самара","Санкт-Петербургский государственный педиатрический университет (СПбГПУ, СПбГПМА, ЛПМИ), Санкт-Петербург","Санкт-Петербургский государственный университет, медицинский факультет (СПбГУ, ЛГУ), Санкт-Петербург","Санкт-Петербургский медико-технический институт (СпбМТИ), Санкт-Петербург","Санкт-Петербургский терапевтический институт (СТИ), Санкт-Петербург","Саратовский военно-медицинский институт (СВМИ), Саратов","Саратовский государственный медицинский университет им. В.И. Разумовского (СГМУ, СМИ), Саратов","Северный государственный медицинский университет (СГМУ, АГМА, АГМИ), Архангельск","Северо-восточный федеральный университет им. М.К. Аммосова, медицинский институт (СВФУ, ЯГУ), Якутск","Северо-Западный государственный медицинский университет им. И.И.Мечникова (СЗГМУ, СПбГМА, ЛСГМИ), Санкт-Петербург","Северо-Кавказская государственная гуманитарно-технологическая академия (КЧТИ, КЧГТА, СКГГТА), Черкесск","Северо-Осетинская государственная медицинская академия (СОГМА, СОГМИ), Владикавказ","Сибирский государственный медицинский университет (СГМУ, ТМИ), Томск","Смоленская государственная медицинская академия (СГМА, СГМИ), Смоленск","Ставропольская государственная медицинская академия (СтГМА, СГМИ), Ставрополь","Сумской государственный университет, медицинский институт (СумГУ), Сумы","Сургутский государственный университет, лечебный факультет (СурГУ), Сургут","Таджикский государственный медицинский университет им. Абуали ибн Сино (ТГМУ ТГМИ), Душанбе","Тамбовский государственный университет имени Г.Р. Державина, медицинский институт (ТГУ), Тамбов","Тамбовский государственный университет имени Г.Р. Державина, медицинский институт (ТГУ), Тамбов","Тамбовский государственный университет имени Г.Р. Державина, медицинский институт (ТГУ), Тамбов","Тартуский университет, медицинский факультет, Тарту","Ташкентская медицинская академия (ТашМА, ТашМИ, 1-й ТашМИ, 2-й ТашМИ), Ташкент","Ташкентский педиатрический медицинский институт (ТашПМИ, САМПИ), Ташкент","Тбилисский государственный медицинский университет (ТГМУ), Тбилиси","Тбилисский государственный университет им. Иванэ Джавахишвили, медицинский факультет (ТГУ), Тбилиси","Тверская государственная медицинская академия (ТГМА), Тверь","Тернопольский государственный медицинский университет им. И.Я. Горбачевского (ТГМУ, ТГМА), Тернополь","Томский военно-медицинский институт (ТВМИ), Томск","Тульский государственный университет, медицинский институт (ТулГУ), Тула","Тюменская государственная медицинская академия (ТГМА,ТГМИ), Тюмень","Ужгородский национальный университет, медицинский факультет (УжНУ), Ужгород","Украинская медицинская стоматологическая академия (УМСА), Полтава","Ульяновский государственный университет, медицинский факультет (УлГУ), Ульяновск","Университет Хазар, школа медицины, стоматологии и здравоохранения, Баку","Уральский государственный медицинский университет (УГМУ, УГМА, СГМИ), Екатеринбург","Хакасский государственный университет им. Н.Ф.Катанова, медико-психолого-социальный институт (ХГУ), Абакан","Ханты-Мансийская государственная медицинская академия (ХГМА, ХГМА), Ханты-Мансийск","Харьковский национальный медицинский университет (ХНМУ), Харьков","Харьковский национальный университет им. В.Н. Каразина, медицинский факультет, Харьков","Чеченский государственный университет, медицинский факультет (ЧГУ, ЧИГУ), Грозный","Читинская государственная медицинская академия (ЧГМА, ЧГМИ), Чита","Чувашский государственный университет, медицинский факультет (ЧувГУ), Чебоксары","Южно-Казахстанская государственная фармацевтическая академия (ЮКГФА, ЮКГМА), Шымкент","Южно-Уральский государственный медицинский университет (ЮУГМУ, ЧелГМА, ЧелГМИ), Челябинск","Ярославская государственная медицинская академия (ЯГМА, ЯГМИ), Ярославль"]
@@ -273,461 +286,467 @@ Vue.component('uploader', w.Components['uploader']);
 // File /Users/jpetrov/Work/signup_demo/src/js/main.js
 
 w.Data = {
-  current: 'main', // current screen
+	current: 'main', // current screen
 
-  // creds
-  // email: 'e.rozhdestvenskaya@doktornarabote.cc',
-  email: '',
-  isValidEmail: false,
-  isExistingAccount: false,
-  isSocialAuth: false, // false or id:['vk', 'fb']
-  smsCode: '',
-  password: '',
-  phone: '',
-  isValidPhone: false,
-  diplomaCode: '',
-  diplomaDate: '',
-  isValidCode: false,
-  hasModal: false,
-  typeModal: 'mChooseEdu', // < reg | existing | eduselect >
+	// creds
+	// email: 'e.rozhdestvenskaya@doktornarabote.cc',
+	email: '',
+	isValidEmail: false,
+	isExistingAccount: false,
+	isSocialAuth: false, // false or id:['vk', 'fb']
+	smsCode: '',
+	password: '',
+	phone: '',
+	isValidPhone: false,
+	diplomaCode: '',
+	diplomaDate: '',
+	isValidCode: false,
+	hasModal: false,
+	typeModal: 'mChooseEdu', // < reg | existing | eduselect >
 
-  p: {
-    focusViewportHeight: window.innerHeight
-  },
+	p: {
+		focusViewportHeight: window.innerHeight
+	},
 
-  main: {
-    loginField: '',
-    isErrorPass: false,
-    validLogin: false,
-    isErrorLogin: false,
-    suggestRestoreAccess: false,
+	main: {
+		loginField: '',
+		isErrorPass: false,
+		validLogin: false,
+		isErrorLogin: false,
+		suggestRestoreAccess: false,
 
-  },
-  social: {
-    prev: '', // 0 - registration, 1 - login
-    app: 'vk' // ['vk', 'fb']
-  },
-  registration: {
-    suggestedEduItems: window._he,
-    _transitionSelectEdu: false,
-    suggestReg: false,
-    socialReg: false,
-    restoreForm: false,
-    existingInfo: {},
-    state: 0, // < 0 | 1>
+	},
+	social: {
+		prev: '', // 0 - registration, 1 - login
+		app: 'vk' // ['vk', 'fb']
+	},
+	registration: {
+		suggestedEduItems: window._he,
+		_transitionSelectEdu: false,
+		suggestReg: false,
+		socialReg: false,
+		restoreForm: false,
+		existingInfo: {},
+		state: 0, // < 0 | 1>
 
-    // personal
-    fsurname: '',
-    fname: '',
-    fmiddlename: '',
-    fbirthyear: '',
-    fsex: '',
+		// personal
+		fsurname: '',
+		fname: '',
+		fmiddlename: '',
+		fbirthyear: '',
+		fsex: '',
 
-    // education
-    fhigheredu: '',
-    fmajor: '',
-    fdocument: '',
-    fgraduatoinyear: '',
+		// education
+		fhigheredu: '',
+		fmajor: '',
+		fdocument: '',
+		fgraduatoinyear: '',
 
-    // work
-    foccupation: '',
-    fjobtitle: '',
-    fspecialty: '',
+		// work
+		foccupation: '',
+		fjobtitle: '',
+		fspecialty: '',
 
-    // personal 2
-    fphone: '',
-    fsocialapps: [],
-    fnewpass: '',
+		// personal 2
+		fphone: '',
+		fsocialapps: [],
+		fnewpass: '',
 
-  },
-  restore: {
-    // accData: {
-    //   name: '',
-    //   code: '1234',
-    //   name: 'Володина Ольга Александровна',
-    //   pic: '/img/userpic.jpeg',
-    //   app: ['vk']
-    // },
-    accData: {},
-    accountId: '',
-    validAccount: false,
-    error: false,
-    state: 0, // 0 - запрос идентификатора, 1 - пароль на почту или соц. сеть, 2 - телефон, 3 - диплом
-    form: 'https://docs.google.com/forms/d/e/1FAIpQLSdQppOFU75_mrrfzUtfR-sFexdB1J7M0ic9LQ1KdAWrWssGcA/viewform'
-  },
+	},
+	restore: {
+		// accData: {
+		//   name: '',
+		//   code: '1234',
+		//   name: 'Володина Ольга Александровна',
+		//   pic: '/img/userpic.jpeg',
+		//   app: ['vk']
+		// },
+		accData: {},
+		accountId: '',
+		validAccount: false,
+		error: false,
+		state: 0, // 0 - запрос идентификатора, 1 - пароль на почту или соц. сеть, 2 - телефон, 3 - диплом
+		form: 'https://docs.google.com/forms/d/e/1FAIpQLSdQppOFU75_mrrfzUtfR-sFexdB1J7M0ic9LQ1KdAWrWssGcA/viewform'
+	},
 
-  testUsers: {
-    'exist@dnr.cc': {
-      password: '123',
-      name: 'Константинопольский Константин Константинович',
-      pic: '/img/no_photo.jpeg',
-      diploma: ['АБ 99999', '10.07.2017']
-    },
-    'exist_phone@dnr.cc': {
-      password: '123',
-      phone: '9647025299',
-      code: '1234',
-      name: 'Володина Ольга',
-      pic: '/img/userpic.jpeg',
-      diploma: ['АБ 99999', '10.07.2017']
-    },
-    'exist_vk@dnr.cc': {
-      password: '123',
-      code: '1234',
-      name: 'Володина Ольга',
-      app: ['vk'],
-      pic: '/img/userpic.jpeg',
-      diploma: ['АБ 99999', '10.07.2017']
-    },
-    '9647025299': 'exist_phone@dnr.cc'
-  },
+	testUsers: {
+		'exist@dnr.cc': {
+			password: '123',
+			name: 'Константинопольский Константин Константинович',
+			pic: '/img/no_photo.jpeg',
+			diploma: ['АБ 99999', '10.07.2017']
+		},
+		'exist_phone@dnr.cc': {
+			password: '123',
+			phone: '9647025299',
+			code: '1234',
+			name: 'Володина Ольга',
+			pic: '/img/userpic.jpeg',
+			diploma: ['АБ 99999', '10.07.2017']
+		},
+		'exist_vk@dnr.cc': {
+			password: '123',
+			code: '1234',
+			name: 'Володина Ольга',
+			app: ['vk'],
+			pic: '/img/userpic.jpeg',
+			diploma: ['АБ 99999', '10.07.2017']
+		},
+		'9647025299': 'exist_phone@dnr.cc'
+	},
 
-  appNames: {
-    'vk': 'Вконтакте',
-    'fb': 'Фэйсбук'
-  },
+	appNames: {
+		'vk': 'Вконтакте',
+		'fb': 'Фэйсбук'
+	},
 
-  formErrors: {
-    'wrongpass': 'Неверный пароль',
-    'unknownnumber': 'Номер не зарегистрирован',
-    'unknownrestore': 'Профиль не найден'
-  }
+	formErrors: {
+		'wrongpass': 'Неверный пароль',
+		'unknownnumber': 'Номер не зарегистрирован',
+		'unknownrestore': 'Профиль не найден'
+	}
 }
 
 w.App = new Vue({
-  data: w.Data,
-  computed: {},
-  methods: {
-    _route: function( cb, scroll = true ) {
-      if(scroll) {
-        window.scrollTo(0, 0);
-      }
+	data: w.Data,
+	computed: {},
+	methods: {
+		_route: function( cb, scroll = true ) {
+			if(scroll) {
+				window.scrollTo(0, 0);
+			}
 
-      if(typeof cb == 'function') {
-        cb();
-      } else if( typeof cb == 'string') {
-        this.current = cb;
-      }
-    },
-    cleanSlate: function() {
-      this.email = '';
-      this.isValidEmail = false;
-      this.isValidPhone = false;
-      this.isExistingAccount = false;
-      this.isSocialAuth = false;
-      this.phone = '';
-      this.passwd = '';
-    },
-    clearModals: function() {
-      this.hasModal = false;
-    },
-    headerBack: function() {
-      this._route('main');
-    },
-    unflagError(key) {
-      console.log(key);
-      this.$set(this, key, null);
-    },
-    routeHome: function() {
-      this._route('main');
-    },
-    routeSocial: function(app) {
-      this.social.app = app;
-      this.social.prev = this.current;
+			if(typeof cb == 'function') {
+				cb();
+			} else if( typeof cb == 'string') {
+				this.current = cb;
+			}
+		},
+		cleanSlate: function() {
+			this.email = '';
+			this.isValidEmail = false;
+			this.isValidPhone = false;
+			this.isExistingAccount = false;
+			this.isSocialAuth = false;
+			this.phone = '';
+			this.passwd = '';
+		},
+		clearModals: function() {
+			this.hasModal = false;
+		},
+		headerBack: function() {
+			this._route('main');
+		},
+		unflagError(key) {
+			console.log(key);
+			this.$set(this, key, null);
+		},
+		routeHome: function() {
+			this._route('main');
+		},
+		routeSocial: function(app) {
+			this.social.app = app;
+			this.social.prev = this.current;
 
-      if(this.social.app == 'vk') this.email = 'exist_vk@dnr.cc';
-      if(this.social.app == 'fb') this.email = 'new@dnr.cc';
-      this.isValidEmail = true;
+			if(this.social.app == 'vk') this.email = 'exist_vk@dnr.cc';
+			if(this.social.app == 'fb') this.email = 'new@dnr.cc';
+			this.isValidEmail = true;
 
-      this._route('social');
-    },
-    routeFeed: function() {
-      this._route('feed');
-    },
-    checkLogin: function() {
-      var user = this.checkUser();
+			this._route('social');
+		},
+		routeFeed: function() {
+			this._route('feed');
+		},
+		checkLogin: function(btn) {
+			if(!this.main.validLogin) return;
 
-      console.log(user);
+			w.utils._fakeLoad(btn, this, function() {
+				if(btn && btn.classList) { btn.classList.remove('loading')}
+				var user = this.checkUser();
 
-      if( user && user.password && this.password == user.password ) {
-        this.routeFeed();
-      } else if (user && user.password && this.password != user.password ) {
-        this.main.isErrorPass = 'wrongpass';
-        this.main.validLogin = false;
-        setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 750);
-      } else if ( this.email && !(user && user.password) ) {
-        this.typeModal = 'mErrorNewUser';
-        this.hasModal = true;
-      } else if ( this.phone && !user) {
-        this.main.isErrorLogin = 'unknownnumber';
-        this.main.validLogin = false;
-        setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 750);
-      }
-    },
-    onSocialNext: function() {
-      // 0 – new user, 1 – signed up user
-      var user = this.checkUser();
+				console.log(user);
 
-      console.log(user);
+				if( user && user.password && this.password == user.password ) {
+					this.routeFeed();
+				} else if (user && user.password && this.password != user.password ) {
+					this.main.isErrorPass = 'wrongpass';
+					this.main.validLogin = false;
+					setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 750);
+				} else if ( this.email && !(user && user.password) ) {
+					this.typeModal = 'mErrorNewUser';
+					this.hasModal = true;
+				} else if ( this.phone && !user) {
+					this.main.isErrorLogin = 'unknownnumber';
+					this.main.validLogin = false;
+					setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 750);
+				}
+			});
+			
+		},
+		onSocialNext: function() {
+			// 0 – new user, 1 – signed up user
+			var user = this.checkUser();
 
-      var isExisting = (user && user.password);
+			console.log(user);
 
-      if ( !isExisting && this.social.prev == 'main') {
-        // новый пользователь при входе в аккаунт
+			var isExisting = (user && user.password);
 
-        this.routeRegStepOne();
-        this.registration.suggestReg = true;
-        this.registration.socialReg = true;
-      } else if ( !isExisting && this.social.prev == 'registration1') {
-        // новый пользователь при регистрации
+			if ( !isExisting && this.social.prev == 'main') {
+				// новый пользователь при входе в аккаунт
 
-        this.routeRegStepOne();
-        this.registration.suggestReg = false;
-        this.registration.socialReg = true;
-      } else if(isExisting) {
-        // существующий пользователь, логиним
+				this.routeRegStepOne();
+				this.registration.suggestReg = true;
+				this.registration.socialReg = true;
+			} else if ( !isExisting && this.social.prev == 'registration1') {
+				// новый пользователь при регистрации
 
-        this.routeFeed();
-      }
-    },
-    validateEmail: function(val) {
-      // return this.isValidEmail = (val.indexOf('@') != -1);
-      return this.isValidEmail = /[^\.@]+@[^\.@]+\.[^\.@]+/i.test(val);
-    },
-    validatePhone: function(val) {
-      var _val = val.trim();
-      _val = _val.replace(/[- \(\)]/g, '');
+				this.routeRegStepOne();
+				this.registration.suggestReg = false;
+				this.registration.socialReg = true;
+			} else if(isExisting) {
+				// существующий пользователь, логиним
 
-      return this.isValidPhone = /^(\+7|8)?[0-9]{10}$/i.test(_val);
-    },
-    checkUser: function() {
-      var _email = '';
+				this.routeFeed();
+			}
+		},
+		validateEmail: function(val) {
+			// return this.isValidEmail = (val.indexOf('@') != -1);
+			return this.isValidEmail = /[^\.@]+@[^\.@]+\.[^\.@]+/i.test(val);
+		},
+		validatePhone: function(val) {
+			var _val = val.trim();
+			_val = _val.replace(/[- \(\)]/g, '');
 
-      if (this.email && this.isValidEmail) {
-        _email = this.email;
-      } else if (this.phone && this.isValidPhone) {
-        this.phone = this.phone.replace(/^(\+7|8)/, '');
-        _email = this.testUsers[this.phone];
-      } else {
-        return undefined;
-      }
-      var result = this.testUsers[_email];
+			return this.isValidPhone = /^(\+7|8)?[0-9]{10}$/i.test(_val);
+		},
+		checkUser: function() {
+			var _email = '';
 
-      if(!result) {
-        this.testUsers[this.email] = {
-          password: ''
-        }
-      }
+			if (this.email && this.isValidEmail) {
+				_email = this.email;
+			} else if (this.phone && this.isValidPhone) {
+				this.phone = this.phone.replace(/^(\+7|8)/, '');
+				_email = this.testUsers[this.phone];
+			} else {
+				return undefined;
+			}
+			var result = this.testUsers[_email];
 
-      return result;
-    },
-    routeRegStepOne: function( erase ) {
-      this.registration.socialReg = false;
-      this.registration.suggestReg = false;
+			if(!result) {
+				this.testUsers[this.email] = {
+					password: ''
+				}
+			}
 
-      var erase = !!(erase);
-      if(erase) this.cleanSlate();
+			return result;
+		},
+		routeRegStepOne: function( erase ) {
+			this.registration.socialReg = false;
+			this.registration.suggestReg = false;
 
-      this.clearModals();
+			var erase = !!(erase);
+			if(erase) this.cleanSlate();
 
-      this._route('registration1');
-    },
-    routeRegStepTwo: function() {
-      if(!this.isValidEmail) return;
+			this.clearModals();
 
-      var user = this.checkUser();
+			this._route('registration1');
+		},
+		routeRegStepTwo: function() {
+			if(!this.isValidEmail) return;
 
-      if (user && user.password && !this.registration.restoreForm) {
-        this.hasModal = !!(this.email && this.isValidEmail && this.testUsers[this.email] && this.testUsers[this.email].password);
-        this.typeModal = 'mErrorExistingUser'
-        // this.routeHome();
-        return true;
-      }
+			var user = this.checkUser();
 
-      this.registration.existingInfo = user || {};
-      this.registration.existingInfo.email = this.email;
+			if (user && user.password && !this.registration.restoreForm) {
+				this.hasModal = !!(this.email && this.isValidEmail && this.testUsers[this.email] && this.testUsers[this.email].password);
+				this.typeModal = 'mErrorExistingUser'
+				// this.routeHome();
+				return true;
+			}
 
-      console.log(this.registration.existingInfo.name);
+			this.registration.existingInfo = user || {};
+			this.registration.existingInfo.email = this.email;
 
-      this.current = 'registration2'
+			console.log(this.registration.existingInfo.name);
 
-    },
-    cantLogin: function(ev) {
+			this.current = 'registration2'
 
-      this.clearModals();
-      this.initRestore();
-      this._route('restore');
-    },
-    restorePassFocus: function() {
-      if(this.current == 'main') return 'main-screen-email';
-      if(this.current == 'restore') return 'registration-1-screen-email'
-    },
-    initRestore: function() {
-      if(this.restore.accountId == '') return;
-      var user = this.checkUser();
+		},
+		cantLogin: function(ev) {
 
-      if( user && user.password ) {
-        this.restore.accData = user;
-        this.restore.accData.pic = user.pic || '/img/no_photo.jpeg';
+			this.clearModals();
+			this.initRestore();
+			this._route('restore');
+		},
+		restorePassFocus: function() {
+			if(this.current == 'main') return 'main-screen-email';
+			if(this.current == 'restore') return 'registration-1-screen-email'
+		},
+		initRestore: function() {
+			if(this.restore.accountId == '') return;
+			var user = this.checkUser();
 
-        if( this.phone && this.isValidPhone && this.testUsers[this.phone]) {
-          this.email = this.testUsers[this.phone];
-          this.isValidEmail = true;
-        }
+			if( user && user.password ) {
+				this.restore.accData = user;
+				this.restore.accData.pic = user.pic || '/img/no_photo.jpeg';
 
-        if( user.phone ) {
+				if( this.phone && this.isValidPhone && this.testUsers[this.phone]) {
+					this.email = this.testUsers[this.phone];
+					this.isValidEmail = true;
+				}
 
-          this.restore.state = 2;
+				if( user.phone ) {
 
-        } else if ( user.socialApp ) {
+					this.restore.state = 2;
 
-          this.restore.state = 3;
+				} else if ( user.socialApp ) {
 
-        } else {
+					this.restore.state = 3;
 
-          this.restore.state = 1;
-        }
+				} else {
+
+					this.restore.state = 1;
+				}
 
 
-      } else {
-        // нет такого пользователя
-        this.restore.validAccount = false;
-        this.restore.error = 'unknownrestore';
-      }
-    },
-    validateRestoreField: function() {
-      this.restore.error = '';
-      if( this.validateEmail(this.restore.accountId) ) {
-        this.phone = '';
-        this.isValidPhone = false;
-        this.email = this.restore.accountId;
-        this.isValidEmail = true;
-      } else if( this.validatePhone(this.restore.accountId) ) {
-        this.email = '';
-        this.isValidEmail = false;
-        this.phone = this.restore.accountId;
-        this.isValidPhone = true;
-      }
+			} else {
+				// нет такого пользователя
+				this.restore.validAccount = false;
+				this.restore.error = 'unknownrestore';
+			}
+		},
+		validateRestoreField: function() {
+			this.restore.error = '';
+			if( this.validateEmail(this.restore.accountId) ) {
+				this.phone = '';
+				this.isValidPhone = false;
+				this.email = this.restore.accountId;
+				this.isValidEmail = true;
+			} else if( this.validatePhone(this.restore.accountId) ) {
+				this.email = '';
+				this.isValidEmail = false;
+				this.phone = this.restore.accountId;
+				this.isValidPhone = true;
+			}
 
-      if(
-        (this.email != '' && this.isValidEmail) ||
-        (this.phone != '' && this.isValidPhone)
-      ) {
-        this.restore.validAccount = true;
-      } else {
-        this.restore.validAccount = false;
-      }
+			if(
+				(this.email != '' && this.isValidEmail) ||
+				(this.phone != '' && this.isValidPhone)
+			) {
+				this.restore.validAccount = true;
+			} else {
+				this.restore.validAccount = false;
+			}
 
-      console.log(this.restore.validAccount);
-    },
-    checkSmsCode: function () {
-      if(this.smsCode == '') return;
-      this.smsCode = parseInt(this.smsCode);
+			console.log(this.restore.validAccount);
+		},
+		checkSmsCode: function () {
+			if(this.smsCode == '') return;
+			this.smsCode = parseInt(this.smsCode);
 
-      if(this.smsCode == NaN) this.smsCode = '';
+			if(this.smsCode == NaN) this.smsCode = '';
 
-      console.log(this.smsCode);
+			console.log(this.smsCode);
 
-      if(this.smsCode == this.restore.accData.code) {
-        this.isValidCode = true;
-      } else {
-        this.isValidCode = false;
-      }
-    },
-    loginCode: function() {
-      if(this.isValidCode) {
-        this.current = 'feed';
-      }
-    },
-    tryDiploma: function() {
-      this.restore.state = 3;
-    },
-    checkDiploma: function() {
-      if(this.diplomaCode && this.diplomaDate && this.phone) {
+			if(this.smsCode == this.restore.accData.code) {
+				this.isValidCode = true;
+			} else {
+				this.isValidCode = false;
+			}
+		},
+		loginCode: function() {
+			if(this.isValidCode) {
+				this.current = 'feed';
+			}
+		},
+		tryDiploma: function() {
+			this.restore.state = 3;
+		},
+		checkDiploma: function() {
+			if(this.diplomaCode && this.diplomaDate && this.phone) {
 
-        if(this.diplomaCode == this.restore.accData.diploma[0] && this.diplomaDate == this.restore.accData.diploma[1]) {
-          this.routeHome();
-        }
+				if(this.diplomaCode == this.restore.accData.diploma[0] && this.diplomaDate == this.restore.accData.diploma[1]) {
+					this.routeHome();
+				}
 
-      }
-    },
-    validateLogin: function( clearPassErr ) {
-      console.log(window.innerHeight);
-      if( this.validateEmail(this.main.loginField) ) {
-        this.phone = '';
-        this.isValidPhone = false;
-        this.email = this.main.loginField;
-        this.isValidEmail = true;
-      } else if( this.validatePhone(this.main.loginField) ) {
-        this.email = '';
-        this.isValidEmail = false;
-        this.phone = this.main.loginField;
-        this.isValidPhone = true;
-      }
+			}
+		},
+		validateLogin: function( clearPassErr ) {
+			console.log(window.innerHeight);
+			if( this.validateEmail(this.main.loginField) ) {
+				this.phone = '';
+				this.isValidPhone = false;
+				this.email = this.main.loginField;
+				this.isValidEmail = true;
+			} else if( this.validatePhone(this.main.loginField) ) {
+				this.email = '';
+				this.isValidEmail = false;
+				this.phone = this.main.loginField;
+				this.isValidPhone = true;
+			}
 
-      if(
-        (this.email != '' && this.isValidEmail && this.password != '') ||
-        (this.phone != '' && this.isValidPhone && this.password != '')
-      ) {
-        this.main.validLogin = true;
-      } else {
-        this.main.validLogin = false;
-      }
+			if(
+				(this.email != '' && this.isValidEmail && this.password != '') ||
+				(this.phone != '' && this.isValidPhone && this.password != '')
+			) {
+				this.main.validLogin = true;
+			} else {
+				this.main.validLogin = false;
+			}
 
-      if(clearPassErr) {
-        this.main.isErrorPass = '';
-      }
+			if(clearPassErr) {
+				this.main.isErrorPass = '';
+			}
 
-      return true;
-    },
-    scrollLogin: function() {
-      // var top = this.$refs.signInBlock.offsetTop;
-      // w.utils.scrollTop(top + 16, false, 250);
-    },
-    restoreForm: function() {
-      this.registration.restoreForm = true;
-      this.routeRegStepTwo();
-    },
-    openEduSelect: function() {
-      this.hasModal = true;
-      this.typeModal = 'mChooseEdu';
-      return true;
-    },
-    retryPass: function() {
-      this.clearModals();
-      this.routeHome();
-      return true;
-    },
-    focusSelectEdu: function() {
-      console.log(window.innerHeight);
-    },
-    sortEduList: function() {
-      this.$refs['mErrorNewUserList'] && this.$refs['mErrorNewUserList'].scrollTo(0,0);
+			return true;
+		},
+		scrollLogin: function() {
+			// var top = this.$refs.signInBlock.offsetTop;
+			// w.utils.scrollTop(top + 16, false, 250);
+		},
+		restoreForm: function() {
+			this.registration.restoreForm = true;
+			this.routeRegStepTwo();
+		},
+		openEduSelect: function() {
+			this.hasModal = true;
+			this.typeModal = 'mChooseEdu';
+			return true;
+		},
+		retryPass: function() {
+			this.clearModals();
+			this.routeHome();
+			return true;
+		},
+		focusSelectEdu: function() {
+			console.log(window.innerHeight);
+		},
+		sortEduList: function() {
+			this.$refs['mErrorNewUserList'] && this.$refs['mErrorNewUserList'].scrollTo(0,0);
 
-      if(this.registration.fhigheredu != '') {
-        this.registration.suggestedEduItems = w.utils.filterSubstr(this.registration.fhigheredu, w._he);
-      } else {
-        this.registration.suggestedEduItems = w._he;
-      }
-    },
-    applySelectedEdu: function( elem, item ) {
-      // this.registration._transitionSelectEdu = true;
-      console.log('apply');
-      // elem.dataset.selected = true;
-      this.registration.fhigheredu = item;
-      setTimeout(_.bind(function() { this.registration._transitionSelectEdu = false; this.hasModal = false;}, this), 300);
-    }
-  },
-  watch: {
-    'email': function() {
-      this.main.loginField = this.email;
-      this.restore.accountId = this.email;
-    },
-    'phone': function() {
-      this.main.loginField = this.phone;
-      this.restore.accountId = this.phone;
-    }
-  }
+			if(this.registration.fhigheredu != '') {
+				this.registration.suggestedEduItems = w.utils.filterSubstr(this.registration.fhigheredu, w._he);
+			} else {
+				this.registration.suggestedEduItems = w._he;
+			}
+		},
+		applySelectedEdu: function( elem, item ) {
+			// this.registration._transitionSelectEdu = true;
+			console.log('apply');
+			// elem.dataset.selected = true;
+			this.registration.fhigheredu = item;
+			setTimeout(_.bind(function() { this.registration._transitionSelectEdu = false; this.hasModal = false;}, this), 300);
+		}
+	},
+	watch: {
+		'email': function() {
+			this.main.loginField = this.email;
+			this.restore.accountId = this.email;
+		},
+		'phone': function() {
+			this.main.loginField = this.phone;
+			this.restore.accountId = this.phone;
+		}
+	}
 
 });
 
