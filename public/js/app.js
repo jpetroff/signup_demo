@@ -201,13 +201,13 @@ Vue.component('field', w.Components['field']);
 // File /Users/jpetrov/Work/signup_demo/src/components/popup.js
 
 w.Components['popup'] = {
-  template: "<div class=popup-backdrop v-show=isOpen><div class=popup-content><slot></slot></div></div>",
-  props: ['isOpen'],
-  data: function () {
-    return {
+	template: "<transition name=popup-transition><div class=popup-backdrop v-show=isOpen><div class=popup-content><slot></slot></div></div></transition>",
+	props: ['isOpen'],
+	data: function () {
+		return {
 
-    }
-  },
+		}
+	},
 
 }
 

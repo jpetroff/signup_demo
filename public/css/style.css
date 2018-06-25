@@ -520,13 +520,18 @@ textarea::-webkit-input-placeholder {
 .popup-transition-leave-to {
   opacity: 0;
 }
-.popup-transition-enter .content,
-.popup-transition-leave-to .content {
-  top: 30px;
+.popup-transition-enter .popup-content,
+.popup-transition-leave-to .popup-content {
+  opacity: 0;
+  bottom: -100px;
 }
 .popup-transition-enter-active,
 .popup-transition-leave-active {
-  transition: all .3s ease;
+  transition: all .15s ease;
+}
+.popup-transition-enter-active .popup-content,
+.popup-transition-leave-active .popup-content {
+  transition: all 0.2s ease;
 }
 .popup-backdrop {
   background: rgba(0, 0, 0, 0.5);
@@ -543,9 +548,9 @@ textarea::-webkit-input-placeholder {
   left: 0;
   right: 0;
   bottom: 0;
-  transition: top 0.2s ease-in-out;
   padding: 20px;
   background: white;
+  opacity: 1;
 }
 .popup-content .account-description {
   margin-bottom: 36px;
@@ -1043,17 +1048,49 @@ body {
 #main-screen .get-app-block .app-mockup {
   height: 172px;
   margin-top: 24px;
-  background: black;
-  opacity: 0.2;
   width: 180px;
   margin-left: auto;
   margin-right: auto;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
+  overflow: hidden;
+}
+#main-screen .get-app-block .app-mockup img {
+  width: 100%;
 }
 #main-screen .footer {
   background: #252525;
   min-height: 280px;
+}
+#main-screen .footer nav.footer-section {
+  padding-top: 18px;
+}
+#main-screen .footer nav.footer-section a.footer-link {
+  color: white;
+  text-decoration: none;
+  opacity: 0.5;
+  cursor: pointer;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 49%;
+  padding: 8px 0;
+  font-size: 18px;
+}
+#main-screen .footer nav.footer-section a.footer-link:hover {
+  text-decoration: none;
+  opacity: 0.8;
+}
+@media screen and (max-width: 340px) {
+  #main-screen .footer nav.footer-section a.footer-link {
+    font-size: 16px;
+  }
+}
+#main-screen .footer div.copyright {
+  margin-top: 26px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 18px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
 }
 #social-screen {
   height: 100vh;
