@@ -86,6 +86,9 @@ gulp.task('less', function(){
 gulp.task('assets', function() {
 	gulp.src( src + 'assets/**/*' )
 		.pipe(gulp.dest(dst));
+
+	gulp.src( src + 'app.js')
+		.pipe(gulp.dest(dst));
 });
 
 gulp.task('pages', function() {
