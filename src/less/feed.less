@@ -1,12 +1,24 @@
 #logged-feed-screen {
+  padding-top: 0;
   .feed-mockup {
-    position: fixed;
+    position: static;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     background: url('/img/feed_mockup.png') top left no-repeat transparent;
     background-size: 100%;
     border: none;
+
+    .message {
+      position: absolute;
+      top:100px;
+      width: 100%;
+      padding: 24px;
+      font-size: 18px;
+      background: rgba(255,255,255,0.9);
+      color: #323232;
+      line-height: 1.5;
+    }
   }
 }

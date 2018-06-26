@@ -1,113 +1,117 @@
 #restore-access-screen {
-  .header {
-    .mixin-header;
-    font-size: 10px;
-    margin-bottom: 28px;
-    text-align: left;
-    vertical-align: top;
-    display: flex;
-    flex-flow: row;
+	.header {
+		.mixin-header;
+		font-size: 10px;
+		margin-bottom: 28px;
+		text-align: left;
+		vertical-align: top;
+		display: flex;
+		flex-flow: row;
 
-    &-logo {
-      position: relative;
-      top: 3px;
-      margin-right: 20px;
-    }
+		&-logo {
+			position: relative;
+			top: 3px;
+			margin-right: 20px;
+		}
 
-    .title {
-      font-size: 18px;
-      line-height: 20px;
-      color: white;
-    }
-  }
+		.title {
+			font-size: 18px;
+			line-height: 20px;
+			color: white;
+		}
+	}
 
-  .content {
-    padding: 0px 20px;
-  }
+	.content {
+		padding: 0px 20px;
+	}
 
-  .account-description {
-    margin-bottom: 0;
-  }
+	.account-description {
+		margin-bottom: 0;
+	}
 
-  .restore-new-email {
-    .message { text-align: left; font-size: 14px; line-height: 20px; }
-    .social-block { margin-top: 4px; margin-bottom: 12px;}
+	.restore-new-email {
+		.message { text-align: left; font-size: 14px; line-height: 20px; }
+		.social-block { margin-top: 4px; margin-bottom: 12px;}
 
-    .level {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 24px;
+		.level {
+			display: flex;
+			flex-direction: column;
+			margin-bottom: 24px;
 
-      &.social {
-        flex-direction: row-reverse;
-        margin-top: 24px;
-        margin-bottom: 0;
+			&.social {
+				flex-direction: row-reverse;
+				margin-top: 24px;
+				margin-bottom: 0;
 
-        .social-block {
-          flex-grow: 1;
-          text-align: left;
-          margin: 0;
-        }
+				.social-block {
+					flex-grow: 1;
+					text-align: left;
+					margin: 0;
+				}
 
-        .message {
-          width: 146px;
-          flex-grow: 0;
-          flex-shrink: 0;
-          padding-top: 2px;
-          margin-right: 12px;
-          font-weight: normal;
-          opacity: 0.5;
-        }
-      }
+				.message {
+					width: 146px;
+					flex-grow: 0;
+					flex-shrink: 0;
+					padding-top: 2px;
+					margin-right: 12px;
+					font-weight: normal;
+					opacity: 0.5;
+				}
+			}
 
 
-    }
+		}
 
-  }
+	}
 
-  .restore-sms {
-    margin-top: 20px;
+	.restore-sms {
+		margin-top: 20px;
 
-    .message {
-      font-size: 16px;
-      line-height: 20px;
-    }
+		.message {
+			font-size: 16px;
+			line-height: 20px;
+		}
 
-    .phone-number {
-      font-size: 21px;
-      line-height: 24px;
-      margin-top: 8px;
-      margin-bottom: 24px;
-      font-weight: 600;
+		.phone-number {
+			font-size: 21px;
+			line-height: 24px;
+			margin-top: 8px;
+			margin-bottom: 24px;
+			font-weight: 600;
 
-      &:before {
-        content: '+7';
-      }
-    }
-    .code-input-wrapper {
-      display: flex;
-      flex-direction: row;
-      vertical-align: top;
+			&:before {
+				content: '+7';
+			}
+		}
+		.code-input-wrapper {
+			display: flex;
+			flex-direction: row;
+			vertical-align: top;
 
-      .btn {
-        margin-top: 0;
-        height: 66px;
-        line-height: 65px;
-        width: 100px;
-        flex-grow: 0;
-        flex-shrink: 0;
-        margin-left: 12px;
-      }
-    }
-  }
+			.phone {
+				flex-grow: 1;
+			}
 
-  .restore-diploma {
-    padding-bottom: 56px;
-    .text {
-      text-align: left; font-size: 16px; line-height: 20px;
-      margin-bottom: 16px;
-      margin-top: 16px;
-    }
+			.btn {
+				margin-top: 0;
+				height: 66px;
+				line-height: 65px;
+				width: 100px;
+				flex-grow: 0;
+				flex-shrink: 0;
+				margin-left: 12px;
+			}
+		}
+	}
 
-  }
+	.restore-diploma {
+		padding-bottom: 56px;
+		.text {
+			text-align: left; font-size: 16px; line-height: 20px;
+			margin-bottom: 16px;
+			margin-top: 16px;
+		}
+
+	}
 }

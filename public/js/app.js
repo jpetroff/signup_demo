@@ -380,16 +380,16 @@ w.Data = {
 			password: '123',
 			phone: '9647025299',
 			code: '1234',
-			name: 'Володина Ольга',
-			pic: '/img/userpic.jpeg',
+			name: 'Петров Александр Иванович',
+			pic: '/img/userpic2.png',
 			diploma: ['АБ 99999', '10.07.2017']
 		},
 		'exist_vk@dnr.cc': {
 			password: '123',
 			code: '1234',
-			name: 'Володина Ольга',
+			name: 'Константинопольский Александр Иванович',
 			app: ['vk'],
-			pic: '/img/userpic.jpeg',
+			pic: '/img/userpic2.png',
 			diploma: ['АБ 99999', '10.07.2017']
 		},
 		'9647025299': 'exist_phone@dnr.cc'
@@ -435,6 +435,9 @@ w.App = new Vue({
 			this.hasModal = false;
 		},
 		headerBack: function() {
+			if(this.current == 'restore' && this.restore.state != 0) {
+				return this.restore.state = 0;
+			}
 			this._route('main');
 		},
 		unflagError(key) {
@@ -456,6 +459,9 @@ w.App = new Vue({
 		},
 		routeFeed: function() {
 			this._route('feed');
+			setTimeout(function() {
+				alert('Вы успешно авторизовались на сайте');
+			}, 200);
 		},
 		checkLogin: function(btn) {
 			if(!this.main.validLogin) return;
@@ -511,6 +517,8 @@ w.App = new Vue({
 		},
 		validateEmail: function(val) {
 			// return this.isValidEmail = (val.indexOf('@') != -1);
+			// var val = val.toLowerCase();
+			this.email = val.toLowerCase();
 			return this.isValidEmail = /[^\.@]+@[^\.@]+\.[^\.@]+/i.test(val);
 		},
 		validatePhone: function(val) {
@@ -657,10 +665,12 @@ w.App = new Vue({
 				this.isValidCode = false;
 			}
 		},
-		loginCode: function() {
-			if(this.isValidCode) {
-				this.current = 'feed';
-			}
+		loginCode: function(btn) {
+			w.utils._fakeLoad(btn, this, function() {
+				if(this.isValidCode) {
+					this.routeFeed();
+				}
+			});
 		},
 		tryDiploma: function() {
 			this.restore.state = 3;
@@ -739,6 +749,15 @@ w.App = new Vue({
 			// elem.dataset.selected = true;
 			this.registration.fhigheredu = item;
 			setTimeout(_.bind(function() { this.registration._transitionSelectEdu = false; this.hasModal = false;}, this), 300);
+		},
+		requestPassbyEmail: function(btn) {
+			w.utils._fakeLoad(btn, this, function() {
+				this.password = '';
+				this.routeHome();
+				setTimeout(_.bind(function() {
+					alert('Пароль отправлен на почту ' + this.email);
+				}, this), 200);
+			})
 		}
 	},
 	watch: {

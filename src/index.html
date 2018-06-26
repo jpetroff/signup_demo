@@ -105,7 +105,7 @@
 				</div> -->
 				<div class="sign-up-block content">
 					<h1 class="sign-up-header">
-						Коллективный разум<br>527 415 врачей
+						Коллективный разум<br>527&#8198;415 врачей
 					</h1>
 					<btn class="btn btn-secondary"  v-on:click="routeRegStepOne">
 						Регистрация
@@ -165,7 +165,7 @@
 						<a href="#" class="footer-link">Обратная связь</a>
 					</nav>
 					<div class="copyright">
-						© 2009&ndash;2018 телемедицинская платформа «Доктор на&nbsp;работe»
+						2009&ndash;2018 телемедицинская платформа «Доктор на&nbsp;работe»
 					</div>
 				</div>
 			</div>
@@ -225,16 +225,18 @@
 					<div class="confirm-personal-data">
 						<!-- <input type="checkbox" /> -->
 						<p class="confirmation-text">
-							Администрация сайта не использует и не разглашает Ваши персональные данные без Вашего согласия в соответствии с Федеральным законом от 27.07.2006 г. №152-ФЗ «О персональных данных».
+							Администрация сайта не использует и не разглашает ваши персональные данные без вашего согласия в соответствии с Федеральным законом от&nbsp;27.07.2006&nbsp;г. №152&ndash;ФЗ «О&nbsp;персональных данных».
 						</p><p class="confirmation-text">
-							Продолжая, Вы подтверждаете, что ознакомились с Лицензионным договором и принимаете его условия.
+							Продолжая, вы подтверждаете, что ознакомились с Лицензионным договором и принимаете его условия.
 						</p>
 					</div>
 				</div>
 			</div>
 
 			<div class="screen" id="logged-feed-screen" v-show="this.current == 'feed'">
-				<div class="feed-mockup"></div>
+				<div class="feed-mockup">
+					<!-- <div class="message">Вы авторизовались на сайте</div> -->
+				</div>
 			</div>
 
 			<div class="screen" id="restore-access-screen" v-show="this.current == 'restore'">
@@ -288,7 +290,13 @@
 								<div class="message" v-if="restore.accData.app && restore.accData.app.length != 0">Войти через социальную&nbsp;сеть</div>
 							</div>
 							<div class="level">
-								<div class="btn btn-primary">Получить пароль на почту</div>
+								<label for="main-screen-password" class="btn btn-primary" v-on:click="requestPassbyEmail($event.currentTarget)">
+									<span class="caption">Получить пароль на почту</span>
+									<div class="spinner">
+										<div class="double-bounce1"></div>
+										<div class="double-bounce2"></div>
+									</div>
+								</label>
 								<a v-bind:href="restore.form" class="btn btn-text btn-sm btn-primary btn-next" target="_blank">У меня нет доступа к почте</a>
 							</div>
 						</div>
@@ -298,7 +306,13 @@
 							<div class="phone-number">{{restore.accData.phone}}</div>
 							<div class="code-input-wrapper">
 								<field id="restore-screen-sms" class="phone code" v-on:input="checkSmsCode" v-model="smsCode" type="number" label="Код из СМС"></field>
-								<div class="btn btn-secondary" v-bind:class="{ 'disabled': !isValidCode }" v-on:click="loginCode">Войти</div>
+								<div class="btn btn-secondary" v-bind:class="{ 'disabled': !isValidCode }" v-on:click="loginCode($event.currentTarget)">
+										<span class="caption">Войти</span>
+										<div class="spinner">
+											<div class="double-bounce1"></div>
+											<div class="double-bounce2"></div>
+										</div>
+								</div>
 							</div>
 							<div class="btn btn-text btn-sm btn-primary btn-next disabled">Повторить (через 45 сек)</div>
 						</div>
@@ -354,7 +368,7 @@
 							</g>
 							</svg>
 						</div>
-						<div class="message-text">На ваш адрес придет  письмо со&nbsp;ссылкой  для&nbsp;подтверждения</div>
+						<div class="message-text">На ваш адрес придет письмо со&nbsp;ссылкой для&nbsp;подтверждения</div>
 					</div>
 
 					<div class="default-message new-password">
@@ -507,7 +521,7 @@
 
 							<div class="fieldset">
 								<div class="field-caption">
-									C телефоном можно быстро зайти на сайт без пароля.
+									Оставьте телефон, чтобы быстро заходить на сайт без пароля.
 									<span class="faded">Мы никому не передаем ваш номер и не используем его для рассылок</span>
 								</div>
 								<field id="fphone" v-model="registration.fphone" type="text" label="Телефон"></field>
@@ -527,6 +541,9 @@
 							</div>
 
 							<div class="fieldset">
+									<div class="field-caption">
+										Если нужно, смените пароль на более удобный и запоминающийся
+										</div>
 								<field id="fnewpass" v-model="registration.fnewpass" type="text" label="Новый пароль"></field>
 							</div>
 
