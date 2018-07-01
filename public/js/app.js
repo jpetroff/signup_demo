@@ -311,7 +311,7 @@ w.Data = {
 	main: {
 		loginField: '',
 		isErrorPass: false,
-		validLogin: false,
+		validLogin: true,
 		isErrorLogin: false,
 		suggestRestoreAccess: false,
 
@@ -409,7 +409,15 @@ w.Data = {
 
 w.App = new Vue({
 	data: w.Data,
-	computed: {},
+	computed: {
+		restoreText: function() {
+			if (this.main.isErrorPass == 'wrongpass') {
+				return 'Я не помню пароль';
+			} else {
+				return 'Я не могу войти';
+			}
+		}
+	},
 	methods: {
 		_route: function( cb, scroll = true ) {
 			if(scroll) {
@@ -440,10 +448,10 @@ w.App = new Vue({
 			}
 			this._route('main');
 		},
-		unflagError(key) {
-			console.log(key);
-			this.$set(this, key, null);
-		},
+		// unflagError(key) {
+		// 	console.log(key);
+		// 	this.$set(this, key, null);
+		// },
 		routeHome: function() {
 			this._route('main');
 		},
@@ -477,14 +485,14 @@ w.App = new Vue({
 				} else if (user && user.password && this.password != user.password ) {
 					this.main.isErrorPass = 'wrongpass';
 					this.main.validLogin = false;
-					setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 750);
+					setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 250);
 				} else if ( this.email && !(user && user.password) ) {
 					this.typeModal = 'mErrorNewUser';
 					this.hasModal = true;
 				} else if ( this.phone && !user) {
 					this.main.isErrorLogin = 'unknownnumber';
 					this.main.validLogin = false;
-					setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 750);
+					setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 250);
 				}
 			});
 			

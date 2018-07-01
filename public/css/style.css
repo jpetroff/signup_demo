@@ -1038,18 +1038,43 @@ body {
 #main-screen .content {
   padding: 0px 20px;
 }
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-4px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(4px);
+  }
+}
 #main-screen .emergency-btn {
   color: #065E8D;
-  background-color: #EBF5FB;
-  margin-top: 0;
+  background-color: transparent;
+  border: 1px solid #a1c3d9;
+  margin-top: 24px;
   transition: all 0.2s ease;
-  border-radius: 0;
   height: 44px;
   line-height: 43px;
+  position: relative;
 }
 #main-screen .emergency-btn.highlighted {
+  border-color: #065E8D;
   background-color: #065E8D;
   color: white;
+  box-shadow: 0 0 10px #065E8D;
+  animation: shake 1s ease;
+  animation-fill-mode: both;
+  animation-delay: 0.4s;
 }
 #main-screen .sign-in-block {
   background: #D8ECF7;
