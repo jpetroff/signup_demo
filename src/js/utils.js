@@ -73,14 +73,16 @@ w.utils = {
     return result;
 	},
 	_fakeLoad: function(elem, ctx, fn) {
-		var loadingT = 0;
-		if(elem && elem.classList) {
-			loadingT = Math.round( Math.random() * 1500 ) + 500;
-			elem.classList.add('loading');
-			console.log('!!', loadingT);
+		if(!elem || !elem.classList) {
+			return;
 		}
 
-		setTimeout(function(){
+		var loadingT = Math.round( Math.random() * 1500 ) + 500;
+		elem.classList.add('loading');
+		
+		console.log('!!', loadingT);
+
+		setTimeout(function() {
 			w.requestAnimationFrame(function() { elem.classList.remove('loading')} );
 			fn.apply(ctx);
 		}, loadingT);
