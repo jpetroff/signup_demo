@@ -29,8 +29,8 @@ gulp.task('js-libs', function(){
 	gulp.src([
 		base + 'underscore-min.js',
 		base + 'vue.min.js',
-		base + 'hammer.js',
-		base + 'vue-touch.js'
+		// base + 'hammer.js',
+		base + 'promise.min.js'
 
 	])
 		.pipe(concat('libs.js'))
