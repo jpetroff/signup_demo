@@ -208,7 +208,7 @@ w.App = new Vue({
 				} else {
 					w.utils.toggleLoad(btn, false);
 					this.main.sendingRequest = false;
-					
+
 					this.main.isErrorPass = reponseData.Error;
 					this.main.validLogin = false;
 					this.typeModal = 'mErrorNewUser';
@@ -217,6 +217,7 @@ w.App = new Vue({
 			}, this), function(error) {
 				w.utils.toggleLoad(btn, false);
 				this.main.sendingRequest = false;
+				alert('Что-то пошло не так, пожалуйста, попробуйте позже');
 			});
 			
 			// w.utils._fakeLoad(btn, this, function() {
