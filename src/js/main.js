@@ -24,7 +24,7 @@ w.Data = {
 	main: {
 		loginField: '',
 		isErrorPass: false,
-		validLogin: true,
+		validLogin: false,
 		isErrorLogin: false,
 		suggestRestoreAccess: false,
 
@@ -187,12 +187,39 @@ w.App = new Vue({
 		checkLogin: function(btn) {
 			if(!this.main.validLogin) return;
 
-			w.utils._fakeLoad(btn, this, function() {
-				if(btn && btn.classList) { btn.classList.remove('loading')}
+			// w.utils._fakeLoad(btn, this, function() {
+			// 	if(btn && btn.classList) { btn.classList.remove('loading')}
+			// 	var user = this.checkUser();
+
+			// 	console.log(user);
+
+			// 	if( user && user.password && this.password == user.password ) {
+			// 		this.routeFeed();
+			// 	} else if (user && user.password && this.password != user.password ) {
+			// 		this.main.isErrorPass = 'wrongpass';
+			// 		this.main.validLogin = false;
+			// 		setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 250);
+			// 	} else if ( this.email && !(user && user.password) ) {
+			// 		this.typeModal = 'mErrorNewUser';
+			// 		this.hasModal = true;
+			// 	} else if ( this.phone && !user) {
+			// 		this.main.isErrorLogin = 'unknownnumber';
+			// 		this.main.validLogin = false;
+			// 		setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 250);
+			// 	}
+			// });
+
+			w.utils.toggleLoad(btn, true);
+			w.utils.ajax({
+				url: '',
+				method: 'GET',
+				data: {}
+			}).then(_.bind(function(response){
+				w.utils.toggleLoad(btn, false);
+
+				// set user details
+
 				var user = this.checkUser();
-
-				console.log(user);
-
 				if( user && user.password && this.password == user.password ) {
 					this.routeFeed();
 				} else if (user && user.password && this.password != user.password ) {
@@ -207,7 +234,7 @@ w.App = new Vue({
 					this.main.validLogin = false;
 					setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 250);
 				}
-			});
+			}, this));
 			
 		},
 		onSocialNext: function() {
@@ -283,9 +310,32 @@ w.App = new Vue({
 		routeRegStepTwo: function(btn) {
 			if(!this.isValidEmail) return;
 
-			w.utils._fakeLoad(btn, this, function() {
-				var user = this.checkUser();
+			// w.utils._fakeLoad(btn, this, function() {
+			// 	var user = this.checkUser();
 
+			// 	if (user && user.password && !this.registration.restoreForm) {
+			// 		this.hasModal = !!(this.email && this.isValidEmail && this.testUsers[this.email] && this.testUsers[this.email].password);
+			// 		this.typeModal = 'mErrorExistingUser'
+			// 		// this.routeHome();
+			// 		return true;
+			// 	}
+
+			// 	this.registration.existingInfo = user || {};
+			// 	this.registration.existingInfo.email = this.email;
+
+			// 	console.log(this.registration.existingInfo.name);
+
+			// 	this.current = 'registration2';
+			// })
+
+			w.utils.toggleLoad(btn, true);
+			w.utils.ajax( {
+				url: '',
+				method: 'GET',
+				data: {}
+			}).then(_.bind(function() {
+				w.utils.toggleLoad(btn, false);
+				var user = this.checkUser();
 				if (user && user.password && !this.registration.restoreForm) {
 					this.hasModal = !!(this.email && this.isValidEmail && this.testUsers[this.email] && this.testUsers[this.email].password);
 					this.typeModal = 'mErrorExistingUser'
@@ -299,7 +349,7 @@ w.App = new Vue({
 				console.log(this.registration.existingInfo.name);
 
 				this.current = 'registration2';
-			})
+			}, this));
 		},
 		cantLogin: function(ev) {
 
@@ -314,7 +364,13 @@ w.App = new Vue({
 		initRestore: function(btn) {
 			if(this.restore.accountId == '') return;
 
-			w.utils._fakeLoad(btn, this, function() {
+			w.utils.toggleLoad(btn, true);
+			w.utils.ajax({
+				url: '',
+				method: 'GET',
+				data: {}
+			}).then(_.bind(function(response){
+				w.utils.toggleLoad(btn, false);
 				var user = this.checkUser();
 
 				if( user && user.password ) {
@@ -345,7 +401,40 @@ w.App = new Vue({
 					this.restore.validAccount = false;
 					this.restore.error = 'unknownrestore';
 				}
-			});
+			}, this));
+
+			// w.utils._fakeLoad(btn, this, function() {
+			// 	var user = this.checkUser();
+
+			// 	if( user && user.password ) {
+			// 		this.restore.accData = user;
+			// 		this.restore.accData.pic = user.pic || '/img/no_photo.jpeg';
+
+			// 		if( this.phone && this.isValidPhone && this.testUsers[this.phone]) {
+			// 			this.email = this.testUsers[this.phone];
+			// 			this.isValidEmail = true;
+			// 		}
+
+			// 		if( user.phone ) {
+
+			// 			this.restore.state = 2;
+
+			// 		} else if ( user.socialApp ) {
+
+			// 			this.restore.state = 3;
+
+			// 		} else {
+
+			// 			this.restore.state = 1;
+			// 		}
+
+
+			// 	} else {
+			// 		// нет такого пользователя
+			// 		this.restore.validAccount = false;
+			// 		this.restore.error = 'unknownrestore';
+			// 	}
+			// });
 		},
 		validateRestoreField: function() {
 			this.restore.error = '';
@@ -387,11 +476,22 @@ w.App = new Vue({
 			}
 		},
 		loginCode: function(btn) {
-			w.utils._fakeLoad(btn, this, function() {
+			// w.utils._fakeLoad(btn, this, function() {
+			// 	if(this.isValidCode) {
+			// 		this.routeFeed();
+			// 	}
+			// });
+
+			w.utils.toggleLoad(btn, true);
+			w.utils.ajax({
+				url: '',
+				method: 'GET',
+				data: {}
+			}).then(_.bind(function(response) {
 				if(this.isValidCode) {
-					this.routeFeed();
-				}
-			});
+						this.routeFeed();
+					}
+			}, this));
 		},
 		tryDiploma: function() {
 			this.restore.state = 3;
@@ -472,13 +572,27 @@ w.App = new Vue({
 			setTimeout(_.bind(function() { this.registration._transitionSelectEdu = false; this.hasModal = false;}, this), 300);
 		},
 		requestPassbyEmail: function(btn) {
-			w.utils._fakeLoad(btn, this, function() {
+			w.utils.toggleLoad(btn, true);
+			w.utils.ajax({
+				url: '',
+				method: 'GET',
+				data: {}
+			}).then(_.bind(function(response){
+				w.utils.toggleLoad(btn, false);
 				this.password = '';
 				this.routeHome();
 				setTimeout(_.bind(function() {
 					alert('Пароль отправлен на почту ' + this.email);
 				}, this), 200);
-			})
+			}, this));
+
+			// w.utils._fakeLoad(btn, this, function() {
+			// 	this.password = '';
+			// 	this.routeHome();
+			// 	setTimeout(_.bind(function() {
+			// 		alert('Пароль отправлен на почту ' + this.email);
+			// 	}, this), 200);
+			// })
 		}
 	},
 	watch: {
