@@ -1,3 +1,32 @@
+function makeRequest(method, url, options) {
+    return new Promise(function (resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState != 4)
+                return;
+
+            if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 302) {
+                resolve(JSON.parse(xhr.responseText));
+            } else {
+                reject({
+                    status: xhr.status,
+                    statusText: xhr.statusText
+                });
+            }
+        };
+
+        if (options && options.body) {
+            xhr.send(JSON.stringify(options.body));
+        }
+        else {
+            xhr.send();
+        }
+    });
+}
+
 w.Data = {
 	current: 'main', // current screen
 
@@ -185,29 +214,55 @@ w.App = new Vue({
 			}, 200);
 		},
 		checkLogin: function(btn) {
-			if(!this.main.validLogin) return;
+			if (!this.email || !this.password || !this.isValidEmail) {
+				return;
+			}
 
-			w.utils._fakeLoad(btn, this, function() {
-				if(btn && btn.classList) { btn.classList.remove('loading')}
-				var user = this.checkUser();
+			var body = {
+				Email: this.email,
+				Password: this.password
+			};
 
-				console.log(user);
+			btn.classList.add('loading');
 
-				if( user && user.password && this.password == user.password ) {
-					this.routeFeed();
-				} else if (user && user.password && this.password != user.password ) {
-					this.main.isErrorPass = 'wrongpass';
+			makeRequest('POST', '/Account/LogonAjax', { body }).then((response) => {
+				btn.classList.remove('loading');
+				
+				if (response.RedirectURL) {
+					window.location.href = response.RedirectURL;
+				}
+				else {
+					this.main.isErrorPass = response.Error;
 					this.main.validLogin = false;
-					setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 250);
-				} else if ( this.email && !(user && user.password) ) {
 					this.typeModal = 'mErrorNewUser';
 					this.hasModal = true;
-				} else if ( this.phone && !user) {
-					this.main.isErrorLogin = 'unknownnumber';
-					this.main.validLogin = false;
-					setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 250);
 				}
+			}, (error) => {
+				btn.classList.remove('loading');
+				console.log(error);
 			});
+			
+			// w.utils._fakeLoad(btn, this, function() {
+			// 	if(btn && btn.classList) { btn.classList.remove('loading')}
+			// 	var user = this.checkUser();
+
+			// 	console.log(user);
+
+			// 	if( user && user.password && this.password == user.password ) {
+			// 		this.routeFeed();
+			// 	} else if (user && user.password && this.password != user.password ) {
+			// 		this.main.isErrorPass = 'wrongpass';
+			// 		this.main.validLogin = false;
+			// 		setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 250);
+			// 	} else if ( this.email && !(user && user.password) ) {
+			// 		this.typeModal = 'mErrorNewUser';
+			// 		this.hasModal = true;
+			// 	} else if ( this.phone && !user) {
+			// 		this.main.isErrorLogin = 'unknownnumber';
+			// 		this.main.validLogin = false;
+			// 		setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 250);
+			// 	}
+			// });
 			
 		},
 		onSocialNext: function() {
