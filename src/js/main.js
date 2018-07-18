@@ -27,7 +27,7 @@ w.Data = {
 		validLogin: false,
 		isErrorLogin: false,
 		suggestRestoreAccess: false,
-
+		sendingRequest: false
 	},
 	social: {
 		prev: '', // 0 - registration, 1 - login
@@ -185,7 +185,7 @@ w.App = new Vue({
 			}, 200);
 		},
 		checkLogin: function(btn) {
-			if (!this.email || !this.password || !this.isValidEmail) {
+			if (!this.email || !this.password || !this.isValidEmail || this.main.sendingRequest) {
 				return;
 			}
 
@@ -195,25 +195,28 @@ w.App = new Vue({
 			};
 
 			w.utils.toggleLoad(btn, true);
+			this.main.sendingRequest = true;
 			w.utils.ajax({
 				url: '/Account/LogonAjax',
 				method: 'POST',
 				data: body
 			}).then(_.bind(function(response){
-				w.utils.toggleLoad(btn, false);
-
-				var reponseData = JSON.parse(response);
+				var reponseData = JSON.parse(response) || {};
 				if(reponseData.RedirectURL) {
 					window.location.href = reponseData.RedirectURL;
+
 				} else {
+					w.utils.toggleLoad(btn, false);
+					this.main.sendingRequest = false;
+					
 					this.main.isErrorPass = reponseData.Error;
 					this.main.validLogin = false;
 					this.typeModal = 'mErrorNewUser';
 					this.hasModal = true;
 				}
-			}, this))
-			.catch(error => {
+			}, this), function(error) {
 				w.utils.toggleLoad(btn, false);
+				this.main.sendingRequest = false;
 			});
 			
 			// w.utils._fakeLoad(btn, this, function() {
