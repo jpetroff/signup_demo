@@ -122,6 +122,9 @@ w.Data = {
 
 w.App = new Vue({
 	data: w.Data,
+	mounted: function() {
+		
+	},
 	computed: {
 		restoreText: function() {
 			if (this.main.isErrorPass == 'wrongpass') {
