@@ -8,6 +8,9 @@ w.Data = {
 	isExistingAccount: false,
 	isSocialAuth: false, // false or id:['vk', 'fb']
 	smsCode: '',
+	canRequestSmsCode: false,
+	smsCodeCountdown: 0,
+	codeSessionId: '',
 	password: '',
 	phone: '',
 	isValidPhone: false,
@@ -16,7 +19,7 @@ w.Data = {
 	isValidCode: false,
 	hasModal: false,
 	typeModal: 'mChooseEdu', // < reg | existing | eduselect >
-
+	
 	p: {
 		focusViewportHeight: window.innerHeight
 	},
@@ -217,11 +220,11 @@ w.App = new Vue({
 					this.typeModal = 'mErrorNewUser';
 					this.hasModal = true;
 				}
-			}, this), function(error) {
+			}, this), _.bind(function(error) {
 				w.utils.toggleLoad(btn, false);
 				this.main.sendingRequest = false;
 				w.utils.showErrorMessage();
-			});
+			}, this));
 			
 			// w.utils._fakeLoad(btn, this, function() {
 			// 	if(btn && btn.classList) { btn.classList.remove('loading')}
@@ -338,26 +341,44 @@ w.App = new Vue({
 			// })
 
 			w.utils.toggleLoad(btn, true);
+			this.main.sendingRequest = true;
 			w.utils.ajax( {
-				url: '',
-				method: 'GET',
-				data: {}
-			}).then(_.bind(function() {
+				url: '/Account/DoctorRegistrationAjax',
+				method: 'POST',
+				data: { login: this.email }
+			}).then(_.bind(function(response) {
 				w.utils.toggleLoad(btn, false);
-				var user = this.checkUser();
-				if (user && user.password && !this.registration.restoreForm) {
-					this.hasModal = !!(this.email && this.isValidEmail && this.testUsers[this.email] && this.testUsers[this.email].password);
-					this.typeModal = 'mErrorExistingUser'
-					// this.routeHome();
-					return true;
+
+				var reponseData = JSON.parse(response || '');
+				if(reponseData.Data) {
+					window.location.href = reponseData.Data;
+					return;
 				}
+				
+				this.main.sendingRequest = false;
 
-				this.registration.existingInfo = user || {};
-				this.registration.existingInfo.email = this.email;
+				this.hasModal = this.email && this.isValidEmail;
+				this.typeModal = 'mErrorExistingUser';
 
-				console.log(this.registration.existingInfo.name);
+				// var user = this.checkUser();
+				// if (user && user.password && !this.registration.restoreForm) {
+				// 	this.hasModal = !!(this.email && this.isValidEmail && this.testUsers[this.email] && this.testUsers[this.email].password);
+				// 	this.typeModal = 'mErrorExistingUser'
+				// 	// this.routeHome();
+				// 	return true;
+				// }
 
-				this.current = 'registration2';
+				// this.registration.existingInfo = user || {};
+				// this.registration.existingInfo.email = this.email;
+
+				// console.log(this.registration.existingInfo.name);
+
+				// this.current = 'registration2';
+			}, this), _.bind(function (error) {
+				w.utils.toggleLoad(btn, false);
+				this.main.sendingRequest = false;
+				console.error(error);
+				w.utils.showErrorMessage();
 			}, this));
 		},
 		cantLogin: function(ev) {
@@ -368,12 +389,23 @@ w.App = new Vue({
 			if(this.current == 'main') return 'main-screen-email';
 			if(this.current == 'restore') return 'registration-1-screen-email'
 		},
+		startSmsCodeCountdown: function() {
+			this.smsCodeCountdown = 45;
+			var countdownInterval = window.setInterval(_.bind(function () {
+				this.smsCodeCountdown -= 1;
+				if (this.smsCodeCountdown <= 0) {
+					window.clearInterval(countdownInterval);
+					this.canRequestSmsCode = true;
+				}
+			}, this), 980);
+		},
 		initRestore: function(btn) {
 			if(this.restore.accountId == '' || this.main.sendingRequest)
 				return;
 			
 			this.main.sendingRequest = true;
 			w.utils.toggleLoad(btn, true);
+			this.canRequestSmsCode = false;
 			w.utils.ajax({
 				url: '/Account/FindUser',
 				method: 'GET',
@@ -391,9 +423,12 @@ w.App = new Vue({
 						// this.restore.accData = user;
 						// this.restore.accData.pic = user.pic || '/img/no_photo.jpeg';
 	
-						if (userAuthMethods.HasPhone) {
+						if (userAuthMethods.Phone) {
 							/* via mobile */
 							this.restore.state = 2;
+							this.codeSessionId = userAuthMethods.CodeSessionId;
+							this.restore.accData.phone = userAuthMethods.Phone;
+							this.startSmsCodeCountdown();
 						} else {
 							this.restore.accData.app = userAuthMethods.AuthProviders || [];
 
@@ -411,10 +446,10 @@ w.App = new Vue({
 					console.log(responseData.Error);
 					w.utils.showErrorMessage();
 				}
-			}, this), function(error) {
+			}, this), _.bind(function(error) {
 				this.main.sendingRequest = false;
 				w.utils.showErrorMessage();
-			});
+			}, this));
 
 			// w.utils._fakeLoad(btn, this, function() {
 			// 	var user = this.checkUser();
@@ -476,34 +511,38 @@ w.App = new Vue({
 		},
 		checkSmsCode: function () {
 			if(this.smsCode == '') return;
-			this.smsCode = parseInt(this.smsCode);
 
-			if(this.smsCode == NaN) this.smsCode = '';
-
-			console.log(this.smsCode);
-
-			if(this.smsCode == this.restore.accData.code) {
-				this.isValidCode = true;
-			} else {
-				this.isValidCode = false;
-			}
+			var matching = this.smsCode.toString().match(/^\d{4}$/);
+			this.isValidCode = matching && matching.length === 1;
 		},
 		loginCode: function(btn) {
-			// w.utils._fakeLoad(btn, this, function() {
-			// 	if(this.isValidCode) {
-			// 		this.routeFeed();
-			// 	}
-			// });
+			if (this.main.sendingRequest)
+				return;
 
 			w.utils.toggleLoad(btn, true);
+			this.main.sendingRequest = true;
 			w.utils.ajax({
-				url: '',
-				method: 'GET',
-				data: {}
+				url: '/Account/ValidateCode',
+				method: 'POST',
+				data: {
+					code: this.smsCode,
+					codeSessionId: this.codeSessionId
+				}
 			}).then(_.bind(function(response) {
-				if(this.isValidCode) {
-						this.routeFeed();
-					}
+				var reponseData = JSON.parse(response || '');
+				if(reponseData.IsSuccess) {
+					window.location.href = '/';
+					return;
+				}
+				
+				w.utils.toggleLoad(btn, false);
+				this.main.sendingRequest = false;
+
+				w.utils.showErrorMessage('Проверьте код подтверждения');
+			}, this), _.bind(function(error) {
+				w.utils.toggleLoad(btn, false);
+				this.main.sendingRequest = false;
+				w.utils.showErrorMessage();
 			}, this));
 		},
 		tryDiploma: function() {
@@ -614,12 +653,12 @@ w.App = new Vue({
 				setTimeout(_.bind(function() {
 					alert('Пароль отправлен на почту ' + this.email);
 				}, this), 200);
-			}, this), function(error) {
+			}, this), _.bind(function(error) {
 				w.utils.toggleLoad(btn, false);
 				this.main.sendingRequest = false;
 				console.error(error);
 				w.utils.showErrorMessage();
-			});
+			}, this));
 
 			// w.utils._fakeLoad(btn, this, function() {
 			// 	this.password = '';
@@ -640,7 +679,6 @@ w.App = new Vue({
 			this.restore.accountId = this.phone;
 		}
 	}
-
 });
 
 App.$mount('#app');

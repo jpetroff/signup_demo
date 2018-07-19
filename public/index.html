@@ -37,7 +37,7 @@
 			</div>
 
 			<popup id="mErrorExistingUser" class="existing-user-notice"
-				v-bind:is-open="hasModal && typeModal == 'mErrorExistingUser' ">
+				v-bind:is-open="hasModal && typeModal === 'mErrorExistingUser' ">
 				<div class="header">Профиль уже существует</div>
 				<account-info
 					v-bind:name="testUsers[email] && testUsers[email].name"
@@ -62,7 +62,7 @@
 			</popup>
 
 			<popup id="mErrorNewUser" class="new-user-notice"
-				v-bind:is-open="hasModal && typeModal == 'mErrorNewUser' ">
+				v-bind:is-open="hasModal && typeModal === 'mErrorNewUser' ">
 
 				<div class="header">К сожалению, такой пользователь у&nbsp;нас не&nbsp;зарегистрирован</div>
 				<account-info
@@ -86,7 +86,7 @@
 				</label>
 			</popup>
 
-			<popup id="mChooseEdu" class="fs-modal-selector" v-bind:is-open="hasModal && typeModal == 'mChooseEdu' ">
+			<popup id="mChooseEdu" class="fs-modal-selector" v-bind:is-open="hasModal && typeModal === 'mChooseEdu' ">
 				<!-- <field id="fhigheredu" v-model="registration.fhigheredu" place="top" type="text" label="Начните вводить название" v-on:input="sortEduList" tabindex="-1"></field> -->
 				<div class="simple-field">
 					<span class="simple-field__placeholder" v-show="registration.fhigheredu == ''">Начните вводить название</span>
@@ -99,7 +99,7 @@
 			</popup>
 
 			<!-- <div class="screen" id="main-screen" v-bind:class="{show: (current == 'main'), hide: (current != 'main')}"> -->
-			<div class="screen" id="main-screen" v-show="current == 'main'">
+			<div class="screen" id="main-screen" v-show="current === 'main'">
 				<!-- <div class="header">
 					<img class="header-logo" src="/img/logo_full.png" srcset="/img/logo_full@2x.png 2x" alt="">
 				</div> -->
@@ -235,13 +235,13 @@
 				</div>
 			</div>
 
-			<div class="screen" id="logged-feed-screen" v-show="this.current == 'feed'">
+			<div class="screen" id="logged-feed-screen" v-show="this.current === 'feed'">
 				<div class="feed-mockup">
 					<!-- <div class="message">Вы авторизовались на сайте</div> -->
 				</div>
 			</div>
 
-			<div class="screen" id="restore-access-screen" v-show="this.current == 'restore'">
+			<div class="screen" id="restore-access-screen" v-show="this.current === 'restore'">
 				<!-- <div class="header">
 					<img v-on:click="routeHome" class="header-logo" src="/img/d_logo.png" srcset="/img/d_logo@2x.png 2x" alt="">
 					<span class="title">Восстановить доступ</span>
@@ -316,7 +316,7 @@
 										</div>
 								</div>
 							</div>
-							<div class="btn btn-text btn-sm btn-primary btn-next disabled">Повторить (через 45 сек)</div>
+							<div class="btn btn-text btn-sm btn-primary btn-next" v-on:click="if (canRequestSmsCode) initRestore($event.currentTarget)" v-bind:class="{ 'disabled': !canRequestSmsCode }">Повторить (через {{smsCodeCountdown}} сек)</div>
 						</div>
 					</div>
 

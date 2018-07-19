@@ -1723,9 +1723,6 @@ body {
   margin-bottom: 24px;
   font-weight: 600;
 }
-#restore-access-screen .restore-sms .phone-number:before {
-  content: '+7';
-}
 #restore-access-screen .restore-sms .code-input-wrapper {
   display: -ms-flexbox;
   display: flex;
