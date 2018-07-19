@@ -318,23 +318,6 @@
 							</div>
 							<div class="btn btn-text btn-sm btn-primary btn-next disabled">Повторить (через 45 сек)</div>
 						</div>
-
-						<div class="restore-diploma" v-show="restore.state == 3">
-							<div class="text message">Введите данные диплома</div>
-							<field id="restore-screen-diploma-code" v-model="diplomaCode" type="text" place="top" label="Серия и номер диплома"></field>
-							<field id="restore-screen-diploma-date" v-model="diplomaDate" type="text" place="bottom" label="Дата выдачи"></field>
-
-							<div class="text">Новый пароль будет отправлен на ваш номер</div>
-							<field id="restore-screen-add-phone" v-model="phone" type="text" label="Телефон"></field>
-							<div class="btn btn-secondary" v-on:click="checkDiploma">Отправить</div>
-							<div class="btn btn-text">Альтернативный способ</div>
-						</div>
-
-						<div class="restore-contact" v-show="restore.state == 4">
-							<div class="message">
-								Свяжитесь с нами для подтверждения личности
-							</div>
-						</div>
 					</div>
 
 				</div>

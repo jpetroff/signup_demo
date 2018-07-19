@@ -582,19 +582,34 @@ w.App = new Vue({
 		},
 		requestPassbyEmail: function(btn) {
 			w.utils.toggleLoad(btn, true);
-			// TODO
 			w.utils.ajax({
-				url: '',
-				method: 'GET',
-				data: {}
+				url: '/Account/GetNewCodeAjax',
+				method: 'POST',
+				data: {
+					Email: this.email
+				}
 			}).then(_.bind(function(response){
 				w.utils.toggleLoad(btn, false);
+
+				var responseData = JSON.parse(response || '');
+
+				if (!responseData || !responseData.Success) {
+					console.error(response);
+					w.utils.showErrorMessage();
+					return;
+				}
+
 				this.password = '';
 				this.routeHome();
+
 				setTimeout(_.bind(function() {
 					alert('Пароль отправлен на почту ' + this.email);
 				}, this), 200);
-			}, this));
+			}, this), function(error) {
+				w.utils.toggleLoad(btn, false);
+				console.error(error);
+				w.utils.showErrorMessage();
+			});
 
 			// w.utils._fakeLoad(btn, this, function() {
 			// 	this.password = '';

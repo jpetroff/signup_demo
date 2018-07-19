@@ -754,11 +754,10 @@ w.App = new Vue({
 						if (userAuthMethods.HasPhone) {
 							/* via mobile */
 							this.restore.state = 2;
-						} else if (userAuthMethods.AuthProviders && userAuthMethods.AuthProviders.length > 0) {
-							/* via social network */
-							this.restore.state = 3;
 						} else {
-							/* via email */
+							this.restore.accData.app = userAuthMethods.AuthProviders || [];
+
+							/* via sc/email */
 							this.restore.state = 1;
 						}
 					}
@@ -946,19 +945,34 @@ w.App = new Vue({
 		},
 		requestPassbyEmail: function(btn) {
 			w.utils.toggleLoad(btn, true);
-			// TODO
 			w.utils.ajax({
-				url: '',
-				method: 'GET',
-				data: {}
+				url: '/Account/GetNewCodeAjax',
+				method: 'POST',
+				data: {
+					Email: this.email
+				}
 			}).then(_.bind(function(response){
 				w.utils.toggleLoad(btn, false);
+
+				var responseData = JSON.parse(response || '');
+
+				if (!responseData || !responseData.Success) {
+					console.error(response);
+					w.utils.showErrorMessage();
+					return;
+				}
+
 				this.password = '';
 				this.routeHome();
+
 				setTimeout(_.bind(function() {
 					alert('Пароль отправлен на почту ' + this.email);
 				}, this), 200);
-			}, this));
+			}, this), function(error) {
+				w.utils.toggleLoad(btn, false);
+				console.error(error);
+				w.utils.showErrorMessage();
+			});
 
 			// w.utils._fakeLoad(btn, this, function() {
 			// 	this.password = '';
