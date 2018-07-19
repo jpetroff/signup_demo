@@ -369,8 +369,10 @@ w.App = new Vue({
 			if(this.current == 'restore') return 'registration-1-screen-email'
 		},
 		initRestore: function(btn) {
-			if(this.restore.accountId == '') return;
-
+			if(this.restore.accountId == '' || this.main.sendingRequest)
+				return;
+			
+			this.main.sendingRequest = true;
 			w.utils.toggleLoad(btn, true);
 			w.utils.ajax({
 				url: '/Account/FindUser',
@@ -380,6 +382,7 @@ w.App = new Vue({
 				}
 			}).then(_.bind(function(response){
 				w.utils.toggleLoad(btn, false);
+				this.main.sendingRequest = false;
 
 				var responseData = JSON.parse(response);
 				if (responseData.Data) {
@@ -409,6 +412,7 @@ w.App = new Vue({
 					w.utils.showErrorMessage();
 				}
 			}, this), function(error) {
+				this.main.sendingRequest = false;
 				w.utils.showErrorMessage();
 			});
 
@@ -581,6 +585,10 @@ w.App = new Vue({
 			setTimeout(_.bind(function() { this.registration._transitionSelectEdu = false; this.hasModal = false;}, this), 300);
 		},
 		requestPassbyEmail: function(btn) {
+			if (this.main.sendingRequest)
+				return;
+
+			this.main.sendingRequest = true;
 			w.utils.toggleLoad(btn, true);
 			w.utils.ajax({
 				url: '/Account/GetNewCodeAjax',
@@ -590,6 +598,7 @@ w.App = new Vue({
 				}
 			}).then(_.bind(function(response){
 				w.utils.toggleLoad(btn, false);
+				this.main.sendingRequest = false;
 
 				var responseData = JSON.parse(response || '');
 
@@ -607,6 +616,7 @@ w.App = new Vue({
 				}, this), 200);
 			}, this), function(error) {
 				w.utils.toggleLoad(btn, false);
+				this.main.sendingRequest = false;
 				console.error(error);
 				w.utils.showErrorMessage();
 			});
