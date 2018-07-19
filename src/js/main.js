@@ -391,11 +391,10 @@ w.App = new Vue({
 						if (userAuthMethods.HasPhone) {
 							/* via mobile */
 							this.restore.state = 2;
-						} else if (userAuthMethods.AuthProviders && userAuthMethods.AuthProviders.length > 0) {
-							/* via social network */
-							this.restore.state = 3;
 						} else {
-							/* via email */
+							this.restore.accData.app = userAuthMethods.AuthProviders || [];
+
+							/* via sc/email */
 							this.restore.state = 1;
 						}
 					}
