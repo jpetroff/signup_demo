@@ -158,6 +158,10 @@ w.utils = {
 			}
 
 		})
+	},
+
+	showErrorMessage: function(msg) {
+		alert(msg || 'Что-то пошло не так, пожалуйста, попробуйте позже');
 	}
 }
 

@@ -162,6 +162,10 @@ w.utils = {
 			}
 
 		})
+	},
+
+	showErrorMessage: function(msg) {
+		alert(msg || 'Что-то пошло не так, пожалуйста, попробуйте позже');
 	}
 }
 
@@ -565,10 +569,11 @@ w.App = new Vue({
 				var reponseData = JSON.parse(response) || {};
 				if(reponseData.RedirectURL) {
 					window.location.href = reponseData.RedirectURL;
+
 				} else {
 					w.utils.toggleLoad(btn, false);
 					this.main.sendingRequest = false;
-					
+
 					this.main.isErrorPass = reponseData.Error;
 					this.main.validLogin = false;
 					this.typeModal = 'mErrorNewUser';
@@ -577,7 +582,7 @@ w.App = new Vue({
 			}, this), function(error) {
 				w.utils.toggleLoad(btn, false);
 				this.main.sendingRequest = false;
-				alert('Что-то пошло не так, пожалуйста, попробуйте позже');
+				w.utils.showErrorMessage();
 			});
 			
 			// w.utils._fakeLoad(btn, this, function() {
@@ -718,9 +723,7 @@ w.App = new Vue({
 			}, this));
 		},
 		cantLogin: function(ev) {
-
 			this.clearModals();
-			this.initRestore();
 			this._route('restore');
 		},
 		restorePassFocus: function() {
@@ -732,42 +735,45 @@ w.App = new Vue({
 
 			w.utils.toggleLoad(btn, true);
 			w.utils.ajax({
-				url: '',
+				url: '/Account/FindUser',
 				method: 'GET',
-				data: {}
+				data: {
+					term: this.restore.accountId
+				}
 			}).then(_.bind(function(response){
 				w.utils.toggleLoad(btn, false);
-				var user = this.checkUser();
 
-				if( user && user.password ) {
-					this.restore.accData = user;
-					this.restore.accData.pic = user.pic || '/img/no_photo.jpeg';
-
-					if( this.phone && this.isValidPhone && this.testUsers[this.phone]) {
-						this.email = this.testUsers[this.phone];
-						this.isValidEmail = true;
+				var responseData = JSON.parse(response);
+				if (responseData.Data) {
+					var userAuthMethods = responseData.Data;
+					if(userAuthMethods) {
+						// this.restore.accData = user;
+						// this.restore.accData.pic = user.pic || '/img/no_photo.jpeg';
+	
+						if (userAuthMethods.HasPhone) {
+							/* via mobile */
+							this.restore.state = 2;
+						} else if (userAuthMethods.AuthProviders && userAuthMethods.AuthProviders.length > 0) {
+							/* via social network */
+							this.restore.state = 3;
+						} else {
+							/* via email */
+							this.restore.state = 1;
+						}
 					}
-
-					if( user.phone ) {
-
-						this.restore.state = 2;
-
-					} else if ( user.socialApp ) {
-
-						this.restore.state = 3;
-
-					} else {
-
-						this.restore.state = 1;
-					}
-
-
-				} else {
+				}
+				else if (responseData.Error) {
 					// нет такого пользователя
 					this.restore.validAccount = false;
 					this.restore.error = 'unknownrestore';
 				}
-			}, this));
+				else {
+					console.log(responseData.Error);
+					w.utils.showErrorMessage();
+				}
+			}, this), function(error) {
+				w.utils.showErrorMessage();
+			});
 
 			// w.utils._fakeLoad(btn, this, function() {
 			// 	var user = this.checkUser();
