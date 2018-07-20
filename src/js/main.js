@@ -18,7 +18,7 @@ w.Data = {
 	diplomaDate: '',
 	isValidCode: false,
 	hasModal: false,
-	typeModal: 'mChooseEdu', // < reg | existing | eduselect >
+	typeModal: 'mErrorNewUser', // < reg | existing | eduselect >
 	
 	p: {
 		focusViewportHeight: window.innerHeight

@@ -64,22 +64,25 @@
 			<popup id="mErrorNewUser" class="new-user-notice"
 				v-bind:is-open="hasModal && typeModal === 'mErrorNewUser' ">
 
-				<div class="header">К сожалению, такой пользователь у&nbsp;нас не&nbsp;зарегистрирован</div>
+				<div class="header">К сожалению, вы неверно ввели логин или пароль. </div>
 				<account-info
 					v-bind:name="null"
 					v-bind:email="email"
 					v-bind:pic="null"
+					v-bind:phone="phone"
 				></account-info>
 
+				<label for="restore-screen-email" class="btn btn-primary" style="letter-spacing:-0.3px" v-on:click="cantLogin">Я не помню логин и пароль</label>
+
 				<label for="registration-1-screen-email"
-					class="btn btn-secondary"
+					class="btn btn-primary btn-text btn-next btn-sm"
 					v-on:click="routeRegStepOne(); $nextTick(function() {console.log('!'); this.hasModal = false})">
 					Я новый участник
 				</label>
-				<label for="restore-screen-email" class="btn btn-text btn-next btn-sm btn-secondary" v-on:click="cantLogin">Я не могу войти</label>
+				
 				<label
 					v-bind:for="restorePassFocus()"
-					class="btn btn-text btn-sm btn-secondary"
+					class="btn btn-text btn-sm btn-primary"
 					v-on:click="clearModals"
 				>
 					Ввести другую почту
@@ -108,7 +111,7 @@
 						Коллективный разум<br>527&#8198;415 врачей
 					</h1>
 					<btn class="btn btn-secondary"  v-on:click="routeRegStepOne">
-						Регистрация
+						Присоединиться
 					</btn>
 					<div class="btn-subscript">требует подтверждения квалификации, 18+</div>
 				</div>
@@ -278,6 +281,7 @@
 							v-bind:name="restore.accData.name"
 							v-bind:email="email"
 							v-bind:pic="restore.accData.pic"
+							v-bind:phone="phone"
 						></account-info>
 
 						<div class="restore-new-email" v-show="restore.state == 1">
@@ -316,7 +320,9 @@
 										</div>
 								</div>
 							</div>
-							<div class="btn btn-text btn-sm btn-primary btn-next" v-on:click="if (canRequestSmsCode) initRestore($event.currentTarget)" v-bind:class="{ 'disabled': !canRequestSmsCode }">Повторить (через {{smsCodeCountdown}} сек)</div>
+							<div class="btn btn-text btn-sm btn-primary btn-next" v-show="!canRequestSmsCode">Отправить снова (через {{smsCodeCountdown}} сек)</div>
+							<!-- @TODO: функция повторной отправки -->
+							<div class="btn btn-text btn-sm btn-primary btn-next" v-on:click="if (canRequestSmsCode) initRestore($event.currentTarget)" v-show="canRequestSmsCode">Отправить снова</div>
 						</div>
 					</div>
 
@@ -337,7 +343,7 @@
 						v-bind:name="registration.existingInfo.name"
 						v-bind:email="registration.existingInfo.email || email"
 						v-bind:pic="registration.existingInfo.pic"
-						v-bind:pic="registration.existingInfo.phone"
+						v-bind:phone="registration.existingInfo.phone"
 					></account-info>
 
 					<div class="default-message confirm-link">
