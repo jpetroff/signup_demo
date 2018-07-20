@@ -5,25 +5,22 @@
 			<div class="name" v-html="name && name.split(' ').join('<br/>')"></div>
 		</div>
 
-		<div class="label-header">{{loginType}}</div>
-		<span class="text-overflow">{{loginValue}}</span>
+		<div v-if="email">
+			<div class="label-header">Почта</div>
+			<span class="text-overflow">{{email}}</span>
+		</div>
+		
+		<div v-if="phone">
+			<div class="label-header">Телефон</div>
+			<span class="text-overflow">{{phone}}</span>
+		</div>
 	</div>
 </template>
 
 <script>
 w.Components['account-info'] = {
 	template: "<%= template %>",
-	props: ['name', 'email', 'phone', 'pic'],
-	computed: {
-		loginType: function() {
-			if(this.phone) return 'Телефон';
-			return 'Почта';
-		},
-		loginValue: function() {
-			if(this.phone) return this.phone;
-			return this.email;
-		}
-	}
+	props: ['name', 'email', 'phone', 'pic']
 }
 
 Vue.component('account-info', w.Components['account-info']);
@@ -38,6 +35,10 @@ Vue.component('account-info', w.Components['account-info']);
 	border-top: 1px solid #e2e2e2;
 	border-bottom: 1px solid #e2e2e2;
 	background: #f5f5f5;
+
+	> div:not(:last-child) {
+		margin-bottom: 20px;
+	}
 
 	.label-header {
 		font-size: 14px;

@@ -279,9 +279,9 @@
 
 						<account-info
 							v-bind:name="restore.accData.name"
-							v-bind:email="email"
+							v-bind:email="restore.accData.email || email"
 							v-bind:pic="restore.accData.pic"
-							v-bind:phone="phone"
+							v-bind:phone="restore.accData.phone || phone"
 						></account-info>
 
 						<div class="restore-new-email" v-show="restore.state == 1">
@@ -321,8 +321,7 @@
 								</div>
 							</div>
 							<div class="btn btn-text btn-sm btn-primary btn-next" v-show="!canRequestSmsCode">Отправить снова (через {{smsCodeCountdown}} сек)</div>
-							<!-- @TODO: функция повторной отправки -->
-							<div class="btn btn-text btn-sm btn-primary btn-next" v-on:click="if (canRequestSmsCode) initRestore($event.currentTarget)" v-show="canRequestSmsCode">Отправить снова</div>
+							<div class="btn btn-text btn-sm btn-primary btn-next" v-on:click="initRestore($event.currentTarget)" v-show="canRequestSmsCode">Отправить снова</div>
 						</div>
 					</div>
 
@@ -341,7 +340,7 @@
 					<div class="restore-message"></div>
 					<account-info
 						v-bind:name="registration.existingInfo.name"
-						v-bind:email="registration.existingInfo.email || email"
+						v-bind:email="restore.accData.email || email"
 						v-bind:pic="registration.existingInfo.pic"
 						v-bind:phone="registration.existingInfo.phone"
 					></account-info>

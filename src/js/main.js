@@ -8,8 +8,9 @@ w.Data = {
 	isExistingAccount: false,
 	isSocialAuth: false, // false or id:['vk', 'fb']
 	smsCode: '',
-	canRequestSmsCode: false,
+	canRequestSmsCode: true,
 	smsCodeCountdown: 0,
+	countdownInterval: null,
 	codeSessionId: '',
 	password: '',
 	phone: '',
@@ -390,8 +391,9 @@ w.App = new Vue({
 			if(this.current == 'restore') return 'registration-1-screen-email'
 		},
 		startSmsCodeCountdown: function() {
+			window.clearInterval(this.countdownInterval);
 			this.smsCodeCountdown = 45;
-			var countdownInterval = window.setInterval(_.bind(function () {
+			this.countdownInterval = window.setInterval(_.bind(function () {
 				this.smsCodeCountdown -= 1;
 				if (this.smsCodeCountdown <= 0) {
 					window.clearInterval(countdownInterval);
@@ -419,22 +421,18 @@ w.App = new Vue({
 				var responseData = JSON.parse(response);
 				if (responseData.Data) {
 					var userAuthMethods = responseData.Data;
-					if(userAuthMethods) {
-						// this.restore.accData = user;
-						// this.restore.accData.pic = user.pic || '/img/no_photo.jpeg';
-	
-						if (userAuthMethods.Phone) {
-							/* via mobile */
-							this.restore.state = 2;
-							this.codeSessionId = userAuthMethods.CodeSessionId;
-							this.restore.accData.phone = userAuthMethods.Phone;
-							this.startSmsCodeCountdown();
-						} else {
-							this.restore.accData.app = userAuthMethods.AuthProviders || [];
+					this.restore.accData.email = userAuthMethods.Email;
+					this.restore.accData.phone = userAuthMethods.Phone;
+					this.codeSessionId = userAuthMethods.CodeSessionId;
+					if (userAuthMethods.Phone) {
+						/* via mobile */
+						this.restore.state = 2;
+						this.startSmsCodeCountdown();
+					} else {
+						this.restore.accData.app = userAuthMethods.AuthProviders || [];
 
-							/* via sc/email */
-							this.restore.state = 1;
-						}
+						/* via sc/email */
+						this.restore.state = 1;
 					}
 				}
 				else if (responseData.Error) {
@@ -633,7 +631,7 @@ w.App = new Vue({
 				url: '/Account/GetNewCodeAjax',
 				method: 'POST',
 				data: {
-					Email: this.email
+					Email: this.restore.accountId
 				}
 			}).then(_.bind(function(response){
 				w.utils.toggleLoad(btn, false);

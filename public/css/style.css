@@ -357,6 +357,9 @@ th {
   border-bottom: 1px solid #e2e2e2;
   background: #f5f5f5;
 }
+.account-description > div:not(:last-child) {
+  margin-bottom: 20px;
+}
 .account-description .label-header {
   font-size: 14px;
   opacity: 0.5;
