@@ -128,10 +128,10 @@
 					</div>
 					<div class="social-block">
 						<div class="social-btn social-btn_vk" v-on:click="routeSocial('vk')"></div>
-						<div class="social-btn social-btn_ok"></div>
+						<div class="social-btn social-btn_ok" v-on:click="routeSocial('ok')"></div>
 						<div class="social-btn social-btn_fb" v-on:click="routeSocial('fb')"></div>
-						<div class="social-btn social-btn_mailru"></div>
-						<div class="social-btn social-btn_ya"></div>
+						<div class="social-btn social-btn_mailru" v-on:click="routeSocial('ma')"></div>
+						<div class="social-btn social-btn_ya" v-on:click="routeSocial('ya')"></div>
 					</div>
 					
 					<btn class="emergency-btn btn-sm btn-primary" v-bind:class="{'highlighted':main.suggestRestoreAccess}" v-on:click="cantLogin" focus-id="restore-screen-email">
@@ -202,10 +202,10 @@
 						<div class="subscript">Зарегистрируйтесь<br />через социальные сети</div>
 						<div class="social-block">
 							<div class="social-btn social-btn_vk" v-on:click="routeSocial('vk')"></div>
-							<div class="social-btn social-btn_ok"></div>
-							<div class="social-btn social-btn_fb" v-on:click="routeSocial('fb')"></div>
-							<div class="social-btn social-btn_mailru"></div>
-							<div class="social-btn social-btn_ya"></div>
+						<div class="social-btn social-btn_ok" v-on:click="routeSocial('ok')"></div>
+						<div class="social-btn social-btn_fb" v-on:click="routeSocial('fb')"></div>
+						<div class="social-btn social-btn_mailru" v-on:click="routeSocial('ma')"></div>
+						<div class="social-btn social-btn_ya" v-on:click="routeSocial('ya')"></div>
 						</div>
 						<field id="registration-1-screen-email" class="reg-email" v-on:input="validateEmail" v-model="email" type="email" label="Или введите почту"></field>
 					</div>
@@ -288,10 +288,10 @@
 							<div class="level social"  v-if="restore.accData.app && restore.accData.app.length != 0">
 								<div class="social-block">
 									<div class="social-btn social-btn_vk" v-if="restore.accData.app && restore.accData.app.indexOf('vk') != -1" v-on:click="routeSocial('vk')"></div>
-									<div class="social-btn social-btn_ok" v-if="restore.accData.app && restore.accData.app.indexOf('ok') != -1"></div>
+									<div class="social-btn social-btn_ok" v-if="restore.accData.app && restore.accData.app.indexOf('ok') != -1" v-on:click="routeSocial('ok')"></div>
 									<div class="social-btn social-btn_fb" v-if="restore.accData.app && restore.accData.app.indexOf('fb') != -1" v-on:click="routeSocial('fb')"></div>
-									<div class="social-btn social-btn_mailru" v-if="restore.accData.app && restore.accData.app.indexOf('ma') != -1"></div>
-									<div class="social-btn social-btn_ya" v-if="restore.accData.app && restore.accData.app.indexOf('ya') != -1"></div>
+									<div class="social-btn social-btn_mailru" v-if="restore.accData.app && restore.accData.app.indexOf('ma') != -1" v-on:click="routeSocial('ma')"></div>
+									<div class="social-btn social-btn_ya" v-if="restore.accData.app && restore.accData.app.indexOf('ya') != -1" v-on:click="routeSocial('ya')"></div>
 								</div>
 								<div class="message" v-if="restore.accData.app && restore.accData.app.length != 0">Войти через социальную&nbsp;сеть</div>
 							</div>

@@ -539,14 +539,21 @@ w.App = new Vue({
 			this._route('main');
 		},
 		routeSocial: function(app) {
-			this.social.app = app;
-			this.social.prev = this.current;
+			try {
+				/* External dependency */
+				window.location.href = window.AuthProviders.getProviders()[app];
+			} catch (error)
+			{
+				console.error(error);
+			}
+			// this.social.app = app;
+			// this.social.prev = this.current;
 
-			if(this.social.app == 'vk') this.email = 'exist_vk@dnr.cc';
-			if(this.social.app == 'fb') this.email = 'new@dnr.cc';
-			this.isValidEmail = true;
+			// if(this.social.app == 'vk') this.email = 'exist_vk@dnr.cc';
+			// if(this.social.app == 'fb') this.email = 'new@dnr.cc';
+			// this.isValidEmail = true;
 
-			this._route('social');
+			// this._route('social');
 		},
 		routeFeed: function() {
 			this._route('feed');
