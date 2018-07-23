@@ -47,7 +47,7 @@ w.Data = {
 		restoreForm: false,
 		existingInfo: {},
 		state: 0, // < 0 | 1>
-
+		avatarSrc: null,
 		// personal
 		fsurname: '',
 		fname: '',
@@ -72,6 +72,7 @@ w.Data = {
 		// personal 2
 		fphone: '',
 		fsocialapps: [],
+		foldpass: '',
 		fnewpass: '',
 
 	},
@@ -188,7 +189,9 @@ w.App = new Vue({
 					
 					this.registration.hasDiploma = viewModel.CountDiploma > 0;
 					this.email = viewModel.Email;
-					this.registration.fnewpass = viewModel.NewPassword;
+					this.registration.foldpass = viewModel.Password;
+					this.registration.fnewpass = viewModel.Password.toString();
+					this.registration.avatarSrc = viewModel.AvatarUrl;
 				}
 			}, this), _.bind(function (error) {
 				this.main.sendingRequest = false;
@@ -286,14 +289,14 @@ w.App = new Vue({
 				method: 'POST',
 				data: body
 			}).then(_.bind(function(response){
-				var reponseData = JSON.parse(response) || {};
-				if (reponseData.RedirectURL) {
-					window.location.href = reponseData.RedirectURL;
+				var responseData = JSON.parse(response) || {};
+				if (responseData.RedirectURL) {
+					window.location.href = responseData.RedirectURL;
 				} else {
 					w.utils.toggleLoad(btn, false);
 					this.main.sendingRequest = false;
 
-					this.main.isErrorPass = reponseData.Error;
+					this.main.isErrorPass = responseData.Error;
 					this.main.validLogin = false;
 					this.typeModal = 'mErrorNewUser';
 					this.hasModal = true;
@@ -748,7 +751,7 @@ w.App = new Vue({
 				UniversityId: this.registration.fhigheredu.Id === -1 ? null : this.registration.fhigheredu.Id,
 				SpecialityId: this.registration.fmajor.Id === -1 ? null : this.registration.fmajor.Id,
 				GraduatedAt: new Date(graduationYear, 6, 1).toISOString(),
-				NewPassword: this.registration.fnewpass
+				NewPassword: this.registration.fnewpass && this.registration.foldpass !== this.registration.fnewpass ? this.registration.fnewpass : null
 			};
 
 			w.utils.ajax({

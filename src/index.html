@@ -371,22 +371,22 @@
 						<div class="message-text">На ваш адрес придет письмо со&nbsp;ссылкой для&nbsp;подтверждения</div>
 					</div>
 
-					<div class="default-message new-password">
+					<div class="default-message new-password" v-if="registration.foldpass">
 						<div class="message-icon">
 							<svg width="32" height="22" viewBox="0 0 32 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-							<g id="Canvas" fill="none">
-							<g id="pass">
-							<circle id="Ellipse" cx="3" cy="3" r="3" transform="translate(6.12451 8)" fill="#217AAF"/>
-							<circle id="Ellipse_2" cx="3" cy="3" r="3" transform="translate(13.0625 8)" fill="#217AAF"/>
-							<circle id="Ellipse_3" cx="3" cy="3" r="3" transform="translate(20 8)" fill="#217AAF"/>
-							<rect id="Rectangle 2" x="-1" y="-1" width="30" height="20" rx="3" transform="translate(2 2)" stroke="#217AAF" stroke-width="2"/>
-							</g>
-							</g>
+								<g id="Canvas" fill="none">
+									<g id="pass">
+										<circle id="Ellipse" cx="3" cy="3" r="3" transform="translate(6.12451 8)" fill="#217AAF" />
+										<circle id="Ellipse_2" cx="3" cy="3" r="3" transform="translate(13.0625 8)" fill="#217AAF" />
+										<circle id="Ellipse_3" cx="3" cy="3" r="3" transform="translate(20 8)" fill="#217AAF" />
+										<rect id="Rectangle 2" x="-1" y="-1" width="30" height="20" rx="3" transform="translate(2 2)" stroke="#217AAF" stroke-width="2" />
+									</g>
+								</g>
 							</svg>
 						</div>
 						<div class="message-text">
 							Запишите пароль для входа:
-							<div class="pass">123456</div>
+							<div class="pass">{{ registration.foldpass }}</div>
 						</div>
 					</div>
 
@@ -467,7 +467,7 @@
 								</div>
 							</div> -->
 							<div class="fieldset">
-								<uploader id="avatar-uploader" type="avatar" label="Загрузить фотографию" accept="image/*" subscript="На фото должно быть различимо видно ваше лицо"></uploader>
+								<uploader id="avatar-uploader" type="avatar" label="Загрузить фотографию" accept="image/*" v-bind:src="registration.avatarSrc" subscript="На фото должно быть различимо видно ваше лицо"></uploader>
 							</div>
 
 
@@ -492,7 +492,7 @@
 							<div class="fieldset">
 								<field id="fbirthyear" v-model="registration.fgraduationyear" type="number" label="Год получения диплома"></field>
 							</div>
-							<div class="fieldset">
+							<div class="fieldset" v-if="!registration.hasDiploma">
 								<uploader id="diploma-uploader" type="file" label="Прикрепить диплом" accept="image/*,.pdf"></uploader>
 							</div>
 						</div>

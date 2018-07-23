@@ -319,67 +319,100 @@ Vue.component('popup', w.Components['popup']);
 // File /Users/jpetrov/Work/signup_demo/src/components/uploader.js
 
 w.Components['uploader'] = {
-	props: ['type', 'label', 'id', 'accept', 'subscript'],
-	template: "<label class=\"app-field upload-field\" v-bind:class=\"{loaded: (name &amp;&amp; name != \'\'), focus: (name &amp;&amp; name != \'\' &amp;&amp; type == \'file\'), \'avatar-layout\': (type == \'avatar\')}\" v-on:click=\"$emit(\'click\')\"><span class=app-field__caption><span class=app-field__caption-default>{{ dynamicLabel }}</span> <span class=subscript v-if=subscript>{{ subscript }}</span> </span><span class=app-field__input v-html=content v-bind:style=styleObject></span><div class=upload-field__icon><svg width=32 height=32 viewBox=\"0 0 32 32\" version=1.1 xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink><g id=Canvas fill=none><g id=plus><circle id=Ellipse cx=16 cy=16 r=16 fill=#E3E3E3></circle><rect id=\"Rectangle 2\" width=2 height=16 transform=\"translate(15 8)\" fill=white></rect><rect id=Rectangle width=16 height=2 transform=\"translate(8 15)\" fill=white></rect></g></g></svg></div><div class=upload-field__loading><div class=spinner></div></div><input class=upload-field__hidden-input v-bind:id=[id] type=file v-on:change=onUpload($event.target)></label>",
-	data: function() {
-		return {
-			content: '',
-			type: 'file', // < file | avatar >
-			errorClass: '',
-			errorType: this.error,
-			dynamicLabel: this.label,
-			styleObject: {},
-			name: null
+  props: ['type', 'label', 'id', 'accept', 'subscript', 'src'],
+  template: "<label class=\"app-field upload-field\" v-bind:class=\"{loaded: (src &amp;&amp; src != \'\'), focus: (name &amp;&amp; name != \'\' &amp;&amp; type == \'file\'), \'avatar-layout\': (type == \'avatar\')}\" v-on:click=\"$emit(\'click\')\"><span class=app-field__caption>{{ dynamicLabel }} <span class=subscript v-if=subscript>{{ subscript }}</span> </span><span class=app-field__input v-html=\"type == \'avatar\' ? \'\' : content\" v-bind:style=styleObject></span><div class=upload-field__icon><svg width=32 height=32 viewBox=\"0 0 32 32\" version=1.1 xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink><g id=Canvas fill=none><g id=plus><circle id=Ellipse cx=16 cy=16 r=16 fill=#E3E3E3></circle><rect id=\"Rectangle 2\" width=2 height=16 transform=\"translate(15 8)\" fill=white></rect><rect id=Rectangle width=16 height=2 transform=\"translate(8 15)\" fill=white></rect></g></g></svg></div><input class=upload-field__hidden-input v-bind:id=[id] type=file v-on:change=onUpload($event.target)></label>",
+  data: function() {
+    return {
+      content: '',
+      type: 'file', // < file | avatar >
+      errorClass: '',
+      errorType: this.error,
+      dynamicLabel: this.label,
+      styleObject: {},
+      name: null,
+      src: ''
+    }
+  },
+  watch: {
+		'src': function(val) {
+			this.src = val;
+      this.styleObject = {
+        backgroundImage: 'url("' + this.src + '")'
+      };
 		}
 	},
-	methods: {
-		onUpload: function(elem) {
-			console.dir(elem);
+  methods: {
+    onUpload: function(elem) {
+      console.dir(elem);
 
-			if(!elem.files[0]) return;
+      if(!elem.files[0]) return;
 
-			this.name = elem.files[0].name;
+      this.name = elem.files[0].name;
 
-			if(this.type == "file") {
-				this.content = '' + elem.files[0].name;
+      if(this.type == "file") {
+        this.uploadDiploma(elem);
+      } else if (this.type == "avatar") {
+        this.uploadAvatar(elem);
+      }
 
-				w.utils.toggleLoad(elem, true);
+      this.$emit('upload', elem.files[0].name);
+    },
+    uploadDiploma: function(elem) {
+      this.content = '' + elem.files[0].name;
 
-				var body = new FormData();
-				body.append(elem.files[0].name, elem.files[0]);
-				
-				w.utils.ajax({
-					url: '/Diploma/Upload',
-					method: 'POST',
-					contentType: 'multipart/form-data',
-					data: body
-				}).then(_.bind(function(response){
-					this.main.sendingRequest = false;
-					w.utils.toggleLoad(elem, false);
-				}, this), _.bind(function(error) {
-					w.utils.toggleLoad(elem, false);
-					this.main.sendingRequest = false;
-					console.error(error);
-					w.utils.showErrorMessage();
-				}, this));
-			} else if (this.type == "avatar") {
-				var reader = new FileReader();
+      w.utils.toggleLoad(elem, true);
 
-				reader.addEventListener('load', _.bind(function() {
-					this.content = '&nbsp;';
+      var body = new FormData();
+      body.append(elem.files[0].name, elem.files[0]);
+      
+      w.utils.ajax({
+        url: '/Diploma/Upload',
+        method: 'POST',
+        contentType: 'multipart/form-data',
+        data: body
+      }).then(_.bind(function(response){
+        w.utils.toggleLoad(elem, false);
+      }, this), _.bind(function(error) {
+        w.utils.toggleLoad(elem, false);
+        console.error(error);
+        w.utils.showErrorMessage();
+      }, this));
+    },
+    uploadAvatar: function(elem) {
+      // var reader = new FileReader();
 
-					this.styleObject = {
-						backgroundImage: 'url("' + reader.result + '")'
-					}
-				}, this));
+      // reader.addEventListener('load', _.bind(function() {
+      //   this.content = '&nbsp;';
 
-				reader.readAsDataURL(elem.files[0]);
-			}
+      //   this.styleObject = {
+      //     backgroundImage: 'url("' + reader.result + '")'
+      //   }
+      // }, this));
 
+      // reader.readAsDataURL(elem.files[0]);
+      this.content = '' + elem.files[0].name;
 
-			this.$emit('upload', elem.files[0].name);
-		}
-	}
+      w.utils.toggleLoad(elem, true);
+
+      var body = new FormData();
+      body.append(elem.files[0].name, elem.files[0]);
+      
+      w.utils.ajax({
+        url: '/FileUpload.ashx?TypeID=2&ID=0',
+        method: 'POST',
+        contentType: 'multipart/form-data',
+        data: body
+      }).then(_.bind(function(response){
+        w.utils.toggleLoad(elem, false);
+        
+        this.src = response;
+      }, this), _.bind(function(error) {
+        w.utils.toggleLoad(elem, false);
+        console.error(error);
+        w.utils.showErrorMessage();
+      }, this));
+    }
+  }
 
 }
 
@@ -440,7 +473,7 @@ w.Data = {
 		restoreForm: false,
 		existingInfo: {},
 		state: 0, // < 0 | 1>
-
+		avatarSrc: null,
 		// personal
 		fsurname: '',
 		fname: '',
@@ -465,6 +498,7 @@ w.Data = {
 		// personal 2
 		fphone: '',
 		fsocialapps: [],
+		foldpass: '',
 		fnewpass: '',
 
 	},
@@ -581,7 +615,9 @@ w.App = new Vue({
 					
 					this.registration.hasDiploma = viewModel.CountDiploma > 0;
 					this.email = viewModel.Email;
-					this.registration.fnewpass = viewModel.NewPassword;
+					this.registration.foldpass = viewModel.Password;
+					this.registration.fnewpass = viewModel.Password.toString();
+					this.registration.avatarSrc = viewModel.AvatarUrl;
 				}
 			}, this), _.bind(function (error) {
 				this.main.sendingRequest = false;
@@ -679,14 +715,14 @@ w.App = new Vue({
 				method: 'POST',
 				data: body
 			}).then(_.bind(function(response){
-				var reponseData = JSON.parse(response) || {};
-				if (reponseData.RedirectURL) {
-					window.location.href = reponseData.RedirectURL;
+				var responseData = JSON.parse(response) || {};
+				if (responseData.RedirectURL) {
+					window.location.href = responseData.RedirectURL;
 				} else {
 					w.utils.toggleLoad(btn, false);
 					this.main.sendingRequest = false;
 
-					this.main.isErrorPass = reponseData.Error;
+					this.main.isErrorPass = responseData.Error;
 					this.main.validLogin = false;
 					this.typeModal = 'mErrorNewUser';
 					this.hasModal = true;
@@ -1141,7 +1177,7 @@ w.App = new Vue({
 				UniversityId: this.registration.fhigheredu.Id === -1 ? null : this.registration.fhigheredu.Id,
 				SpecialityId: this.registration.fmajor.Id === -1 ? null : this.registration.fmajor.Id,
 				GraduatedAt: new Date(graduationYear, 6, 1).toISOString(),
-				NewPassword: this.registration.fnewpass
+				NewPassword: this.registration.fnewpass && this.registration.foldpass !== this.registration.fnewpass ? this.registration.fnewpass : null
 			};
 
 			w.utils.ajax({
