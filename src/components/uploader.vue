@@ -1,10 +1,10 @@
 <template lang="html">
-  <label class="app-field upload-field" v-bind:class="{loaded: (name && name != ''), focus: (name && name != '' && type == 'file'), 'avatar-layout': (type == 'avatar')}" v-on:click="$emit('click')">
+  <label class="app-field upload-field" v-bind:class="{loaded: (src && src != ''), focus: (name && name != '' && type == 'file'), 'avatar-layout': (type == 'avatar')}" v-on:click="$emit('click')">
     <span class="app-field__caption">
       {{ dynamicLabel }}
       <span class="subscript" v-if="subscript">{{ subscript }}</span>
     </span>
-    <span class="app-field__input" v-html="content" v-bind:style="styleObject"></span>
+    <span class="app-field__input" v-html="type == 'avatar' ? '' : content" v-bind:style="styleObject"></span>
 
     <div class="upload-field__icon">
       <svg width="32" height="32" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -27,7 +27,7 @@
 
 <script>
 w.Components['uploader'] = {
-  props: ['type', 'label', 'id', 'accept', 'subscript'],
+  props: ['type', 'label', 'id', 'accept', 'subscript', 'src'],
   template: "<%= template %>",
   data: function() {
     return {
@@ -37,9 +37,18 @@ w.Components['uploader'] = {
       errorType: this.error,
       dynamicLabel: this.label,
       styleObject: {},
-      name: null
+      name: null,
+      src: ''
     }
   },
+  watch: {
+		'src': function(val) {
+			this.src = val;
+      this.styleObject = {
+        backgroundImage: 'url("' + this.src + '")'
+      };
+		}
+	},
   methods: {
     onUpload: function(elem) {
       console.dir(elem);
@@ -49,43 +58,67 @@ w.Components['uploader'] = {
       this.name = elem.files[0].name;
 
       if(this.type == "file") {
-        this.content = '' + elem.files[0].name;
-
-        w.utils.toggleLoad(elem, true);
-
-        var body = new FormData();
-        body.append(elem.files[0].name, elem.files[0]);
-        
-        w.utils.ajax({
-          url: '/Diploma/Upload',
-          method: 'POST',
-          contentType: 'multipart/form-data',
-          data: body
-        }).then(_.bind(function(response){
-          this.main.sendingRequest = false;
-          w.utils.toggleLoad(elem, false);
-        }, this), _.bind(function(error) {
-          w.utils.toggleLoad(elem, false);
-          this.main.sendingRequest = false;
-          console.error(error);
-          w.utils.showErrorMessage();
-        }, this));
+        this.uploadDiploma(elem);
       } else if (this.type == "avatar") {
-        var reader = new FileReader();
-
-        reader.addEventListener('load', _.bind(function() {
-          this.content = '&nbsp;';
-
-          this.styleObject = {
-            backgroundImage: 'url("' + reader.result + '")'
-          }
-        }, this));
-
-        reader.readAsDataURL(elem.files[0]);
+        this.uploadAvatar(elem);
       }
 
-
       this.$emit('upload', elem.files[0].name);
+    },
+    uploadDiploma: function(elem) {
+      this.content = '' + elem.files[0].name;
+
+      w.utils.toggleLoad(elem, true);
+
+      var body = new FormData();
+      body.append(elem.files[0].name, elem.files[0]);
+      
+      w.utils.ajax({
+        url: '/Diploma/Upload',
+        method: 'POST',
+        contentType: 'multipart/form-data',
+        data: body
+      }).then(_.bind(function(response){
+        w.utils.toggleLoad(elem, false);
+      }, this), _.bind(function(error) {
+        w.utils.toggleLoad(elem, false);
+        console.error(error);
+        w.utils.showErrorMessage();
+      }, this));
+    },
+    uploadAvatar: function(elem) {
+      // var reader = new FileReader();
+
+      // reader.addEventListener('load', _.bind(function() {
+      //   this.content = '&nbsp;';
+
+      //   this.styleObject = {
+      //     backgroundImage: 'url("' + reader.result + '")'
+      //   }
+      // }, this));
+
+      // reader.readAsDataURL(elem.files[0]);
+      this.content = '' + elem.files[0].name;
+
+      w.utils.toggleLoad(elem, true);
+
+      var body = new FormData();
+      body.append(elem.files[0].name, elem.files[0]);
+      
+      w.utils.ajax({
+        url: '/FileUpload.ashx?TypeID=2&ID=0',
+        method: 'POST',
+        contentType: 'multipart/form-data',
+        data: body
+      }).then(_.bind(function(response){
+        w.utils.toggleLoad(elem, false);
+        
+        this.src = response;
+      }, this), _.bind(function(error) {
+        w.utils.toggleLoad(elem, false);
+        console.error(error);
+        w.utils.showErrorMessage();
+      }, this));
     }
   }
 
