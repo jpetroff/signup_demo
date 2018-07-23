@@ -134,7 +134,7 @@ w.utils = {
 			}
 			// console.log(url+'?'+data);
 
-			if (method == 'POST') req.setRequestHeader("Content-type", contentType);
+			if (method == 'POST' && contentType !== 'multipart/form-data') req.setRequestHeader("Content-type", contentType);
 			req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 
 			req.onload = function() {
@@ -433,6 +433,8 @@ w.Data = {
 	registration: {
 		suggestedEduItems: window._he,
 		_transitionSelectEdu: false,
+		suggestedMajorItems: window._he,
+		_transitionSelectMajor: false,
 		suggestReg: false,
 		socialReg: false,
 		restoreForm: false,
@@ -678,9 +680,8 @@ w.App = new Vue({
 				data: body
 			}).then(_.bind(function(response){
 				var responseData = JSON.parse(response) || {};
-				if(responseData.RedirectURL) {
+				if (responseData.RedirectURL) {
 					window.location.href = responseData.RedirectURL;
-
 				} else {
 					w.utils.toggleLoad(btn, false);
 					this.main.sendingRequest = false;
@@ -820,11 +821,11 @@ w.App = new Vue({
 				w.utils.toggleLoad(btn, false);
 
 				var responseData = JSON.parse(response || '');
-				if(responseData.Data) {
+				if (responseData.Data) {
 					window.location.href = responseData.Data;
 					return;
 				}
-				
+
 				this.main.sendingRequest = false;
 
 				this.hasModal = this.email && this.isValidEmail;
@@ -1066,6 +1067,11 @@ w.App = new Vue({
 			this.typeModal = 'mChooseEdu';
 			return true;
 		},
+		openMajorSelect: function () {
+			this.hasModal = true;
+			this.typeModal = 'mChooseMajor';
+			return true;
+		},
 		retryPass: function() {
 			this.clearModals();
 			this.routeHome();
@@ -1108,7 +1114,7 @@ w.App = new Vue({
 			if (this.main.sendingRequest)
 				return;
 
-			var graduationYearMatching = this.registration.fgraduationyear.toString().match(/^\d{4}$/);
+			var graduationYearMatching = this.registration.fgraduationyear.match(/^\d{4}$/);
 			if (!graduationYearMatching || graduationYearMatching.length === 0) {
 				w.utils.showErrorMessage("Некорректный год окончания ВУЗа.");
 				return;

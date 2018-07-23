@@ -286,14 +286,14 @@ w.App = new Vue({
 				method: 'POST',
 				data: body
 			}).then(_.bind(function(response){
-				var reponseData = JSON.parse(response) || {};
-				if (reponseData.RedirectURL) {
-					window.location.href = reponseData.RedirectURL;
+				var responseData = JSON.parse(response) || {};
+				if (responseData.RedirectURL) {
+					window.location.href = responseData.RedirectURL;
 				} else {
 					w.utils.toggleLoad(btn, false);
 					this.main.sendingRequest = false;
 
-					this.main.isErrorPass = reponseData.Error;
+					this.main.isErrorPass = responseData.Error;
 					this.main.validLogin = false;
 					this.typeModal = 'mErrorNewUser';
 					this.hasModal = true;
