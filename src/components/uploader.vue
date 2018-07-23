@@ -18,6 +18,10 @@
       </svg>
     </div>
 
+		<div class="upload-field__loading">
+			<div class="spinner"></div>
+		</div>
+
     <input class="upload-field__hidden-input"
       v-bind:id="[id]"
       type="file"
