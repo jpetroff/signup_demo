@@ -613,7 +613,8 @@ textarea::-webkit-input-placeholder {
   height: 0px;
   left: -999999px;
 }
-.upload-field__icon {
+.upload-field__icon,
+.upload-field__loading {
   width: 32px;
   height: 32px;
   position: absolute;
@@ -629,6 +630,40 @@ textarea::-webkit-input-placeholder {
   transition: none !important;
 }
 .upload-field.loaded .upload-field__icon {
+  display: none;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.upload-field__loading {
+  display: none;
+  border-radius: 50%;
+  background: #E3E3E3;
+}
+.upload-field__loading .spinner {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  border: 2px solid transparent;
+  /* Light grey */
+  border-top: 2px solid white;
+  /* Blue */
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  animation: spin 1s linear infinite;
+  margin: 0;
+  box-sizing: border-box;
+}
+.loading .upload-field__loading {
+  display: block;
+}
+.loading .upload-field__icon {
   display: none;
 }
 .avatar-layout {
@@ -653,7 +688,8 @@ textarea::-webkit-input-placeholder {
   line-height: 16px;
   margin-top: 8px;
 }
-.avatar-layout .upload-field__icon {
+.avatar-layout .upload-field__icon,
+.avatar-layout .upload-field__loading {
   top: 25px;
   left: 25px;
 }
