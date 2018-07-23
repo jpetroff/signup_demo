@@ -90,17 +90,27 @@
 			</popup>
 
 			<popup id="mChooseEdu" class="fs-modal-selector" v-bind:is-open="hasModal && typeModal === 'mChooseEdu' ">
-				<!-- <field id="fhigheredu" v-model="registration.fhigheredu" place="top" type="text" label="Начните вводить название" v-on:input="sortEduList" tabindex="-1"></field> -->
 				<div class="simple-field">
-					<span class="simple-field__placeholder" v-show="registration.fhigheredu == ''">Начните вводить название</span>
-					<input type="text" v-model="registration.fhigheredu" id="fhigheredu" class="simple-field__input" v-on:input="sortEduList" tabindex="-1"/>
-					<label class="simple-field__clear" v-on:click="registration.fhigheredu = ''; sortEduList()" for="fhigheredu">×</label>
+					<span class="simple-field__placeholder" v-show="registration.fhigheredu.Name === ''">Начните вводить название</span>
+					<input type="text" v-model="registration.fhigheredu.Name" id="fhigheredu" class="simple-field__input" v-on:input="sortEduList" tabindex="-1" />
+					<label class="simple-field__clear" v-on:click="registration.fhigheredu = registration.defaultEdu; sortEduList()" for="fhigheredu">×</label>
 				</div>
-				<ul class="select-list" ref="mErrorNewUserList">
-					<li class="select-item" v-for="item in registration.suggestedEduItems" v-on:click="applySelectedEdu($event.target, item)" v-bind:class="{selected: (item.trim().toLowerCase() == registration.fhigheredu.trim().toLowerCase())}">{{ item }}</li>
+				<ul class="select-list" ref="mErrorNewUserList">    
+					<li class="select-item" v-for="item in registration.suggestedEduItems" v-on:click="applySelectedEdu($event.target, item)" v-bind:class="{selected: (item && registration.fhigheredu && item.Name.trim().toLowerCase() == registration.fhigheredu.Name.trim().toLowerCase())}">{{ item.Name }}</li>
 				</ul>
 			</popup>
-
+	
+			<popup id="mChooseMajor" class="fs-modal-selector" v-bind:is-open="hasModal && typeModal === 'mChooseMajor' ">
+				<div class="simple-field">
+					<span class="simple-field__placeholder" v-show="registration.fmajor.Name === ''">Начните вводить название</span>
+					<input type="text" v-model="registration.fmajor.Name" id="fmajor" class="simple-field__input" v-on:input="sortMajorList" tabindex="-1" />
+					<label class="simple-field__clear" v-on:click="registration.fmajor = registration.defaultMajor; sortMajorList()" for="fmajor">×</label>
+				</div>
+				<ul class="select-list" ref="mErrorNewUserList">
+					<li class="select-item" v-for="item in registration.suggestedMajorItems" v-on:click="applySelectedMajor($event.target, item)" v-bind:class="{selected: (item && registration.fmajor && item.Name.trim().toLowerCase() == registration.fmajor.Name.trim().toLowerCase())}">{{ item.Name }}</li>
+				</ul>
+			</popup>
+	
 			<!-- <div class="screen" id="main-screen" v-bind:class="{show: (current == 'main'), hide: (current != 'main')}"> -->
 			<div class="screen" id="main-screen" v-show="current === 'main'">
 				<!-- <div class="header">
@@ -470,14 +480,17 @@
 							</h3>
 							<div class="fieldset">
 								<!-- <field id="fhigheredu-readonly" focus-id="fhigheredu" v-model="registration.fhigheredu" place="top" type="text" label="Учебное заведение" v-on:click="openEduSelect" v-bind:readonly="true"></field> -->
-								<label for="fhigheredu" class="app-field top" v-bind:class="{focus: (registration.fhigheredu != '')}" v-on:click="openEduSelect">
+								<label for="fhigheredu" class="app-field top" v-bind:class="{focus: (registration.fhigheredu.Name)}" v-on:click="openEduSelect">
 									<span class="app-field__caption">Учебное заведение</span>
-									<div class="app-field__input fake-input">{{ registration.fhigheredu }}</div>
+									<div class="app-field__input fake-input">{{ registration.fhigheredu.Name }}</div>
 								</label>
-								<field id="fmajor" v-model="registration.fmajor" place="bottom" type="text" label="Основная специальность"></field>
+								<label for="fmajor" class="app-field top" v-bind:class="{focus: (registration.fmajor.Name)}" v-on:click="openMajorSelect">
+									<span class="app-field__caption">Основная специальность</span>
+									<div class="app-field__input fake-input">{{ registration.fmajor.Name }}</div>
+								</label>
 							</div>
 							<div class="fieldset">
-								<field id="fbirthyear" v-model="registration.fgraduatoinyear" type="number" label="Год получения диплома"></field>
+								<field id="fbirthyear" v-model="registration.fgraduationyear" type="number" label="Год получения диплома"></field>
 							</div>
 							<div class="fieldset">
 								<uploader id="diploma-uploader" type="file" label="Прикрепить диплом" accept="image/*,.pdf"></uploader>
@@ -540,7 +553,7 @@
 						</div>
 
 						<div class="registration-footer">
-							<div class="btn btn-primary">Сохранить</div>
+							<div class="btn btn-primary" v-on:click="saveRegBlank($event.currentTarget);">Сохранить</div>
 						</div>
 
 					</div>

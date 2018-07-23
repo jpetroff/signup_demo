@@ -40,6 +40,8 @@ w.Data = {
 	registration: {
 		suggestedEduItems: window._he,
 		_transitionSelectEdu: false,
+		suggestedMajorItems: window._he,
+		_transitionSelectMajor: false,
 		suggestReg: false,
 		socialReg: false,
 		restoreForm: false,
@@ -54,10 +56,13 @@ w.Data = {
 		fsex: '',
 
 		// education
-		fhigheredu: '',
-		fmajor: '',
+		defaultEdu: { Id: -1, Name: '' },
+		defaultMajor: { Id: -1, Name: '' },
+		fhigheredu: { Id: -1, Name: '' },
+		fmajor: { Id: -1, Name: '' },
 		fdocument: '',
-		fgraduatoinyear: '',
+		fgraduationyear: '',
+		hasDiploma: false,
 
 		// work
 		foccupation: '',
@@ -127,7 +132,69 @@ w.Data = {
 w.App = new Vue({
 	data: w.Data,
 	mounted: function() {
-		
+		if (this.current === 'registration2') {
+			w.utils.ajax({
+				url: '/Doctor/FirstAjax',
+				method: 'GET',
+				data: {
+					fromWaitPage: false
+				}
+			}).then(_.bind(function (response) {
+				this.main.sendingRequest = false;
+
+				var responseData = JSON.parse(response) || {};
+				if (!responseData.ViewModel) {
+					if (responseData.RedirectUrl) {
+						window.location.href = responseData.RedirectUrl;
+					} else {
+						w.utils.showErrorMessage();
+					}
+				} else {
+					var viewModel = responseData.ViewModel;
+
+					this.registration.fsurname = viewModel.LastName;
+					this.registration.fname = viewModel.FirstName;
+					this.registration.fmiddlename = viewModel.Patronymic;
+					this.registration.fspecialty = viewModel.AboutMe;
+					this.registration.foccupation = viewModel.WorkOrganization;
+					this.registration.fjobtitle = viewModel.WorkPosition;
+
+					w._he = viewModel.AllUniversities.Options;
+					this.registration.suggestedEduItems = w._he;
+					var selectedUniversity = this.registration.suggestedEduItems.filter(function (e) {
+						return e.Id === viewModel.UniversityId;
+					});
+
+					if (selectedUniversity[0]) {
+						this.registration.fhigheredu = selectedUniversity[0];
+					}
+
+					w._majors = viewModel.AllSpecialties.Options;
+					this.registration.suggestedMajorItems = w._majors;
+					var selectedMajor = this.registration.suggestedMajorItems.filter(function (e) {
+						return e.Id === viewModel.SpecialityId;
+					});
+
+					if (selectedMajor[0]) {
+						this.registration.fmajor = selectedMajor[0];
+					}
+
+					var graduatedAt = w.utils.aspnetDatetimeToUnix(viewModel.GraduatedAt);
+					if (graduatedAt || graduatedAt === 0) {
+						this.registration.fgraduationyear = new Date(graduatedAt).getFullYear().toString();
+					} else {
+						this.registration.fgraduationyear = '';
+					}
+					
+					this.registration.hasDiploma = viewModel.CountDiploma > 0;
+					this.email = viewModel.Email;
+					this.registration.fnewpass = viewModel.NewPassword;
+				}
+			}, this), _.bind(function (error) {
+				this.main.sendingRequest = false;
+				w.utils.showErrorMessage();
+			}, this));
+		}
 	},
 	computed: {
 		restoreText: function() {
@@ -164,9 +231,13 @@ w.App = new Vue({
 		},
 		headerBack: function() {
 			if(this.current == 'restore' && this.restore.state != 0) {
-				return this.restore.state = 0;
+				this.restore.state = 0;
+			} else if (this.current === 'registration2') {
+				this.registration.state = 0;
 			}
-			this._route('main');
+			else {
+				this._route('main');
+			}
 		},
 		// unflagError(key) {
 		// 	console.log(key);
@@ -216,9 +287,8 @@ w.App = new Vue({
 				data: body
 			}).then(_.bind(function(response){
 				var reponseData = JSON.parse(response) || {};
-				if(reponseData.RedirectURL) {
+				if (reponseData.RedirectURL) {
 					window.location.href = reponseData.RedirectURL;
-
 				} else {
 					w.utils.toggleLoad(btn, false);
 					this.main.sendingRequest = false;
@@ -357,12 +427,12 @@ w.App = new Vue({
 			}).then(_.bind(function(response) {
 				w.utils.toggleLoad(btn, false);
 
-				var reponseData = JSON.parse(response || '');
-				if(reponseData.Data) {
-					window.location.href = reponseData.Data;
+				var responseData = JSON.parse(response || '');
+				if (responseData.Data) {
+					window.location.href = responseData.Data;
 					return;
 				}
-				
+
 				this.main.sendingRequest = false;
 
 				this.hasModal = this.email && this.isValidEmail;
@@ -534,8 +604,8 @@ w.App = new Vue({
 					codeSessionId: this.codeSessionId
 				}
 			}).then(_.bind(function(response) {
-				var reponseData = JSON.parse(response || '');
-				if(reponseData.IsSuccess) {
+				var responseData = JSON.parse(response || '');
+				if(responseData.IsSuccess) {
 					window.location.href = '/';
 					return;
 				}
@@ -604,6 +674,11 @@ w.App = new Vue({
 			this.typeModal = 'mChooseEdu';
 			return true;
 		},
+		openMajorSelect: function () {
+			this.hasModal = true;
+			this.typeModal = 'mChooseMajor';
+			return true;
+		},
 		retryPass: function() {
 			this.clearModals();
 			this.routeHome();
@@ -612,21 +687,94 @@ w.App = new Vue({
 		focusSelectEdu: function() {
 			console.log(window.innerHeight);
 		},
-		sortEduList: function() {
-			this.$refs['mErrorNewUserList'] && this.$refs['mErrorNewUserList'].scrollTo(0,0);
+		sortEduList: function () {
+			this.$refs['mErrorNewUserList'] && this.$refs['mErrorNewUserList'].scrollTo(0, 0);
 
-			if(this.registration.fhigheredu != '') {
-				this.registration.suggestedEduItems = w.utils.filterSubstr(this.registration.fhigheredu, w._he);
+			if (this.registration.fhigheredu.Name !== '') {
+				this.registration.suggestedEduItems = w.utils.filterSubstr(this.registration.fhigheredu.Name, w._he);
 			} else {
 				this.registration.suggestedEduItems = w._he;
 			}
 		},
-		applySelectedEdu: function( elem, item ) {
+		applySelectedEdu: function (elem, item) {
 			// this.registration._transitionSelectEdu = true;
-			console.log('apply');
 			// elem.dataset.selected = true;
 			this.registration.fhigheredu = item;
-			setTimeout(_.bind(function() { this.registration._transitionSelectEdu = false; this.hasModal = false;}, this), 300);
+			setTimeout(_.bind(function () { this.registration._transitionSelectEdu = false; this.hasModal = false; }, this), 300);
+		},
+		sortMajorList: function () {
+			this.$refs['mErrorNewUserList'] && this.$refs['mErrorNewUserList'].scrollTo(0, 0);
+
+			if (this.registration.fmajor.Name !== '') {
+				this.registration.suggestedMajorItems = w.utils.filterSubstr(this.registration.fmajor.Name, w._majors);
+			} else {
+				this.registration.suggestedMajorItems = w._majors;
+			}
+		},
+		applySelectedMajor: function (elem, item) {
+			// this.registration._transitionSelectEdu = true;
+			// elem.dataset.selected = true;
+			this.registration.fmajor = item;
+			setTimeout(_.bind(function () { this.registration._transitionSelectEdu = false; this.hasModal = false; }, this), 300);
+		},
+		saveRegBlank: function(btn) {
+			if (this.main.sendingRequest)
+				return;
+
+			var graduationYearMatching = this.registration.fgraduationyear.match(/^\d{4}$/);
+			if (!graduationYearMatching || graduationYearMatching.length === 0) {
+				w.utils.showErrorMessage("Некорректный год окончания ВУЗа.");
+				return;
+			}
+
+			var graduationYear = +graduationYearMatching[0];
+			if (graduationYear > new Date().getFullYear() || graduationYear < 1900) {
+				w.utils.showErrorMessage("Некорректный год окончания ВУЗа.");
+				return;
+			}
+
+			this.main.sendingRequest = true;
+			w.utils.toggleLoad(btn, true);
+
+			var body = {
+				LastName: this.registration.fsurname,
+				FirstName: this.registration.fname,
+				Patronymic: this.registration.fmiddlename,
+				AboutMe: this.registration.fspecialty,
+				WorkOrganization: this.registration.foccupation,
+				WorkPosition: this.registration.fjobtitle,
+				DontWork: false,
+				NotDoctor: false,
+				UniversityId: this.registration.fhigheredu.Id === -1 ? null : this.registration.fhigheredu.Id,
+				SpecialityId: this.registration.fmajor.Id === -1 ? null : this.registration.fmajor.Id,
+				GraduatedAt: new Date(graduationYear, 6, 1).toISOString(),
+				NewPassword: this.registration.fnewpass
+			};
+
+			w.utils.ajax({
+				url: '/Doctor/FirstAjax',
+				method: 'POST',
+				data: body
+			}).then(_.bind(function(response){
+				this.main.sendingRequest = false;
+				w.utils.toggleLoad(btn, false);
+
+				var responseData = JSON.parse(response) || {};
+				if (!responseData.ViewModel) {
+					if (responseData.RedirectUrl) {
+						window.location.href = responseData.RedirectUrl;
+					} else {
+						w.utils.showErrorMessage();
+					}
+				} else {
+					var viewModel = responseData.ViewModel;
+				}
+			}, this), _.bind(function(error) {
+				w.utils.toggleLoad(btn, false);
+				this.main.sendingRequest = false;
+				console.error(error);
+				w.utils.showErrorMessage();
+			}, this));
 		},
 		requestPassbyEmail: function(btn) {
 			if (this.main.sendingRequest)

@@ -50,6 +50,26 @@ w.Components['uploader'] = {
 
       if(this.type == "file") {
         this.content = '' + elem.files[0].name;
+
+        w.utils.toggleLoad(elem, true);
+
+        var body = new FormData();
+        body.append(elem.files[0].name, elem.files[0]);
+        
+        w.utils.ajax({
+          url: '/Diploma/Upload',
+          method: 'POST',
+          contentType: 'multipart/form-data',
+          data: body
+        }).then(_.bind(function(response){
+          this.main.sendingRequest = false;
+          w.utils.toggleLoad(elem, false);
+        }, this), _.bind(function(error) {
+          w.utils.toggleLoad(elem, false);
+          this.main.sendingRequest = false;
+          console.error(error);
+          w.utils.showErrorMessage();
+        }, this));
       } else if (this.type == "avatar") {
         var reader = new FileReader();
 
