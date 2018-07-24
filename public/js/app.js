@@ -319,18 +319,19 @@ Vue.component('popup', w.Components['popup']);
 // File /Users/jpetrov/Work/signup_demo/src/components/uploader.js
 
 w.Components['uploader'] = {
-  props: ['type', 'label', 'id', 'accept', 'subscript', 'src'],
-  template: "<label class=\"app-field upload-field\" v-bind:class=\"{loaded: (src &amp;&amp; src != \'\'), focus: (name &amp;&amp; name != \'\' &amp;&amp; type == \'file\'), \'avatar-layout\': (type == \'avatar\')}\" v-on:click=\"$emit(\'click\')\"><span class=app-field__caption>{{ dynamicLabel }} <span class=subscript v-if=subscript>{{ subscript }}</span> </span><span class=app-field__input v-html=\"type == \'avatar\' ? \'\' : content\" v-bind:style=styleObject></span><div class=upload-field__icon><svg width=32 height=32 viewBox=\"0 0 32 32\" version=1.1 xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink><g id=Canvas fill=none><g id=plus><circle id=Ellipse cx=16 cy=16 r=16 fill=#E3E3E3></circle><rect id=\"Rectangle 2\" width=2 height=16 transform=\"translate(15 8)\" fill=white></rect><rect id=Rectangle width=16 height=2 transform=\"translate(8 15)\" fill=white></rect></g></g></svg></div><div class=upload-field__loading><div class=spinner></div></div><input class=upload-field__hidden-input v-bind:id=[id] type=file v-on:change=onUpload($event.target)></label>",
+  props: ['type', 'label', 'labelLoading', 'labelDone', 'labelError', 'id', 'accept', 'subscript', 'displayValue'],
+  template: "<label class=\"app-field upload-field\" v-bind:class=\"{loading: isLoading, loaded: (!isLoading &amp;&amp; displayValue &amp;&amp; displayValue != \'\'), focus: (displayValue &amp;&amp; displayValue != \'\' &amp;&amp; type == \'file\'), \'avatar-layout\': (type == \'avatar\')}\" v-on:click=\"$emit(\'click\')\"><span class=app-field__caption>{{ dynamicLabel }} <span class=subscript v-if=subscript>{{ subscript }}</span> </span><span class=app-field__input v-html=\"type == \'avatar\' ? \'\' : content\" v-bind:style=styleObject></span><div class=upload-field__icon><svg width=32 height=32 viewBox=\"0 0 32 32\" version=1.1 xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink><g id=Canvas fill=none><g id=plus><circle id=Ellipse cx=16 cy=16 r=16 fill=#E3E3E3></circle><rect id=\"Rectangle 2\" width=2 height=16 transform=\"translate(15 8)\" fill=white></rect><rect id=Rectangle width=16 height=2 transform=\"translate(8 15)\" fill=white></rect></g></g></svg></div><div class=upload-field__loading><div class=spinner></div></div><input class=upload-field__hidden-input v-bind:id=[id] type=file v-on:change=onUpload($event.target)></label>",
   data: function() {
     return {
-      content: '',
+      content: this.displayValue,
       type: 'file', // < file | avatar >
       errorClass: '',
       errorType: this.error,
       dynamicLabel: this.label,
       styleObject: {},
       name: null,
-      src: ''
+			src: '',
+			isLoading: false
     }
   },
   watch: {
@@ -339,23 +340,36 @@ w.Components['uploader'] = {
       this.styleObject = {
         backgroundImage: 'url("' + this.src + '")'
       };
+		},
+		'displayValue': function(val) {
+			this.content = val;
 		}
 	},
   methods: {
     onUpload: function(elem) {
-      console.dir(elem);
+      // console.dir(elem);
 
-      if(!elem.files[0]) return;
+      // if(!elem.files[0]) return;
 
-      this.name = elem.files[0].name;
+      // this.name = elem.files[0].name;
 
-      if(this.type == "file") {
-        this.uploadDiploma(elem);
-      } else if (this.type == "avatar") {
-        this.uploadAvatar(elem);
-      }
+      // if(this.type == "file") {
+      //   this.uploadDiploma(elem);
+      // } else if (this.type == "avatar") {
+      //   this.uploadAvatar(elem);
+      // }
 
-      this.$emit('upload', elem.files[0].name);
+			// this.$emit('upload', elem.files[0].name);
+			this.dynamicLabel = this.labelLoading;
+			this.isLoading = true;
+			this.$emit('change', elem, _.bind(function(success) {
+				this.isLoading = false;
+				if(success == true) {
+					this.dynamicLabel = this.labelDone;
+				} else {
+					this.dynamicLabel = this.labelError;
+				}
+			}, this));
     },
     uploadDiploma: function(elem) {
       this.content = '' + elem.files[0].name;
@@ -1249,6 +1263,13 @@ w.App = new Vue({
 			// 		alert('Пароль отправлен на почту ' + this.email);
 			// 	}, this), 200);
 			// })
+		},
+		uploadDiploma: function(input, cb) {
+			console.dir(input.files[0].name);
+			this.registration.fdocument = input.files[0].name;
+			setTimeout(function() {
+				cb(true);
+			}, 2000);
 		}
 	},
 	watch: {

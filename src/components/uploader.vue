@@ -1,5 +1,5 @@
 <template lang="html">
-  <label class="app-field upload-field" v-bind:class="{loaded: (src && src != ''), focus: (name && name != '' && type == 'file'), 'avatar-layout': (type == 'avatar')}" v-on:click="$emit('click')">
+  <label class="app-field upload-field" v-bind:class="{loading: isLoading, loaded: (!isLoading && displayValue && displayValue != ''), focus: (displayValue && displayValue != '' && type == 'file'), 'avatar-layout': (type == 'avatar')}" v-on:click="$emit('click')">
     <span class="app-field__caption">
       {{ dynamicLabel }}
       <span class="subscript" v-if="subscript">{{ subscript }}</span>
@@ -31,18 +31,19 @@
 
 <script>
 w.Components['uploader'] = {
-  props: ['type', 'label', 'id', 'accept', 'subscript', 'src'],
+  props: ['type', 'label', 'labelLoading', 'labelDone', 'labelError', 'id', 'accept', 'subscript', 'displayValue'],
   template: "<%= template %>",
   data: function() {
     return {
-      content: '',
+      content: this.displayValue,
       type: 'file', // < file | avatar >
       errorClass: '',
       errorType: this.error,
       dynamicLabel: this.label,
       styleObject: {},
       name: null,
-      src: ''
+			src: '',
+			isLoading: false
     }
   },
   watch: {
@@ -51,23 +52,36 @@ w.Components['uploader'] = {
       this.styleObject = {
         backgroundImage: 'url("' + this.src + '")'
       };
+		},
+		'displayValue': function(val) {
+			this.content = val;
 		}
 	},
   methods: {
     onUpload: function(elem) {
-      console.dir(elem);
+      // console.dir(elem);
 
-      if(!elem.files[0]) return;
+      // if(!elem.files[0]) return;
 
-      this.name = elem.files[0].name;
+      // this.name = elem.files[0].name;
 
-      if(this.type == "file") {
-        this.uploadDiploma(elem);
-      } else if (this.type == "avatar") {
-        this.uploadAvatar(elem);
-      }
+      // if(this.type == "file") {
+      //   this.uploadDiploma(elem);
+      // } else if (this.type == "avatar") {
+      //   this.uploadAvatar(elem);
+      // }
 
-      this.$emit('upload', elem.files[0].name);
+			// this.$emit('upload', elem.files[0].name);
+			this.dynamicLabel = this.labelLoading;
+			this.isLoading = true;
+			this.$emit('change', elem, _.bind(function(success) {
+				this.isLoading = false;
+				if(success == true) {
+					this.dynamicLabel = this.labelDone;
+				} else {
+					this.dynamicLabel = this.labelError;
+				}
+			}, this));
     },
     uploadDiploma: function(elem) {
       this.content = '' + elem.files[0].name;
