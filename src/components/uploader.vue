@@ -1,5 +1,5 @@
 <template lang="html">
-  <label class="app-field upload-field" v-bind:class="{loading: isLoading, loaded: (!isLoading && displayValue && displayValue != ''), focus: (displayValue && displayValue != '' && type == 'file'), 'avatar-layout': (type == 'avatar')}" v-on:click="$emit('click')">
+  <label class="app-field upload-field" v-bind:class="{loading: isLoading, loaded: (!isLoading && (displayValue && displayValue !== '' || src && src !=='')), focus: (displayValue && displayValue != '' && type == 'file'), 'avatar-layout': (type == 'avatar')}" v-on:click="$emit('click')">
     <span class="app-field__caption">
       {{ dynamicLabel }}
       <span class="subscript" v-if="subscript">{{ subscript }}</span>
@@ -31,7 +31,7 @@
 
 <script>
 w.Components['uploader'] = {
-  props: ['type', 'label', 'labelLoading', 'labelDone', 'labelError', 'id', 'accept', 'subscript', 'displayValue'],
+  props: ['type', 'label', 'labelLoading', 'labelDone', 'labelError', 'id', 'accept', 'subscript', 'displayValue', 'src'],
   template: "<%= template %>",
   data: function() {
     return {
@@ -82,61 +82,6 @@ w.Components['uploader'] = {
 					this.dynamicLabel = this.labelError;
 				}
 			}, this));
-    },
-    uploadDiploma: function(elem) {
-      this.content = '' + elem.files[0].name;
-
-      w.utils.toggleLoad(elem, true);
-
-      var body = new FormData();
-      body.append(elem.files[0].name, elem.files[0]);
-      
-      w.utils.ajax({
-        url: '/Diploma/Upload',
-        method: 'POST',
-        contentType: 'multipart/form-data',
-        data: body
-      }).then(_.bind(function(response){
-        w.utils.toggleLoad(elem, false);
-      }, this), _.bind(function(error) {
-        w.utils.toggleLoad(elem, false);
-        console.error(error);
-        w.utils.showErrorMessage();
-      }, this));
-    },
-    uploadAvatar: function(elem) {
-      // var reader = new FileReader();
-
-      // reader.addEventListener('load', _.bind(function() {
-      //   this.content = '&nbsp;';
-
-      //   this.styleObject = {
-      //     backgroundImage: 'url("' + reader.result + '")'
-      //   }
-      // }, this));
-
-      // reader.readAsDataURL(elem.files[0]);
-      this.content = '' + elem.files[0].name;
-
-      w.utils.toggleLoad(elem, true);
-
-      var body = new FormData();
-      body.append(elem.files[0].name, elem.files[0]);
-      
-      w.utils.ajax({
-        url: '/FileUpload.ashx?TypeID=2&ID=0',
-        method: 'POST',
-        contentType: 'multipart/form-data',
-        data: body
-      }).then(_.bind(function(response){
-        w.utils.toggleLoad(elem, false);
-        
-        this.src = response;
-      }, this), _.bind(function(error) {
-        w.utils.toggleLoad(elem, false);
-        console.error(error);
-        w.utils.showErrorMessage();
-      }, this));
     }
   }
 

@@ -1,6 +1,6 @@
 (function(w){
 "use strict";
-// File /Users/jpetrov/Work/signup_demo/src/js/utils.js
+// File D:\signup_demo\src\js\utils.js
 
 w.Components = {};
 
@@ -55,24 +55,27 @@ w.utils = {
 	easeOutCubic: function(currentIteration, startValue, changeInValue, totalIterations) {
 		return changeInValue * (Math.pow(currentIteration / totalIterations - 1, 3) + 1) + startValue;
 	},
-  easeInCubic: function(currentIteration, startValue, changeInValue, totalIterations) {
-  	return changeInValue * Math.pow(currentIteration / totalIterations, 3) + startValue;
-  },
-  filterSubstr( _str, arr ) {
-    var str = _str.trim().toLowerCase();
-    var result = [];
-    arr.forEach(function(_elem) {
-      var elem = _elem.toLowerCase();
-      if(elem.indexOf(str) != -1) {
-        result.push(_elem);
-      }
-    });
+	easeInCubic: function(currentIteration, startValue, changeInValue, totalIterations) {
+		return changeInValue * Math.pow(currentIteration / totalIterations, 3) + startValue;
+	},
+	filterSubstr( _str, arr, propertySelector) {
+		var str = _str.trim().toLowerCase();
+		var result = [];
+		arr.forEach(function(_elem) {
+			var property = propertySelector ? propertySelector(_elem) : _elem;
+			var elem = property.toLowerCase();
+			if(elem.indexOf(str) != -1) {
+				result.push(_elem);
+			}
+		});
 
-    result.sort(function(a, b) {
-      return (a.toLowerCase().indexOf(str) - b.toLowerCase().indexOf(str));
-    });
+		result.sort(function(a, b) {
+			var aProp = propertySelector ? propertySelector(a) : a;
+			var bProp = propertySelector ? propertySelector(b) : b;
+			return (aProp.toLowerCase().indexOf(str) - bProp.toLowerCase().indexOf(str));
+		});
 
-    return result;
+		return result;
 	},
 
 	_fakeLoad: function(elem, ctx, fn) {
@@ -111,7 +114,7 @@ w.utils = {
 		if (!url) return new Promise(function(resolve,reject){reject(Error('No URL provided'))});
 
 		var query = [];
-		if (data != null && typeof data == 'object' && method !== 'POST') {
+		if (data != null && typeof data == 'object' && (method == 'POST' && contentType === "application/x-www-form-urlencoded" || method !== 'POST')) {
 			for (var key in data) {
 				if (!data.hasOwnProperty(key)) continue;
 				query.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
@@ -181,11 +184,11 @@ w._majors = [];
 w._he = [];
 // w._he = ["Vasile Goldis Western University, Арад, Румыния","Азербайджанский медицинский университет (АМУ), Баку","Азербайджанский международный университет, медицинский факультет, Баку","Алтайский государственный медицинский университет (АГМУ, АГМИ), Барнаул","Амурская государственная медицинская академия (АГМА, БГМИ), Благовещенск","Андижанский государственный медицинский институт (АГМИ), Андижан","Армянский медицинский институт (АМИ), Ереван","Армянско-Российский международный университет \"Мхитар Гош\", Ванадзор","Астраханская государственная медицинская академия (АГМА, АГМИ), Астрахань","Афинский Национальный Каподистрийский Университет, Афины, Греция","Балтийский федеральный университет им. Иммануила Канта, медицинский факультет (БФУ, РГУ), Калининград","Башкирский государственный медицинский университет (БГМУ, БГМИ), Уфа","Белгородский государственный университет, медицинский факультет (БелГУ), Белгород","Белорусский государственный медицинский университет (БГМУ, БМИ, ММИ), Минск","Буковинский государственный медицинский университет (БГМУ, БГМА), Черновцы","Бурятский государственный университет, медицинский факультет (БГУ), Улан-Удэ","Бухарский медицинский институт, Бухара","Вильнюсский университет, медицинский факультет (ВУ, ВГУ), Вильнюс","Винницкий национальный медицинский университет им. Н.И. Пирогова (ВНМУ), Винница","Витебский государственный медицинский университет (ВГМУ, ВГМИ), Витебск","Владивостокский государственный медицинский университет (ВГМУ, ВГМИ), Владивосток","Военно-медицинская академия Бундесвера, Росток","Военно-медицинская академия им. С.М. Кирова (ВМедА, ВМОЛКА, ВМА), Санкт-Петербург","Волгоградский государственный медицинский университет (ВолГМУ), Волгоград","Воронежская государственная медицинская академия им. Н.Н. Бурденко (ВГМА, ВГМИ), Воронеж","Гомельский государственный медицинский университет (ГГМУ, ГГМИ), Гомель","Государственная классическая академия им. Маймонида, факультет социальной медицины (ГКА, ГЕА), Москва","Государственный медицинский университет города Семей (ГМУ города Семей, СГМА, СГМИ), Семипалатинск","Государственный медицинский университет туркменистана (ТГМУ, ТГМИ), Ашхабад","Государственный университет медицины и фармакологии им. Николая Тестемицяну, Кишинёв","Гродненский государственный медицинский университет (ГрГМУ, ГрМАГрМИ), Гродно","Гюмрийский университет \"Прогресс\", Гюмри","Дагестанская государственная медицинская академия (ДГМА, ДГМИ), Махачкала","Дальневосточный государственный медицинский университет (ДВГМУ, ХГМИ), Хабаровск","Днепропетровская государственная медицинская академия  (ДГМА), Днепропетровск","Днепропетровский медицинский институт народной медицины, Днепропетровск","Днепропетровский национальный университет, факультет биологии, экологии и медицины (ДНУ), Днепропетровск","Донецкий государственный медицинский университет им. М. Горького (ДонНМУ), Донецк","Ереванский государственный медицинский университет им. М. Гераци (ЕГМУ), Ереван","Ереванский медицинский институт им. Меграбяна, Ереван","Ереванский медицинский университет им. Святой Терезы, Ереван","Ереванский университет \"Айбусак\", медицинский факультет, Ереван","Западно-Казахстанская государственная медицинская академия им. М. Оспанова (ЗКГМА, АГМА), Актобе","Запорожский государственный медицинский университет (ЗГМУ), Запорожье","Ивановская государственная медицинская академия (ИвГМА, ИГМА), Иваново","Ивано-Франковский государственный медицинский университет (ИФГМУ, ИФГМА, СГМИ), Ивано-Франковск","Ижевская государственная медицинская академия (ИГМА, ИГМИ), Ижевск","Ингушский государственный университет, медицинский факультет (ИнгГУ), Назрань","Институт экологии и медицины, медицинский факультет, Киев","Иркутский государственный медицинский университет (ИГМУ, ИГМИ), Иркутск","Кабардино-Балкарский государственный университет им. Х.М. Бербекова, медицинский факультет (КБГУ), Нальчик","Казанская государственная медицинская академия (КГМА, КГИДУВ), Казань","Казанский государственный медицинский университет (КГМУ, КГМИ), Казань","Казахский национальный медицинский университет им. С.Д. Асфендиярова (КазНМУ), Алма-Ата","Казахстанско-Российский медицинский университет (КРМУ, КМУ, КМИ), Алма-Ата","Карагандинский государственный медицинский университет (КГМУ, КГМА, КГМИ), Караганда","Кемеровская государственная медицинская академия (КемГМА, КемГМИ), Кемерово","Киевский медицинский университет Украинской ассоциации народной медицины (КМУ УАНМ), Киев","Кировская государственная медицинская академия (КГМА, КГМИ), Киров","Кишиневский государственный медицинский университет им. Н.Тестемицану","Красноярский государственный медицинский университет им. проф. В.Ф. Войно-Ясенецкого (КрасГМУ, КрасГМИ, КрасГМА), Красноярск","Крымский государственный медицинский университет им. С.И. Георгиевского (КГМУ, КГМИ), Симферополь","Кубанский государственный медицинский университет (КубГМУ, КубГМА, КубГМИ), Краснодар","Курский государственный медицинский университет (КГМУ, КГМИ), Курск","Кыргызская государственная медицинская академия (КГМА, КГМИ), Бишкек","Кыргызско-Российский славянский университет, медицинский факультет, Бишкек","Латвийский университет, медицинский факультет, Рига","Литовский университет наук о здоровье, медицинская академия, Каунас","Луганский государственный медицинский университет (ЛГМУ, ЛГМИ), Луганск","Львовский национальный медицинский университет им. Данила Галицкого (ЛМИ, ЛНМУ, ЛГМУ, ЛГМИ), Львов","Майкопский государственный технологический университет, медицинский институт (МИ МГТУ), Майкоп","Медицинский институт \"Амирдовлат Амасиаци\", Ванадзор","Медицинский университет Астана (AMU, МУА, КГМА, КМА, КазГМА), Астана","Международный казахско-турецкий университет им. Х.А. Яссави, школа медицины (МКТУ), Туркестан","Мордовский государственный университет им. Н.П. Огарева, медицинский институт (НИ МГУ), Саранск","Московский государственный медико-стоматологический университет (МГМСУ, МГМСИ), Москва","Московский государственный университет им. М.В. Ломоносова, факультет фундаментальной медицины (МГУ), Москва","Мюнхенский университет Людвига-Максимилиана","Нахичеванский государственный университет, медицинский факультет (НГУ), Нахичевань","Национальный медицинский университет им. А.А. Богомольца (НМУ), Киев","Нижегородская государственная медицинская академия (НижГМА, ГМИ), Нижний Новгород","Нижегородский военно-медицинский институт ФПС РФ  при НГМА (НижВМИ), Нижний Новгород","Новгородский государственный университет им. Ярослава Мудрого, институт медицинского образования (ИМО НовГУ), Новгород","Новосибирский государственный медицинский университет (НГМУ, НГМА, НМИ), Новосибирск","Новосибирский государственный университет, медицинский факультет (НГУ), Новосибирск","Обнинский институт атомной энергетики, медицинский факультет (ИАТЭ НИЯУ МИФИ), Обнинск","Одесский национальный медицинский университет (ОНМедУ, ОГМУ), Одесса","Омская государственная медицинская академия (ОмГМА, ОмГМИ), Омск","Оренбургская государственная медицинская академия (ОрГМА, ОрГМИ), Оренбург","Орловский государственный университет, медицинский институт (ОГУ), Орёл","Ошский государственный университет, медицинский институт (ОшГУ), Ош","Пензенский государственный унтверситет, медицинский институт (ПГУ), Пенза","Первый московский государственный медицинский университет им. И.М. Сеченова (1-й МГМУ, ММА), Москва","Первый Санкт-Петербургский государственный медицинский университет им. акад. И.П. Павлова (ПСПбГМУ, СПбГМУ, 1-й ЛМИ), Санкт-Петербург","Пермская государственная медицинская академия им. акад. Е.А. Вагнера (ПГМА, ПМИ), Пермь","Петрозаводский государственный университет, медицинский факультет (ПетрГУ), Петрозаводск","Приднестровский государственный университет им. Т.Г. Шевченко, медицинский факультет (ПГУ), Тирасполь","Рижский университет им. П. Страдиньша, медицинские факультеты, Рига","Российский национальный исследовательский медицинский университет им. Н.И. Пирогова (РНИМУ, РГМУ,  2-й МОЛГМИ), Москва","Российский университет дружбы народов, медицинский факультет (РУДН), Москва","Российско-Армянский государственный университет, медико-биологический факультет, Ереван","Ростовский государственный медицинский университет (РостГМУ, РостМИ), Ростов-на-Дону","Рязанский государственный медицинский университет им. акад. И.П. Павлова (РГМУ, РМИ), Рязань","Самаркандский государственный медицинский институт  (СамГосМИ), Самарканд","Самарский военно-медицинский институт (СВМИ), Самара","Самарский государственный медицинский университет (СамГМУ, КМИ), Самара","Самарский медицинский институт РЕАВИЗ (СМИ Реавиз), Самара","Санкт-Петербургский государственный педиатрический университет (СПбГПУ, СПбГПМА, ЛПМИ), Санкт-Петербург","Санкт-Петербургский государственный университет, медицинский факультет (СПбГУ, ЛГУ), Санкт-Петербург","Санкт-Петербургский медико-технический институт (СпбМТИ), Санкт-Петербург","Санкт-Петербургский терапевтический институт (СТИ), Санкт-Петербург","Саратовский военно-медицинский институт (СВМИ), Саратов","Саратовский государственный медицинский университет им. В.И. Разумовского (СГМУ, СМИ), Саратов","Северный государственный медицинский университет (СГМУ, АГМА, АГМИ), Архангельск","Северо-восточный федеральный университет им. М.К. Аммосова, медицинский институт (СВФУ, ЯГУ), Якутск","Северо-Западный государственный медицинский университет им. И.И.Мечникова (СЗГМУ, СПбГМА, ЛСГМИ), Санкт-Петербург","Северо-Кавказская государственная гуманитарно-технологическая академия (КЧТИ, КЧГТА, СКГГТА), Черкесск","Северо-Осетинская государственная медицинская академия (СОГМА, СОГМИ), Владикавказ","Сибирский государственный медицинский университет (СГМУ, ТМИ), Томск","Смоленская государственная медицинская академия (СГМА, СГМИ), Смоленск","Ставропольская государственная медицинская академия (СтГМА, СГМИ), Ставрополь","Сумской государственный университет, медицинский институт (СумГУ), Сумы","Сургутский государственный университет, лечебный факультет (СурГУ), Сургут","Таджикский государственный медицинский университет им. Абуали ибн Сино (ТГМУ ТГМИ), Душанбе","Тамбовский государственный университет имени Г.Р. Державина, медицинский институт (ТГУ), Тамбов","Тамбовский государственный университет имени Г.Р. Державина, медицинский институт (ТГУ), Тамбов","Тамбовский государственный университет имени Г.Р. Державина, медицинский институт (ТГУ), Тамбов","Тартуский университет, медицинский факультет, Тарту","Ташкентская медицинская академия (ТашМА, ТашМИ, 1-й ТашМИ, 2-й ТашМИ), Ташкент","Ташкентский педиатрический медицинский институт (ТашПМИ, САМПИ), Ташкент","Тбилисский государственный медицинский университет (ТГМУ), Тбилиси","Тбилисский государственный университет им. Иванэ Джавахишвили, медицинский факультет (ТГУ), Тбилиси","Тверская государственная медицинская академия (ТГМА), Тверь","Тернопольский государственный медицинский университет им. И.Я. Горбачевского (ТГМУ, ТГМА), Тернополь","Томский военно-медицинский институт (ТВМИ), Томск","Тульский государственный университет, медицинский институт (ТулГУ), Тула","Тюменская государственная медицинская академия (ТГМА,ТГМИ), Тюмень","Ужгородский национальный университет, медицинский факультет (УжНУ), Ужгород","Украинская медицинская стоматологическая академия (УМСА), Полтава","Ульяновский государственный университет, медицинский факультет (УлГУ), Ульяновск","Университет Хазар, школа медицины, стоматологии и здравоохранения, Баку","Уральский государственный медицинский университет (УГМУ, УГМА, СГМИ), Екатеринбург","Хакасский государственный университет им. Н.Ф.Катанова, медико-психолого-социальный институт (ХГУ), Абакан","Ханты-Мансийская государственная медицинская академия (ХГМА, ХГМА), Ханты-Мансийск","Харьковский национальный медицинский университет (ХНМУ), Харьков","Харьковский национальный университет им. В.Н. Каразина, медицинский факультет, Харьков","Чеченский государственный университет, медицинский факультет (ЧГУ, ЧИГУ), Грозный","Читинская государственная медицинская академия (ЧГМА, ЧГМИ), Чита","Чувашский государственный университет, медицинский факультет (ЧувГУ), Чебоксары","Южно-Казахстанская государственная фармацевтическая академия (ЮКГФА, ЮКГМА), Шымкент","Южно-Уральский государственный медицинский университет (ЮУГМУ, ЧелГМА, ЧелГМИ), Челябинск","Ярославская государственная медицинская академия (ЯГМА, ЯГМИ), Ярославль"]
 
-// End of /Users/jpetrov/Work/signup_demo/src/js/utils.js
+// End of D:\signup_demo\src\js\utils.js
 })(window);
 (function(w){
 "use strict";
-// File /Users/jpetrov/Work/signup_demo/src/components/account.js
+// File D:\signup_demo\src\components\account.js
 
 w.Components['account-info'] = {
 	template: "<div class=account-description><div class=\"personal-info test\" v-if=\"(name != undefined &amp;&amp; name != null &amp;&amp; name != \'\')\"><div class=userpic v-bind:style=\"{backgroundImage: \'url(\\\'\'+pic+\'\\\')\'}\"></div><div class=name v-html=\"name &amp;&amp; name.split(\' \').join(\'<br/>\')\"></div></div><div v-if=email><div class=label-header>Почта</div><span class=text-overflow>{{email}}</span></div><div v-if=phone><div class=label-header>Телефон</div><span class=text-overflow>{{phone}}</span></div></div>",
@@ -194,11 +197,11 @@ w.Components['account-info'] = {
 
 Vue.component('account-info', w.Components['account-info']);
 
-// End of /Users/jpetrov/Work/signup_demo/src/components/account.js
+// End of D:\signup_demo\src\components\account.js
 })(window);
 (function(w){
 "use strict";
-// File /Users/jpetrov/Work/signup_demo/src/components/btn.js
+// File D:\signup_demo\src\components\btn.js
 
 w.Components['btn'] = {
   template: "<label v-bind:for=focusId class=btn v-on:click=onClick><slot></slot></label>",
@@ -212,11 +215,11 @@ w.Components['btn'] = {
 
 Vue.component('btn', w.Components['btn']);
 
-// End of /Users/jpetrov/Work/signup_demo/src/components/btn.js
+// End of D:\signup_demo\src\components\btn.js
 })(window);
 (function(w){
 "use strict";
-// File /Users/jpetrov/Work/signup_demo/src/components/field.js
+// File D:\signup_demo\src\components\field.js
 
 w.Components['field'] = {
 	template: "<label class=app-field v-bind:class=\"[ activeClass, placeClass, errorClass ]\" v-on:click=\"$emit(\'click\')\"><span class=app-field__caption>{{ dynamicLabel }}</span> <input v-if=!textarea class=app-field__input v-bind:id=[id] v-bind:name=[id] v-bind:type=type v-bind:value=value v-on:focus=setfocus($event.target.value) v-on:blur=unfocus v-on:input=\"$emit(\'input\', $event.target.value)\" v-on:change=\"$emit(\'input\', $event.target.value)\" v-bind:readonly=readonly v-bind:tabindex=tabindex> <textarea v-if=!!textarea rows=3 class=app-field__input_multiline v-bind:id=[id] v-bind:name=[id] v-on:focus=setfocus($event.target.value) v-on:blur=unfocus v-on:input=\"$emit(\'input\', $event.target.value)\" v-bind:style=fixIphone>{{ value }}</textarea></label>",
@@ -243,7 +246,7 @@ w.Components['field'] = {
 	},
 	computed: {
 		activeClass: function() {
-			if (this.focus || this.value.length != 0) {
+			if (this.focus || this.value && this.value.length != 0) {
 				return 'focus';
 			} else {
 				return '';
@@ -293,11 +296,11 @@ w.Components['field'] = {
 
 Vue.component('field', w.Components['field']);
 
-// End of /Users/jpetrov/Work/signup_demo/src/components/field.js
+// End of D:\signup_demo\src\components\field.js
 })(window);
 (function(w){
 "use strict";
-// File /Users/jpetrov/Work/signup_demo/src/components/popup.js
+// File D:\signup_demo\src\components\popup.js
 
 w.Components['popup'] = {
 	template: "<transition name=popup-transition><div class=popup-backdrop v-show=isOpen><div class=popup-content><slot></slot></div></div></transition>",
@@ -312,15 +315,15 @@ w.Components['popup'] = {
 
 Vue.component('popup', w.Components['popup']);
 
-// End of /Users/jpetrov/Work/signup_demo/src/components/popup.js
+// End of D:\signup_demo\src\components\popup.js
 })(window);
 (function(w){
 "use strict";
-// File /Users/jpetrov/Work/signup_demo/src/components/uploader.js
+// File D:\signup_demo\src\components\uploader.js
 
 w.Components['uploader'] = {
-  props: ['type', 'label', 'labelLoading', 'labelDone', 'labelError', 'id', 'accept', 'subscript', 'displayValue'],
-  template: "<label class=\"app-field upload-field\" v-bind:class=\"{loading: isLoading, loaded: (!isLoading &amp;&amp; displayValue &amp;&amp; displayValue != \'\'), focus: (displayValue &amp;&amp; displayValue != \'\' &amp;&amp; type == \'file\'), \'avatar-layout\': (type == \'avatar\')}\" v-on:click=\"$emit(\'click\')\"><span class=app-field__caption>{{ dynamicLabel }} <span class=subscript v-if=subscript>{{ subscript }}</span> </span><span class=app-field__input v-html=\"type == \'avatar\' ? \'\' : content\" v-bind:style=styleObject></span><div class=upload-field__icon><svg width=32 height=32 viewBox=\"0 0 32 32\" version=1.1 xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink><g id=Canvas fill=none><g id=plus><circle id=Ellipse cx=16 cy=16 r=16 fill=#E3E3E3></circle><rect id=\"Rectangle 2\" width=2 height=16 transform=\"translate(15 8)\" fill=white></rect><rect id=Rectangle width=16 height=2 transform=\"translate(8 15)\" fill=white></rect></g></g></svg></div><div class=upload-field__loading><div class=spinner></div></div><input class=upload-field__hidden-input v-bind:id=[id] type=file v-on:change=onUpload($event.target)></label>",
+  props: ['type', 'label', 'labelLoading', 'labelDone', 'labelError', 'id', 'accept', 'subscript', 'displayValue', 'src'],
+  template: "<label class=\"app-field upload-field\" v-bind:class=\"{loading: isLoading, loaded: (!isLoading &amp;&amp; (displayValue &amp;&amp; displayValue !== \'\' || src &amp;&amp; src !==\'\')), focus: (displayValue &amp;&amp; displayValue != \'\' &amp;&amp; type == \'file\'), \'avatar-layout\': (type == \'avatar\')}\" v-on:click=\"$emit(\'click\')\"><span class=app-field__caption>{{ dynamicLabel }} <span class=subscript v-if=subscript>{{ subscript }}</span> </span><span class=app-field__input v-html=\"type == \'avatar\' ? \'\' : content\" v-bind:style=styleObject></span><div class=upload-field__icon><svg width=32 height=32 viewBox=\"0 0 32 32\" version=1.1 xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink><g id=Canvas fill=none><g id=plus><circle id=Ellipse cx=16 cy=16 r=16 fill=#E3E3E3></circle><rect id=\"Rectangle 2\" width=2 height=16 transform=\"translate(15 8)\" fill=white></rect><rect id=Rectangle width=16 height=2 transform=\"translate(8 15)\" fill=white></rect></g></g></svg></div><div class=upload-field__loading><div class=spinner></div></div><input class=upload-field__hidden-input v-bind:id=[id] type=file v-on:change=onUpload($event.target)></label>",
   data: function() {
     return {
       content: this.displayValue,
@@ -370,61 +373,6 @@ w.Components['uploader'] = {
 					this.dynamicLabel = this.labelError;
 				}
 			}, this));
-    },
-    uploadDiploma: function(elem) {
-      this.content = '' + elem.files[0].name;
-
-      w.utils.toggleLoad(elem, true);
-
-      var body = new FormData();
-      body.append(elem.files[0].name, elem.files[0]);
-      
-      w.utils.ajax({
-        url: '/Diploma/Upload',
-        method: 'POST',
-        contentType: 'multipart/form-data',
-        data: body
-      }).then(_.bind(function(response){
-        w.utils.toggleLoad(elem, false);
-      }, this), _.bind(function(error) {
-        w.utils.toggleLoad(elem, false);
-        console.error(error);
-        w.utils.showErrorMessage();
-      }, this));
-    },
-    uploadAvatar: function(elem) {
-      // var reader = new FileReader();
-
-      // reader.addEventListener('load', _.bind(function() {
-      //   this.content = '&nbsp;';
-
-      //   this.styleObject = {
-      //     backgroundImage: 'url("' + reader.result + '")'
-      //   }
-      // }, this));
-
-      // reader.readAsDataURL(elem.files[0]);
-      this.content = '' + elem.files[0].name;
-
-      w.utils.toggleLoad(elem, true);
-
-      var body = new FormData();
-      body.append(elem.files[0].name, elem.files[0]);
-      
-      w.utils.ajax({
-        url: '/FileUpload.ashx?TypeID=2&ID=0',
-        method: 'POST',
-        contentType: 'multipart/form-data',
-        data: body
-      }).then(_.bind(function(response){
-        w.utils.toggleLoad(elem, false);
-        
-        this.src = response;
-      }, this), _.bind(function(error) {
-        w.utils.toggleLoad(elem, false);
-        console.error(error);
-        w.utils.showErrorMessage();
-      }, this));
     }
   }
 
@@ -432,11 +380,11 @@ w.Components['uploader'] = {
 
 Vue.component('uploader', w.Components['uploader']);
 
-// End of /Users/jpetrov/Work/signup_demo/src/components/uploader.js
+// End of D:\signup_demo\src\components\uploader.js
 })(window);
 (function(w){
 "use strict";
-// File /Users/jpetrov/Work/signup_demo/src/js/main.js
+// File D:\signup_demo\src\js\main.js
 
 w.Data = {
 	current: 'main', // current screen
@@ -632,6 +580,7 @@ w.App = new Vue({
 					this.registration.foldpass = viewModel.Password;
 					this.registration.fnewpass = viewModel.Password.toString();
 					this.registration.avatarSrc = viewModel.AvatarUrl;
+					this.registration.fphone = viewModel.MobilePhone;
 				}
 			}, this), _.bind(function (error) {
 				this.main.sendingRequest = false;
@@ -841,7 +790,8 @@ w.App = new Vue({
 			this._route('registration1');
 		},
 		routeRegStepTwo: function(btn) {
-			if(!this.isValidEmail) return;
+			if(!this.isValidEmail || this.main.sendingRequest)
+				return;
 
 			// w.utils._fakeLoad(btn, this, function() {
 			// 	var user = this.checkUser();
@@ -1134,7 +1084,11 @@ w.App = new Vue({
 			this.$refs['mErrorNewUserList'] && this.$refs['mErrorNewUserList'].scrollTo(0, 0);
 
 			if (this.registration.fhigheredu.Name !== '') {
-				this.registration.suggestedEduItems = w.utils.filterSubstr(this.registration.fhigheredu.Name, w._he);
+				this.registration.suggestedEduItems = w.utils.filterSubstr(
+					this.registration.fhigheredu.Name,
+					w._he,
+					function (e){ return e.Name; }
+				);
 			} else {
 				this.registration.suggestedEduItems = w._he;
 			}
@@ -1149,7 +1103,11 @@ w.App = new Vue({
 			this.$refs['mErrorNewUserList'] && this.$refs['mErrorNewUserList'].scrollTo(0, 0);
 
 			if (this.registration.fmajor.Name !== '') {
-				this.registration.suggestedMajorItems = w.utils.filterSubstr(this.registration.fmajor.Name, w._majors);
+				this.registration.suggestedMajorItems = w.utils.filterSubstr(
+					this.registration.fmajor.Name,
+					w._majors,
+					function (e){ return e.Name; }
+				);
 			} else {
 				this.registration.suggestedMajorItems = w._majors;
 			}
@@ -1191,7 +1149,8 @@ w.App = new Vue({
 				UniversityId: this.registration.fhigheredu.Id === -1 ? null : this.registration.fhigheredu.Id,
 				SpecialityId: this.registration.fmajor.Id === -1 ? null : this.registration.fmajor.Id,
 				GraduatedAt: new Date(graduationYear, 6, 1).toISOString(),
-				NewPassword: this.registration.fnewpass && this.registration.foldpass !== this.registration.fnewpass ? this.registration.fnewpass : null
+				NewPassword: this.registration.fnewpass && this.registration.foldpass !== this.registration.fnewpass ? this.registration.fnewpass : null,
+				MobilePhone: this.registration.fphone
 			};
 
 			w.utils.ajax({
@@ -1265,11 +1224,39 @@ w.App = new Vue({
 			// })
 		},
 		uploadDiploma: function(input, cb) {
-			console.dir(input.files[0].name);
 			this.registration.fdocument = input.files[0].name;
-			setTimeout(function() {
+
+			var body = new FormData();
+			body.append(input.files[0].name, input.files[0]);
+			
+			w.utils.ajax({
+				url: '/Diploma/Upload',
+				method: 'POST',
+				contentType: 'multipart/form-data',
+				data: body
+			}).then(function(response){
 				cb(true);
-			}, 2000);
+			}, function(error) {
+				console.error(error);
+				cb(false);
+			});
+		},
+		uploadAvatar: function(input, cb) {
+			var body = new FormData();
+			body.append(input.files[0].name, input.files[0]);
+			
+			w.utils.ajax({
+			  url: '/FileUpload.ashx?TypeID=2&ID=0',
+			  method: 'POST',
+			  contentType: 'multipart/form-data',
+			  data: body
+			}).then(_.bind(function (response) {
+				this.registration.avatarSrc = response;
+				cb(true);
+			}, function(error) {
+				console.error(error);
+				cb(false);
+			}));
 		}
 	},
 	watch: {
@@ -1286,5 +1273,5 @@ w.App = new Vue({
 
 App.$mount('#app');
 
-// End of /Users/jpetrov/Work/signup_demo/src/js/main.js
+// End of D:\signup_demo\src\js\main.js
 })(window);

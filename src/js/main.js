@@ -192,6 +192,7 @@ w.App = new Vue({
 					this.registration.foldpass = viewModel.Password;
 					this.registration.fnewpass = viewModel.Password.toString();
 					this.registration.avatarSrc = viewModel.AvatarUrl;
+					this.registration.fphone = viewModel.MobilePhone;
 				}
 			}, this), _.bind(function (error) {
 				this.main.sendingRequest = false;
@@ -695,7 +696,11 @@ w.App = new Vue({
 			this.$refs['mErrorNewUserList'] && this.$refs['mErrorNewUserList'].scrollTo(0, 0);
 
 			if (this.registration.fhigheredu.Name !== '') {
-				this.registration.suggestedEduItems = w.utils.filterSubstr(this.registration.fhigheredu.Name, w._he);
+				this.registration.suggestedEduItems = w.utils.filterSubstr(
+					this.registration.fhigheredu.Name,
+					w._he,
+					function (e){ return e.Name; }
+				);
 			} else {
 				this.registration.suggestedEduItems = w._he;
 			}
@@ -710,7 +715,11 @@ w.App = new Vue({
 			this.$refs['mErrorNewUserList'] && this.$refs['mErrorNewUserList'].scrollTo(0, 0);
 
 			if (this.registration.fmajor.Name !== '') {
-				this.registration.suggestedMajorItems = w.utils.filterSubstr(this.registration.fmajor.Name, w._majors);
+				this.registration.suggestedMajorItems = w.utils.filterSubstr(
+					this.registration.fmajor.Name,
+					w._majors,
+					function (e){ return e.Name; }
+				);
 			} else {
 				this.registration.suggestedMajorItems = w._majors;
 			}
@@ -752,7 +761,8 @@ w.App = new Vue({
 				UniversityId: this.registration.fhigheredu.Id === -1 ? null : this.registration.fhigheredu.Id,
 				SpecialityId: this.registration.fmajor.Id === -1 ? null : this.registration.fmajor.Id,
 				GraduatedAt: new Date(graduationYear, 6, 1).toISOString(),
-				NewPassword: this.registration.fnewpass && this.registration.foldpass !== this.registration.fnewpass ? this.registration.fnewpass : null
+				NewPassword: this.registration.fnewpass && this.registration.foldpass !== this.registration.fnewpass ? this.registration.fnewpass : null,
+				MobilePhone: this.registration.fphone
 			};
 
 			w.utils.ajax({
@@ -826,11 +836,39 @@ w.App = new Vue({
 			// })
 		},
 		uploadDiploma: function(input, cb) {
-			console.dir(input.files[0].name);
 			this.registration.fdocument = input.files[0].name;
-			setTimeout(function() {
+
+			var body = new FormData();
+			body.append(input.files[0].name, input.files[0]);
+			
+			w.utils.ajax({
+				url: '/Diploma/Upload',
+				method: 'POST',
+				contentType: 'multipart/form-data',
+				data: body
+			}).then(function(response){
 				cb(true);
-			}, 2000);
+			}, function(error) {
+				console.error(error);
+				cb(false);
+			});
+		},
+		uploadAvatar: function(input, cb) {
+			var body = new FormData();
+			body.append(input.files[0].name, input.files[0]);
+			
+			w.utils.ajax({
+			  url: '/FileUpload.ashx?TypeID=2&ID=0',
+			  method: 'POST',
+			  contentType: 'multipart/form-data',
+			  data: body
+			}).then(_.bind(function (response) {
+				this.registration.avatarSrc = response;
+				cb(true);
+			}, function(error) {
+				console.error(error);
+				cb(false);
+			}));
 		}
 	},
 	watch: {

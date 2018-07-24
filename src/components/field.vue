@@ -52,7 +52,7 @@ w.Components['field'] = {
 	},
 	computed: {
 		activeClass: function() {
-			if (this.focus || this.value.length != 0) {
+			if (this.focus || this.value && this.value.length != 0) {
 				return 'focus';
 			} else {
 				return '';

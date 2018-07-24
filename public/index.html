@@ -467,7 +467,7 @@
 								</div>
 							</div> -->
 							<div class="fieldset">
-								<uploader id="avatar-uploader" type="avatar" label="Загрузить фотографию" accept="image/*" v-bind:src="registration.avatarSrc" subscript="На фото должно быть различимо видно ваше лицо"></uploader>
+								<uploader id="avatar-uploader" type="avatar" label="Загрузить фотографию" accept="image/*" v-bind:src="registration.avatarSrc" subscript="На фото должно быть различимо видно ваше лицо" v-on:change="uploadAvatar"></uploader>
 							</div>
 
 

@@ -51,24 +51,27 @@ w.utils = {
 	easeOutCubic: function(currentIteration, startValue, changeInValue, totalIterations) {
 		return changeInValue * (Math.pow(currentIteration / totalIterations - 1, 3) + 1) + startValue;
 	},
-  easeInCubic: function(currentIteration, startValue, changeInValue, totalIterations) {
-  	return changeInValue * Math.pow(currentIteration / totalIterations, 3) + startValue;
-  },
-  filterSubstr( _str, arr ) {
-    var str = _str.trim().toLowerCase();
-    var result = [];
-    arr.forEach(function(_elem) {
-      var elem = _elem.toLowerCase();
-      if(elem.indexOf(str) != -1) {
-        result.push(_elem);
-      }
-    });
+	easeInCubic: function(currentIteration, startValue, changeInValue, totalIterations) {
+		return changeInValue * Math.pow(currentIteration / totalIterations, 3) + startValue;
+	},
+	filterSubstr( _str, arr, propertySelector) {
+		var str = _str.trim().toLowerCase();
+		var result = [];
+		arr.forEach(function(_elem) {
+			var property = propertySelector ? propertySelector(_elem) : _elem;
+			var elem = property.toLowerCase();
+			if(elem.indexOf(str) != -1) {
+				result.push(_elem);
+			}
+		});
 
-    result.sort(function(a, b) {
-      return (a.toLowerCase().indexOf(str) - b.toLowerCase().indexOf(str));
-    });
+		result.sort(function(a, b) {
+			var aProp = propertySelector ? propertySelector(a) : a;
+			var bProp = propertySelector ? propertySelector(b) : b;
+			return (aProp.toLowerCase().indexOf(str) - bProp.toLowerCase().indexOf(str));
+		});
 
-    return result;
+		return result;
 	},
 
 	_fakeLoad: function(elem, ctx, fn) {
