@@ -823,6 +823,13 @@ w.App = new Vue({
 			// 		alert('Пароль отправлен на почту ' + this.email);
 			// 	}, this), 200);
 			// })
+		},
+		uploadDiploma: function(input, cb) {
+			console.dir(input.files[0].name);
+			this.registration.fdocument = input.files[0].name;
+			setTimeout(function() {
+				cb(true);
+			}, 2000);
 		}
 	},
 	watch: {

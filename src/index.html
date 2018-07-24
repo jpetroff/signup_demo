@@ -493,7 +493,14 @@
 								<field id="fbirthyear" v-model="registration.fgraduationyear" type="number" label="Год получения диплома"></field>
 							</div>
 							<div class="fieldset" v-if="!registration.hasDiploma">
-								<uploader id="diploma-uploader" type="file" label="Прикрепить диплом" accept="image/*,.pdf"></uploader>
+								<uploader id="diploma-uploader" 
+									type="file" label="Прикрепить диплом" 
+									accept="image/*,.pdf" 
+									v-on:change="uploadDiploma"
+									label-loading="Загружаю файл..."
+									label-done="Диплом загружен"
+									v-bind:display-value="registration.fdocument">
+								</uploader>
 							</div>
 						</div>
 
