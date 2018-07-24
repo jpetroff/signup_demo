@@ -107,7 +107,7 @@ w.utils = {
 		if (!url) return new Promise(function(resolve,reject){reject(Error('No URL provided'))});
 
 		var query = [];
-		if (data != null && typeof data == 'object' && method !== 'POST') {
+		if (data != null && typeof data == 'object' && (method == 'POST' && contentType === "application/x-www-form-urlencoded" || method !== 'POST')) {
 			for (var key in data) {
 				if (!data.hasOwnProperty(key)) continue;
 				query.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));

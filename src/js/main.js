@@ -401,7 +401,8 @@ w.App = new Vue({
 			this._route('registration1');
 		},
 		routeRegStepTwo: function(btn) {
-			if(!this.isValidEmail) return;
+			if(!this.isValidEmail || this.main.sendingRequest)
+				return;
 
 			// w.utils._fakeLoad(btn, this, function() {
 			// 	var user = this.checkUser();
