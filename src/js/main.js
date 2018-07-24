@@ -865,10 +865,10 @@ w.App = new Vue({
 			}).then(_.bind(function (response) {
 				this.registration.avatarSrc = response;
 				cb(true);
-			}, function(error) {
+			}, this), function(error) {
 				console.error(error);
 				cb(false);
-			}));
+			});
 		}
 	},
 	watch: {
