@@ -86,8 +86,6 @@ w.utils = {
 		var loadingT = Math.round( Math.random() * 1500 ) + 500;
 		elem.classList.add('loading');
 		
-		console.log('!!', loadingT);
-
 		setTimeout(function() {
 			w.requestAnimationFrame(function() { elem.classList.remove('loading')} );
 			fn.apply(ctx);
@@ -104,7 +102,7 @@ w.utils = {
 		elem.classList.toggle('loading', on);
 	},
 
-	// @TODO: add Promise polyfill
+	// TODO: add Promise polyfill
 	ajax: function(opts) {
 		var data = opts.data || null;
 		var method = typeof opts.method !== 'undefined' ? opts.method : 'GET';
@@ -116,15 +114,15 @@ w.utils = {
 		var query = [];
 		if (data != null && typeof data == 'object' && (method == 'POST' && contentType === "application/x-www-form-urlencoded" || method !== 'POST')) {
 			for (var key in data) {
-				if (!data.hasOwnProperty(key)) continue;
+				if (!data.hasOwnProperty(key))
+					continue;
+
 				query.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
 			}
 			data = query.join('&');
 
 			if ('' == data) data = null;
 		}
-
-		// console.log(data);
 
 		return new Promise(function(resolve, reject) {
 			// Do the usual XHR stuff
@@ -135,9 +133,11 @@ w.utils = {
 			} else {
 				req.open(method, url+'?'+data);
 			}
-			// console.log(url+'?'+data);
 
-			if (method == 'POST' && contentType !== 'multipart/form-data') req.setRequestHeader("Content-type", contentType);
+			if (method == 'POST' && contentType !== 'multipart/form-data') {
+				req.setRequestHeader("Content-type", contentType);
+			}
+			
 			req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 
 			req.onload = function() {
@@ -632,7 +632,6 @@ w.App = new Vue({
 			}
 		},
 		// unflagError(key) {
-		// 	console.log(key);
 		// 	this.$set(this, key, null);
 		// },
 		routeHome: function() {
@@ -656,18 +655,18 @@ w.App = new Vue({
 			// this._route('social');
 		},
 		routeFeed: function() {
-			this._route('feed');
-			setTimeout(function() {
-				alert('Вы успешно авторизовались на сайте');
-			}, 200);
+			//this._route('feed');
+			// setTimeout(function() {
+			// 	alert('Вы успешно авторизовались на сайте');
+			// }, 200);
 		},
 		checkLogin: function(btn) {
-			if (!this.email || !this.password || !this.isValidEmail || this.main.sendingRequest) {
+			if (!this.main.validLogin || this.main.sendingRequest) {
 				return;
 			}
 
 			var body = {
-				Email: this.email,
+				Email: this.email || this.phone,
 				Password: this.password
 			};
 
@@ -700,8 +699,6 @@ w.App = new Vue({
 			// 	if(btn && btn.classList) { btn.classList.remove('loading')}
 			// 	var user = this.checkUser();
 
-			// 	console.log(user);
-
 			// 	if( user && user.password && this.password == user.password ) {
 			// 		this.routeFeed();
 			// 	} else if (user && user.password && this.password != user.password ) {
@@ -721,29 +718,27 @@ w.App = new Vue({
 		},
 		onSocialNext: function() {
 			// 0 – new user, 1 – signed up user
-			var user = this.checkUser();
+			//var user = this.checkUser();
 
-			console.log(user);
+			// var isExisting = (user && user.password);
 
-			var isExisting = (user && user.password);
+			// if ( !isExisting && this.social.prev == 'main') {
+			// 	// новый пользователь при входе в аккаунт
 
-			if ( !isExisting && this.social.prev == 'main') {
-				// новый пользователь при входе в аккаунт
+			// 	this.routeRegStepOne();
+			// 	this.registration.suggestReg = true;
+			// 	this.registration.socialReg = true;
+			// } else if ( !isExisting && this.social.prev == 'registration1') {
+			// 	// новый пользователь при регистрации
 
-				this.routeRegStepOne();
-				this.registration.suggestReg = true;
-				this.registration.socialReg = true;
-			} else if ( !isExisting && this.social.prev == 'registration1') {
-				// новый пользователь при регистрации
+			// 	this.routeRegStepOne();
+			// 	this.registration.suggestReg = false;
+			// 	this.registration.socialReg = true;
+			// } else if(isExisting) {
+			// 	// существующий пользователь, логиним
 
-				this.routeRegStepOne();
-				this.registration.suggestReg = false;
-				this.registration.socialReg = true;
-			} else if(isExisting) {
-				// существующий пользователь, логиним
-
-				this.routeFeed();
-			}
+			// 	// this.routeFeed();
+			// }
 		},
 		validateEmail: function(val) {
 			// return this.isValidEmail = (val.indexOf('@') != -1);
@@ -806,8 +801,6 @@ w.App = new Vue({
 			// 	this.registration.existingInfo = user || {};
 			// 	this.registration.existingInfo.email = this.email;
 
-			// 	console.log(this.registration.existingInfo.name);
-
 			// 	this.current = 'registration2';
 			// })
 
@@ -842,8 +835,6 @@ w.App = new Vue({
 				// this.registration.existingInfo = user || {};
 				// this.registration.existingInfo.email = this.email;
 
-				// console.log(this.registration.existingInfo.name);
-
 				// this.current = 'registration2';
 			}, this), _.bind(function (error) {
 				w.utils.toggleLoad(btn, false);
@@ -866,7 +857,7 @@ w.App = new Vue({
 			this.countdownInterval = window.setInterval(_.bind(function () {
 				this.smsCodeCountdown -= 1;
 				if (this.smsCodeCountdown <= 0) {
-					window.clearInterval(countdownInterval);
+					window.clearInterval(this.countdownInterval);
 					this.canRequestSmsCode = true;
 				}
 			}, this), 980);
@@ -974,8 +965,6 @@ w.App = new Vue({
 			} else {
 				this.restore.validAccount = false;
 			}
-
-			console.log(this.restore.validAccount);
 		},
 		checkSmsCode: function () {
 			if(this.smsCode == '') return;
@@ -1026,7 +1015,6 @@ w.App = new Vue({
 			}
 		},
 		validateLogin: function( clearPassErr ) {
-			console.log(window.innerHeight);
 			if( this.validateEmail(this.main.loginField) ) {
 				this.phone = '';
 				this.isValidPhone = false;
@@ -1078,7 +1066,6 @@ w.App = new Vue({
 			return true;
 		},
 		focusSelectEdu: function() {
-			console.log(window.innerHeight);
 		},
 		sortEduList: function () {
 			this.$refs['mErrorNewUserList'] && this.$refs['mErrorNewUserList'].scrollTo(0, 0);
@@ -1253,10 +1240,10 @@ w.App = new Vue({
 			}).then(_.bind(function (response) {
 				this.registration.avatarSrc = response;
 				cb(true);
-			}, function(error) {
+			}, this), function(error) {
 				console.error(error);
 				cb(false);
-			}));
+			});
 		}
 	},
 	watch: {

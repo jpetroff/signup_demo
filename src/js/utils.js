@@ -82,8 +82,6 @@ w.utils = {
 		var loadingT = Math.round( Math.random() * 1500 ) + 500;
 		elem.classList.add('loading');
 		
-		console.log('!!', loadingT);
-
 		setTimeout(function() {
 			w.requestAnimationFrame(function() { elem.classList.remove('loading')} );
 			fn.apply(ctx);
@@ -100,7 +98,7 @@ w.utils = {
 		elem.classList.toggle('loading', on);
 	},
 
-	// @TODO: add Promise polyfill
+	// TODO: add Promise polyfill
 	ajax: function(opts) {
 		var data = opts.data || null;
 		var method = typeof opts.method !== 'undefined' ? opts.method : 'GET';
@@ -112,15 +110,15 @@ w.utils = {
 		var query = [];
 		if (data != null && typeof data == 'object' && (method == 'POST' && contentType === "application/x-www-form-urlencoded" || method !== 'POST')) {
 			for (var key in data) {
-				if (!data.hasOwnProperty(key)) continue;
+				if (!data.hasOwnProperty(key))
+					continue;
+
 				query.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
 			}
 			data = query.join('&');
 
 			if ('' == data) data = null;
 		}
-
-		// console.log(data);
 
 		return new Promise(function(resolve, reject) {
 			// Do the usual XHR stuff
@@ -131,9 +129,11 @@ w.utils = {
 			} else {
 				req.open(method, url+'?'+data);
 			}
-			// console.log(url+'?'+data);
 
-			if (method == 'POST' && contentType !== 'multipart/form-data') req.setRequestHeader("Content-type", contentType);
+			if (method == 'POST' && contentType !== 'multipart/form-data') {
+				req.setRequestHeader("Content-type", contentType);
+			}
+			
 			req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 
 			req.onload = function() {
