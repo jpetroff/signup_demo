@@ -426,7 +426,7 @@ w.App = new Vue({
 			this.isValidCode = matching && matching.length === 1;
 		},
 		loginCode: function(btn) {
-			if (this.main.sendingRequest)
+			if (this.main.sendingRequest || !this.isValidCode)
 				return;
 
 			w.utils.toggleLoad(btn, true);
