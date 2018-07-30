@@ -2,7 +2,6 @@ w.Data = {
 	current: 'main', // current screen
 
 	// creds
-	// email: 'e.rozhdestvenskaya@doktornarabote.cc',
 	email: '',
 	isValidEmail: false,
 	isExistingAccount: false,
@@ -77,45 +76,12 @@ w.Data = {
 
 	},
 	restore: {
-		// accData: {
-		//   name: '',
-		//   code: '1234',
-		//   name: 'Володина Ольга Александровна',
-		//   pic: '/img/userpic.jpeg',
-		//   app: ['vk']
-		// },
 		accData: {},
 		accountId: '',
 		validAccount: false,
 		error: false,
 		state: 0, // 0 - запрос идентификатора, 1 - пароль на почту или соц. сеть, 2 - телефон, 3 - диплом
 		form: 'https://docs.google.com/forms/d/e/1FAIpQLSdQppOFU75_mrrfzUtfR-sFexdB1J7M0ic9LQ1KdAWrWssGcA/viewform'
-	},
-
-	testUsers: {
-		'exist@dnr.cc': {
-			password: '123',
-			name: 'Константинопольский Константин Константинович',
-			pic: '/img/no_photo.jpeg',
-			diploma: ['АБ 99999', '10.07.2017']
-		},
-		'exist_phone@dnr.cc': {
-			password: '123',
-			phone: '9647025299',
-			code: '1234',
-			name: 'Петров Александр Иванович',
-			pic: '/img/userpic2.png',
-			diploma: ['АБ 99999', '10.07.2017']
-		},
-		'exist_vk@dnr.cc': {
-			password: '123',
-			code: '1234',
-			name: 'Константинопольский Александр Иванович',
-			app: ['vk'],
-			pic: '/img/userpic2.png',
-			diploma: ['АБ 99999', '10.07.2017']
-		},
-		'9647025299': 'exist_phone@dnr.cc'
 	},
 
 	appNames: {
@@ -243,9 +209,6 @@ w.App = new Vue({
 				this._route('main');
 			}
 		},
-		// unflagError(key) {
-		// 	this.$set(this, key, null);
-		// },
 		routeHome: function() {
 			this._route('main');
 		},
@@ -257,20 +220,9 @@ w.App = new Vue({
 			{
 				console.error(error);
 			}
-			// this.social.app = app;
-			// this.social.prev = this.current;
-
-			// if(this.social.app == 'vk') this.email = 'exist_vk@dnr.cc';
-			// if(this.social.app == 'fb') this.email = 'new@dnr.cc';
-			// this.isValidEmail = true;
-
-			// this._route('social');
 		},
 		routeFeed: function() {
-			//this._route('feed');
-			// setTimeout(function() {
-			// 	alert('Вы успешно авторизовались на сайте');
-			// }, 200);
+			
 		},
 		checkLogin: function(btn) {
 			if (!this.main.validLogin || this.main.sendingRequest) {
@@ -306,51 +258,10 @@ w.App = new Vue({
 				this.main.sendingRequest = false;
 				w.utils.showErrorMessage();
 			}, this));
-			
-			// w.utils._fakeLoad(btn, this, function() {
-			// 	if(btn && btn.classList) { btn.classList.remove('loading')}
-			// 	var user = this.checkUser();
-
-			// 	if( user && user.password && this.password == user.password ) {
-			// 		this.routeFeed();
-			// 	} else if (user && user.password && this.password != user.password ) {
-			// 		this.main.isErrorPass = 'wrongpass';
-			// 		this.main.validLogin = false;
-			// 		setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 250);
-			// 	} else if ( this.email && !(user && user.password) ) {
-			// 		this.typeModal = 'mErrorNewUser';
-			// 		this.hasModal = true;
-			// 	} else if ( this.phone && !user) {
-			// 		this.main.isErrorLogin = 'unknownnumber';
-			// 		this.main.validLogin = false;
-			// 		setTimeout(_.bind(function(){this.main.suggestRestoreAccess = true;}, this), 250);
-			// 	}
-			// });
 
 		},
 		onSocialNext: function() {
-			// 0 – new user, 1 – signed up user
-			//var user = this.checkUser();
-
-			// var isExisting = (user && user.password);
-
-			// if ( !isExisting && this.social.prev == 'main') {
-			// 	// новый пользователь при входе в аккаунт
-
-			// 	this.routeRegStepOne();
-			// 	this.registration.suggestReg = true;
-			// 	this.registration.socialReg = true;
-			// } else if ( !isExisting && this.social.prev == 'registration1') {
-			// 	// новый пользователь при регистрации
-
-			// 	this.routeRegStepOne();
-			// 	this.registration.suggestReg = false;
-			// 	this.registration.socialReg = true;
-			// } else if(isExisting) {
-			// 	// существующий пользователь, логиним
-
-			// 	// this.routeFeed();
-			// }
+			
 		},
 		validateEmail: function(val) {
 			// return this.isValidEmail = (val.indexOf('@') != -1);
@@ -371,16 +282,8 @@ w.App = new Vue({
 				_email = this.email;
 			} else if (this.phone && this.isValidPhone) {
 				this.phone = this.phone.replace(/^(\+7|8)/, '');
-				_email = this.testUsers[this.phone];
 			} else {
 				return undefined;
-			}
-			var result = this.testUsers[_email];
-
-			if(!result) {
-				this.testUsers[this.email] = {
-					password: ''
-				}
 			}
 
 			return result;
@@ -399,22 +302,6 @@ w.App = new Vue({
 		routeRegStepTwo: function(btn) {
 			if(!this.isValidEmail || this.main.sendingRequest)
 				return;
-
-			// w.utils._fakeLoad(btn, this, function() {
-			// 	var user = this.checkUser();
-
-			// 	if (user && user.password && !this.registration.restoreForm) {
-			// 		this.hasModal = !!(this.email && this.isValidEmail && this.testUsers[this.email] && this.testUsers[this.email].password);
-			// 		this.typeModal = 'mErrorExistingUser'
-			// 		// this.routeHome();
-			// 		return true;
-			// 	}
-
-			// 	this.registration.existingInfo = user || {};
-			// 	this.registration.existingInfo.email = this.email;
-
-			// 	this.current = 'registration2';
-			// })
 
 			w.utils.toggleLoad(btn, true);
 			this.main.sendingRequest = true;
@@ -435,19 +322,6 @@ w.App = new Vue({
 
 				this.hasModal = this.email && this.isValidEmail;
 				this.typeModal = 'mErrorExistingUser';
-
-				// var user = this.checkUser();
-				// if (user && user.password && !this.registration.restoreForm) {
-				// 	this.hasModal = !!(this.email && this.isValidEmail && this.testUsers[this.email] && this.testUsers[this.email].password);
-				// 	this.typeModal = 'mErrorExistingUser'
-				// 	// this.routeHome();
-				// 	return true;
-				// }
-
-				// this.registration.existingInfo = user || {};
-				// this.registration.existingInfo.email = this.email;
-
-				// this.current = 'registration2';
 			}, this), _.bind(function (error) {
 				w.utils.toggleLoad(btn, false);
 				this.main.sendingRequest = false;
@@ -475,7 +349,7 @@ w.App = new Vue({
 			}, this), 980);
 		},
 		initRestore: function(btn) {
-			if(this.restore.accountId == '' || this.main.sendingRequest)
+			if(this.restore.accountId == '' || this.main.sendingRequest || !this.restore.validAccount)
 				return;
 			
 			this.main.sendingRequest = true;
@@ -497,7 +371,7 @@ w.App = new Vue({
 					this.restore.accData.email = userAuthMethods.Email;
 					this.restore.accData.phone = userAuthMethods.Phone;
 					this.codeSessionId = userAuthMethods.CodeSessionId;
-					if (userAuthMethods.Phone) {
+					if (userAuthMethods.Phone && this.codeSessionId) {
 						/* via mobile */
 						this.restore.state = 2;
 						this.startSmsCodeCountdown();
@@ -521,39 +395,6 @@ w.App = new Vue({
 				this.main.sendingRequest = false;
 				w.utils.showErrorMessage();
 			}, this));
-
-			// w.utils._fakeLoad(btn, this, function() {
-			// 	var user = this.checkUser();
-
-			// 	if( user && user.password ) {
-			// 		this.restore.accData = user;
-			// 		this.restore.accData.pic = user.pic || '/img/no_photo.jpeg';
-
-			// 		if( this.phone && this.isValidPhone && this.testUsers[this.phone]) {
-			// 			this.email = this.testUsers[this.phone];
-			// 			this.isValidEmail = true;
-			// 		}
-
-			// 		if( user.phone ) {
-
-			// 			this.restore.state = 2;
-
-			// 		} else if ( user.socialApp ) {
-
-			// 			this.restore.state = 3;
-
-			// 		} else {
-
-			// 			this.restore.state = 1;
-			// 		}
-
-
-			// 	} else {
-			// 		// нет такого пользователя
-			// 		this.restore.validAccount = false;
-			// 		this.restore.error = 'unknownrestore';
-			// 	}
-			// });
 		},
 		validateRestoreField: function() {
 			this.restore.error = '';
@@ -805,7 +646,7 @@ w.App = new Vue({
 				this.routeHome();
 
 				setTimeout(_.bind(function() {
-					alert('Пароль отправлен на почту ' + this.email);
+					alert('Пароль отправлен на почту');
 				}, this), 200);
 			}, this), _.bind(function(error) {
 				w.utils.toggleLoad(btn, false);
@@ -813,14 +654,6 @@ w.App = new Vue({
 				console.error(error);
 				w.utils.showErrorMessage();
 			}, this));
-
-			// w.utils._fakeLoad(btn, this, function() {
-			// 	this.password = '';
-			// 	this.routeHome();
-			// 	setTimeout(_.bind(function() {
-			// 		alert('Пароль отправлен на почту ' + this.email);
-			// 	}, this), 200);
-			// })
 		},
 		uploadDiploma: function(input, cb) {
 			this.registration.fdocument = input.files[0].name;
