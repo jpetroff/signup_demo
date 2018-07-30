@@ -40,9 +40,7 @@
 				v-bind:is-open="hasModal && typeModal === 'mErrorExistingUser' ">
 				<div class="header">Профиль уже существует</div>
 				<account-info
-					v-bind:name="testUsers[email] && testUsers[email].name"
 					v-bind:email="email"
-					v-bind:pic="testUsers[email] && testUsers[email].pic"
 				></account-info>
 
 				<btn focus-id="main-screen-password"
