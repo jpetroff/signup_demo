@@ -951,18 +951,49 @@ w.App = new Vue({
 			setTimeout(_.bind(function () { this.registration._transitionSelectEdu = false; this.hasModal = false; }, this), 300);
 		},
 		saveRegBlank: function(btn) {
-			if (this.main.sendingRequest)
+			if (this.main.sendingRequest) {
 				return;
+			}
+			
+			var errorMsg = "Заполните поля с шага 1 по шаг 3";
+			var isValidForm = true;
+
+			this.registration.fname = this.registration.fname.trim();
+			isValidForm = isValidForm && !!this.registration.fname;
+
+			this.registration.fsurname = this.registration.fsurname.trim();
+			isValidForm = isValidForm && !!this.registration.fsurname;
+
+			this.registration.fmiddlename = this.registration.fmiddlename.trim();
+			isValidForm = isValidForm && !!this.registration.fsurname;
+
+			isValidForm = isValidForm && !!this.registration.fhigheredu;
+			isValidForm = isValidForm && !!this.registration.fmajor;
+			isValidForm = isValidForm && !!this.registration.hasDiploma;
+
+			this.registration.foccupation = this.registration.foccupation.trim();
+			isValidForm = isValidForm && !!this.registration.foccupation;
+
+			this.registration.fjobtitle = this.registration.fjobtitle.trim();
+			isValidForm = isValidForm && !!this.registration.fjobtitle;
+
+			this.registration.fspecialty = this.registration.fspecialty.trim();
+			isValidForm = isValidForm && !!this.registration.fspecialty;
+			
+			if (!isValidForm) {
+				w.utils.showErrorMessage(errorMsg);
+				return;
+			}
 
 			var graduationYearMatching = this.registration.fgraduationyear.match(/^\d{4}$/);
 			if (!graduationYearMatching || graduationYearMatching.length === 0) {
-				w.utils.showErrorMessage("Некорректный год окончания ВУЗа.");
+				w.utils.showErrorMessage(errorMsg);
 				return;
 			}
 
 			var graduationYear = +graduationYearMatching[0];
 			if (graduationYear > new Date().getFullYear() || graduationYear < 1900) {
-				w.utils.showErrorMessage("Некорректный год окончания ВУЗа.");
+				w.utils.showErrorMessage(errorMsg);
 				return;
 			}
 
@@ -978,8 +1009,8 @@ w.App = new Vue({
 				WorkPosition: this.registration.fjobtitle,
 				DontWork: false,
 				NotDoctor: false,
-				UniversityId: this.registration.fhigheredu.Id === -1 ? null : this.registration.fhigheredu.Id,
-				SpecialityId: this.registration.fmajor.Id === -1 ? null : this.registration.fmajor.Id,
+				UniversityId: this.registration.fhigheredu.Id,
+				SpecialityId: this.registration.fmajor.Id,
 				GraduatedAt: new Date(graduationYear, 6, 1).toISOString(),
 				NewPassword: this.registration.fnewpass && this.registration.foldpass !== this.registration.fnewpass ? this.registration.fnewpass : null,
 				MobilePhone: this.registration.fphone
@@ -1064,6 +1095,7 @@ w.App = new Vue({
 				data: body
 			}).then(function(response){
 				cb(true);
+				this.registration.hasDiploma = true;
 			}, function(error) {
 				console.error(error);
 				cb(false);
