@@ -323,8 +323,8 @@ Vue.component('popup', w.Components['popup']);
 // File D:\signup_demo\src\components\uploader.js
 
 w.Components['uploader'] = {
-  props: ['type', 'label', 'labelLoading', 'labelDone', 'labelError', 'id', 'accept', 'subscript', 'displayValue', 'src'],
-  template: "<label class=\"app-field upload-field\" v-bind:class=\"{loading: isLoading, loaded: (!isLoading &amp;&amp; (displayValue &amp;&amp; displayValue !== \'\' || src &amp;&amp; src !==\'\')), focus: (displayValue &amp;&amp; displayValue != \'\' &amp;&amp; type == \'file\'), \'avatar-layout\': (type == \'avatar\')}\" v-on:click=\"$emit(\'click\')\"><span class=app-field__caption>{{ dynamicLabel }} <span class=subscript v-if=subscript>{{ subscript }}</span> </span><span class=app-field__input v-html=\"type == \'avatar\' ? \'\' : content\" v-bind:style=styleObject></span><div class=upload-field__icon><svg width=32 height=32 viewBox=\"0 0 32 32\" version=1.1 xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink><g id=Canvas fill=none><g id=plus><circle id=Ellipse cx=16 cy=16 r=16 fill=#E3E3E3></circle><rect id=\"Rectangle 2\" width=2 height=16 transform=\"translate(15 8)\" fill=white></rect><rect id=Rectangle width=16 height=2 transform=\"translate(8 15)\" fill=white></rect></g></g></svg></div><div class=upload-field__loading><div class=spinner></div></div><input class=upload-field__hidden-input v-bind:id=[id] type=file v-on:change=onUpload($event.target)></label>",
+  props: ['type', 'label', 'labelLoading', 'labelDone', 'labelError', 'id', 'accept', 'subscript', 'displayValue', 'src', 'accept'],
+  template: "<label class=\"app-field upload-field\" v-bind:class=\"{loading: isLoading, loaded: (!isLoading &amp;&amp; (displayValue &amp;&amp; displayValue !== \'\' || src &amp;&amp; src !==\'\')), focus: (displayValue &amp;&amp; displayValue != \'\' &amp;&amp; type == \'file\'), \'avatar-layout\': (type == \'avatar\')}\" v-on:click=\"$emit(\'click\')\"><span class=app-field__caption>{{ dynamicLabel }} <span class=subscript v-if=subscript>{{ subscript }}</span> </span><span class=app-field__input v-html=\"type == \'avatar\' ? \'\' : content\" v-bind:style=styleObject></span><div class=upload-field__icon><svg width=32 height=32 viewBox=\"0 0 32 32\" version=1.1 xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink><g id=Canvas fill=none><g id=plus><circle id=Ellipse cx=16 cy=16 r=16 fill=#E3E3E3></circle><rect id=\"Rectangle 2\" width=2 height=16 transform=\"translate(15 8)\" fill=white></rect><rect id=Rectangle width=16 height=2 transform=\"translate(8 15)\" fill=white></rect></g></g></svg></div><div class=upload-field__loading><div class=spinner></div></div><input class=upload-field__hidden-input v-bind:id=[id] type=file v-bind:accept=accept v-on:change=onUpload($event.target)></label>",
   data: function() {
     return {
       content: this.displayValue,
@@ -335,7 +335,8 @@ w.Components['uploader'] = {
       styleObject: {},
       name: null,
 			src: '',
-			isLoading: false
+			isLoading: false,
+			accept: ''
     }
   },
   watch: {
@@ -408,6 +409,8 @@ w.Data = {
 	isValidCode: false,
 	hasModal: false,
 	typeModal: 'mErrorNewUser', // < reg | existing | eduselect >
+	imageTypes: 'image/*',
+	imageAndPdfsTypes: 'image/*,.pdf',
 	
 	p: {
 		focusViewportHeight: window.innerHeight
@@ -1045,6 +1048,10 @@ w.App = new Vue({
 			}, this));
 		},
 		uploadDiploma: function(input, cb) {
+			if (input.files.length === 0) {
+				return;
+			}
+			
 			this.registration.fdocument = input.files[0].name;
 
 			var body = new FormData();
@@ -1063,6 +1070,10 @@ w.App = new Vue({
 			});
 		},
 		uploadAvatar: function(input, cb) {
+			if (input.files.length === 0) {
+				return;
+			}
+			
 			var body = new FormData();
 			body.append(input.files[0].name, input.files[0]);
 			

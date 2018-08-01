@@ -25,13 +25,14 @@
     <input class="upload-field__hidden-input"
       v-bind:id="[id]"
       type="file"
+			v-bind:accept="accept"
       v-on:change="onUpload($event.target)">
   </label>
 </template>
 
 <script>
 w.Components['uploader'] = {
-  props: ['type', 'label', 'labelLoading', 'labelDone', 'labelError', 'id', 'accept', 'subscript', 'displayValue', 'src'],
+  props: ['type', 'label', 'labelLoading', 'labelDone', 'labelError', 'id', 'accept', 'subscript', 'displayValue', 'src', 'accept'],
   template: "<%= template %>",
   data: function() {
     return {
@@ -43,7 +44,8 @@ w.Components['uploader'] = {
       styleObject: {},
       name: null,
 			src: '',
-			isLoading: false
+			isLoading: false,
+			accept: ''
     }
   },
   watch: {

@@ -19,6 +19,8 @@ w.Data = {
 	isValidCode: false,
 	hasModal: false,
 	typeModal: 'mErrorNewUser', // < reg | existing | eduselect >
+	imageTypes: 'image/*',
+	imageAndPdfsTypes: 'image/*,.pdf',
 	
 	p: {
 		focusViewportHeight: window.innerHeight
@@ -656,6 +658,10 @@ w.App = new Vue({
 			}, this));
 		},
 		uploadDiploma: function(input, cb) {
+			if (input.files.length === 0) {
+				return;
+			}
+			
 			this.registration.fdocument = input.files[0].name;
 
 			var body = new FormData();
@@ -674,6 +680,10 @@ w.App = new Vue({
 			});
 		},
 		uploadAvatar: function(input, cb) {
+			if (input.files.length === 0) {
+				return;
+			}
+			
 			var body = new FormData();
 			body.append(input.files[0].name, input.files[0]);
 			

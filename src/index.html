@@ -20,7 +20,7 @@
 
 				<div class="caption">
 					<span class="logo" v-show="current=='main'">
-						<img class="header-logo" src="/img/logo_full.png" srcset="/img/logo_full@2x.png 2x" alt="">
+						<img class="header-logo" src="https://files.doktornarabote.ru/dnr/index/img/logo_full.png" srcset="https://files.doktornarabote.ru/dnr/index/img/logo_full@2x.png 2x" alt="">
 					</span>
 					<span v-if="current=='registration1' || current == 'registration2'">Регистрация</span>
 					<span v-if="current=='restore'">Восстановить доступ</span>
@@ -112,7 +112,7 @@
 			<!-- <div class="screen" id="main-screen" v-bind:class="{show: (current == 'main'), hide: (current != 'main')}"> -->
 			<div class="screen" id="main-screen" v-show="current === 'main'">
 				<!-- <div class="header">
-					<img class="header-logo" src="/img/logo_full.png" srcset="/img/logo_full@2x.png 2x" alt="">
+					<img class="header-logo" src="https://files.doktornarabote.ru/dnr/index/img/logo_full.png" srcset="https://files.doktornarabote.ru/dnr/index/img/logo_full@2x.png 2x" alt="">
 				</div> -->
 				<div class="sign-up-block content">
 					<h1 class="sign-up-header">
@@ -157,14 +157,14 @@
 					</h2>
 					<div class="store-link-wrapper">
 						<a href="#" class="store-link play-market">
-							<img src="/img/play_market.png" srcset="/img/play_market@2x.png 2x" alt="">
+							<img src="https://files.doktornarabote.ru/dnr/index/img/play_market.png" srcset="https://files.doktornarabote.ru/dnr/index/img/play_market@2x.png 2x" alt="">
 						</a>
 						<a href="#" class="store-link app-store">
-							<img src="/img/app_store.png" srcset="/img/app_store@2x.png 2x" alt="">
+							<img src="https://files.doktornarabote.ru/dnr/index/img/app_store.png" srcset="https://files.doktornarabote.ru/dnr/index/img/app_store@2x.png 2x" alt="">
 						</a>
 					</div>
 					<div class="app-mockup">
-						<img src="/img/app.png" srcset="/img/app@2x.png 2x" alt="Новое приложение Доктор на работе – Лента врача" />
+						<img src="https://files.doktornarabote.ru/dnr/index/img/app.png" srcset="https://files.doktornarabote.ru/dnr/index/img/app@2x.png 2x" alt="Новое приложение Доктор на работе – Лента врача" />
 					</div>
 				</div>
 				<div class="content footer">
@@ -202,7 +202,7 @@
 
 			<div class="screen reg-screen" id="registration-1-screen" v-show="current == 'registration1'">
 				<!-- <div class="header">
-					<img v-on:click="routeHome" class="header-logo" src="/img/d_logo.png" srcset="/img/d_logo@2x.png 2x" alt="">
+					<img v-on:click="routeHome" class="header-logo" src="https://files.doktornarabote.ru/dnr/index/img/d_logo.png" srcset="https://files.doktornarabote.ru/dnr/index/img/d_logo@2x.png 2x" alt="">
 					<span class="title">Регистрация</span>
 				</div> -->
 				<div class="content">
@@ -254,7 +254,7 @@
 
 			<div class="screen" id="restore-access-screen" v-show="this.current === 'restore'">
 				<!-- <div class="header">
-					<img v-on:click="routeHome" class="header-logo" src="/img/d_logo.png" srcset="/img/d_logo@2x.png 2x" alt="">
+					<img v-on:click="routeHome" class="header-logo" src="https://files.doktornarabote.ru/dnr/index/img/d_logo.png" srcset="https://files.doktornarabote.ru/dnr/index/img/d_logo@2x.png 2x" alt="">
 					<span class="title">Восстановить доступ</span>
 				</div> -->
 				<div class="content">
@@ -340,7 +340,7 @@
 			<div class="screen reg-screen" v-bind:class="{ 'modal-locker' : hasModal}" id="registration-2-screen" v-show="current == 'registration2'">
 
 				<!-- <div class="header">
-					<img v-on:click="routeHome" class="header-logo" src="/img/d_logo.png" srcset="/img/d_logo@2x.png 2x" alt="">
+					<img v-on:click="routeHome" class="header-logo" src="https://files.doktornarabote.ru/dnr/index/img/d_logo.png" srcset="https://files.doktornarabote.ru/dnr/index/img/d_logo@2x.png 2x" alt="">
 					<span class="title" v-if="registration.restoreForm != true">Регистрация</span>
 					<span class="title" v-if="registration.restoreForm">Восстановить доступ</span>
 				</div> -->
@@ -465,7 +465,7 @@
 								</div>
 							</div> -->
 							<div class="fieldset">
-								<uploader id="avatar-uploader" type="avatar" label="Загрузить фотографию" accept="image/*" v-bind:src="registration.avatarSrc" subscript="На фото должно быть различимо видно ваше лицо" v-on:change="uploadAvatar"></uploader>
+								<uploader id="avatar-uploader" type="avatar" label="Загрузить фотографию" v-bind:src="registration.avatarSrc" v-bind:accept="imageTypes" subscript="На фото должно быть различимо видно ваше лицо" v-on:change="uploadAvatar"></uploader>
 							</div>
 
 
@@ -493,7 +493,7 @@
 							<div class="fieldset" v-if="!registration.hasDiploma">
 								<uploader id="diploma-uploader" 
 									type="file" label="Прикрепить диплом" 
-									accept="image/*,.pdf" 
+									v-bind:accept="imageAndPdfsTypes"
 									v-on:change="uploadDiploma"
 									label-loading="Загружаю файл..."
 									label-done="Диплом загружен"
