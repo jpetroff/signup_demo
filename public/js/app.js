@@ -140,17 +140,19 @@ w.utils = {
 			
 			req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 
-			req.onload = function() {
-				// This is called even on 404 etc
-				// so check the status
-				if (req.status >= 200 && req.status < 300) {
-					// Resolve the promise with the response text
-					resolve(req.response);
-				} else {
-					// Otherwise reject with the status text
-					// which will hopefully be a meaningful error
-					reject(Error(req.statusText));
-				}
+			req.onreadystatechange = function(e) {
+				if (req.readyState == 4) {
+					// This is called even on 404 etc
+					// so check the status
+					if (req.status >= 200 && req.status < 300) {
+						// Resolve the promise with the response text
+						resolve(req.response);
+					} else {
+						// Otherwise reject with the status text
+						// which will hopefully be a meaningful error
+						reject(Error(req.statusText));
+					}
+				 }
 			};
 
 			// Handle network errors
@@ -813,7 +815,7 @@ w.App = new Vue({
 			this.isValidCode = matching && matching.length === 1;
 		},
 		loginCode: function(btn) {
-			if (this.main.sendingRequest)
+			if (this.main.sendingRequest || !this.isValidCode)
 				return;
 
 			w.utils.toggleLoad(btn, true);

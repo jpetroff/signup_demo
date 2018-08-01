@@ -328,7 +328,7 @@
 										</div>
 								</div>
 							</div>
-							<div class="btn btn-text btn-sm btn-primary btn-next" v-show="!canRequestSmsCode">Отправить снова (через {{smsCodeCountdown}} сек)</div>
+							<div class="btn btn-text btn-sm btn-primary btn-next" v-show="!canRequestSmsCode && !main.sendingRequest">Отправить снова (через {{smsCodeCountdown}} сек)</div>
 							<div class="btn btn-text btn-sm btn-primary btn-next" v-on:click="initRestore($event.currentTarget)" v-show="canRequestSmsCode">Отправить снова</div>
 						</div>
 					</div>
