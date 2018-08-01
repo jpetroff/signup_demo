@@ -986,11 +986,11 @@ body {
   margin-bottom: 12px;
   padding: 0 12px;
 }
-.social-block {
+.sc-block {
   text-align: center;
   margin-top: 16px;
 }
-.social-block .social-btn {
+.sc-block .sc-btn {
   height: 44px;
   width: 44px;
   background-position: 6px 6px;
@@ -1000,46 +1000,46 @@ body {
   display: inline-block;
   margin-left: 8px;
 }
-.social-block .social-btn:first-child {
+.sc-block .sc-btn:first-child {
   margin-left: 0;
 }
-.social-block .social-btn_vk {
+.sc-block .sc-btn_vk {
   background-image: url('https://files.doktornarabote.ru/dnr/index/img/index_vk.png');
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .social-block .social-btn_vk {
+  .sc-block .sc-btn_vk {
     background-image: url('https://files.doktornarabote.ru/dnr/index/img/index_vk@2x.png');
   }
 }
-.social-block .social-btn_ok {
+.sc-block .sc-btn_ok {
   background-image: url('https://files.doktornarabote.ru/dnr/index/img/index_ok.png');
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .social-block .social-btn_ok {
+  .sc-block .sc-btn_ok {
     background-image: url('https://files.doktornarabote.ru/dnr/index/img/index_ok@2x.png');
   }
 }
-.social-block .social-btn_fb {
+.sc-block .sc-btn_fb {
   background-image: url('https://files.doktornarabote.ru/dnr/index/img/index_fb.png');
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .social-block .social-btn_fb {
+  .sc-block .sc-btn_fb {
     background-image: url('https://files.doktornarabote.ru/dnr/index/img/index_fb@2x.png');
   }
 }
-.social-block .social-btn_mailru {
+.sc-block .sc-btn_mailru {
   background-image: url('https://files.doktornarabote.ru/dnr/index/img/index_ma.png');
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .social-block .social-btn_mailru {
+  .sc-block .sc-btn_mailru {
     background-image: url('https://files.doktornarabote.ru/dnr/index/img/index_ma@2x.png');
   }
 }
-.social-block .social-btn_ya {
+.sc-block .sc-btn_ya {
   background-image: url('https://files.doktornarabote.ru/dnr/index/img/index_ya.png');
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .social-block .social-btn_ya {
+  .sc-block .sc-btn_ya {
     background-image: url('https://files.doktornarabote.ru/dnr/index/img/index_ya@2x.png');
   }
 }
@@ -1367,7 +1367,7 @@ body {
   text-align: left;
   padding-left: 12px;
 }
-#registration-1-screen .social-block {
+#registration-1-screen .sc-block {
   text-align: left;
   margin-left: 4px;
 }
@@ -1481,7 +1481,7 @@ body {
   opacity: 0.4;
   display: block;
 }
-#registration-2-screen .fieldset .social-block {
+#registration-2-screen .fieldset .sc-block {
   text-align: left;
   margin-left: 6px;
   margin-top: 0;
@@ -1717,7 +1717,7 @@ body {
   font-size: 14px;
   line-height: 20px;
 }
-#restore-access-screen .restore-new-email .social-block {
+#restore-access-screen .restore-new-email .sc-block {
   margin-top: 4px;
   margin-bottom: 12px;
 }
@@ -1728,19 +1728,19 @@ body {
       flex-direction: column;
   margin-bottom: 24px;
 }
-#restore-access-screen .restore-new-email .level.social {
+#restore-access-screen .restore-new-email .level.sc {
   -ms-flex-direction: row-reverse;
       flex-direction: row-reverse;
   margin-top: 24px;
   margin-bottom: 0;
 }
-#restore-access-screen .restore-new-email .level.social .social-block {
+#restore-access-screen .restore-new-email .level.sc .sc-block {
   -ms-flex-positive: 1;
       flex-grow: 1;
   text-align: left;
   margin: 0;
 }
-#restore-access-screen .restore-new-email .level.social .message {
+#restore-access-screen .restore-new-email .level.sc .message {
   width: 146px;
   -ms-flex-positive: 0;
       flex-grow: 0;
